@@ -11,7 +11,7 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         // Caminho absoluto dentro do resources
         FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource("/fxml/professorOrientador/TelaAlunos.fxml")
+                getClass().getResource("/fxml/professorOrientador/telaAlunos.fxml")
         );
 
         Scene scene = new Scene(fxmlLoader.load());
