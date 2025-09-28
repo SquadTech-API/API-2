@@ -1,6 +1,7 @@
 module org.example {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
 
     exports br.com.squadtech.bluetech;
     exports br.com.squadtech.bluetech.controller.professorOrientador;
