@@ -1,4 +1,4 @@
-package org.example;
+package br.com.squadtech.bluetech.controller.professorOrientador;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
