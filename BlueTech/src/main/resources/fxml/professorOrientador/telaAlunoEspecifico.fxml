@@ -121,7 +121,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <image>
-                              <Image url="@excla.png" />
+                              <Image url="@../images/excla.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -151,7 +151,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <image>
-                              <Image url="@check.png" />
+                              <Image url="@../images/check.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -181,7 +181,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <image>
-                              <Image url="@check.png" />
+                              <Image url="@../images/check.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -211,7 +211,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <image>
-                              <Image url="@check.png" />
+                              <Image url="@../images/check.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -241,7 +241,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <image>
-                              <Image url="@check.png" />
+                              <Image url="@../images/check.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -271,7 +271,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <image>
-                              <Image url="@check.png" />
+                              <Image url="@../images/check.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -301,7 +301,7 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                            <image>
-                              <Image url="@check.png" />
+                              <Image url="@../images/check.png" />
                            </image>
                         </ImageView>
                      </children>
