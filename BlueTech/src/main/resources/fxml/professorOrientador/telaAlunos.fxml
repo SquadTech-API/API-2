@@ -14,490 +14,91 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox layoutX="8.0" layoutY="42.0" prefHeight="140.0" prefWidth="1356.0" style="-fx-border-color: transparent transparent #999999 transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
-         <children>
-            <HBox prefHeight="181.0" prefWidth="805.0">
-               <children>
-                  <VBox prefHeight="163.0" prefWidth="670.0">
-                     <children>
-                        <Label prefHeight="30.0" prefWidth="198.0" text="Alunos">
-                           <font>
-                              <Font name="System Bold" size="47.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="707.0" spacing="20.0">
-                           <children>
-                              <ToggleButton layoutX="138.0" layoutY="33.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #0A3D62;" text="Todos" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </ToggleButton>
-                              <ToggleButton layoutX="208.0" layoutY="28.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" text="Não corrigidos">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </ToggleButton>
-                              <ToggleButton layoutX="138.0" layoutY="33.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" text="Corrigidos">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </ToggleButton>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-               <HBox.margin>
-                  <Insets bottom="20.0" />
-               </HBox.margin>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="TOP_RIGHT" prefHeight="163.0" prefWidth="727.0">
-               <children>
-                  <VBox prefHeight="163.0" prefWidth="623.0">
-                     <children>
-                        <HBox alignment="TOP_RIGHT" prefHeight="164.0" prefWidth="610.0">
-                           <children>
-                              <TextField prefHeight="36.0" prefWidth="289.0">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </TextField>
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="116.0" text="Pesquisar">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <padding>
-                              <Insets top="15.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets right="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-      <ScrollPane fitToWidth="true" layoutX="3.2" layoutY="159.2" prefHeight="673.0" prefWidth="1350.0" style="-fx-background-color: #E0E0E0;" AnchorPane.bottomAnchor="-64.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="159.0">
-         <content>
-            <VBox prefHeight="591.0" prefWidth="1336.0" style="-fx-background-color: #E0E0E0;">
-               <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Elder Henrique Menezes">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 45 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/exclav.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
+<AnchorPane fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaAlunosController"
+            maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="768.0" prefWidth="1356.0"
+            style="-fx-background-color: #E0E0E0;"
+            xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox layoutX="8.0" layoutY="42.0" prefHeight="140.0" prefWidth="1356.0" style="-fx-border-color: transparent transparent #999999 transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
+            <children>
+                <HBox prefHeight="181.0" prefWidth="805.0">
+                    <children>
+                        <VBox prefHeight="163.0" prefWidth="670.0">
+                            <children>
+                                <Label prefHeight="30.0" prefWidth="198.0" text="Alunos">
+                                    <font>
+                                        <Font name="System Bold" size="47.0" />
+                                    </font>
+                                </Label>
+                                <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="707.0" spacing="20.0">
+                                    <children>
+                                        <ToggleButton mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #0A3D62;" text="Todos" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold" size="16.0" />
+                                            </font>
+                                        </ToggleButton>
+                                        <ToggleButton mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" text="Não corrigidos">
+                                            <font>
+                                                <Font name="System Bold" size="16.0" />
+                                            </font>
+                                        </ToggleButton>
+                                        <ToggleButton mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" text="Corrigidos">
+                                            <font>
+                                                <Font name="System Bold" size="16.0" />
+                                            </font>
+                                        </ToggleButton>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                    <HBox.margin>
+                        <Insets bottom="20.0" />
+                    </HBox.margin>
+                    <padding>
                         <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Jhonatan Rossi">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 14 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="73.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Guilherme Valim da Silva">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 14 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="136.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Manuela Brito">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 12 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Caio Castro da Silva">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 12 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="João Pedro Meneguel">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 10 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="326.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Giovanna Faria Lima">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 6 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="389.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Kelvin Diogo Nogueira">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 2 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="452.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="João Juscelino Santos">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="389.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Maria Isabel Costa">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="579.0" prefHeight="65.0" prefWidth="1341.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Sarah Leal Oliveira">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="642.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Jorge Benjoir Nair">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="705.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Gabriel Teixeira Ribeiro">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="768.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="Gisele Silva de Castro">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </VBox>
-         </content>
-      </ScrollPane>
-   </children>
+                    </padding>
+                </HBox>
+                <HBox alignment="TOP_RIGHT" prefHeight="163.0" prefWidth="727.0">
+                    <children>
+                        <VBox prefHeight="163.0" prefWidth="623.0">
+                            <children>
+                                <HBox alignment="TOP_RIGHT" prefHeight="164.0" prefWidth="610.0">
+                                    <children>
+                                        <TextField prefHeight="36.0" prefWidth="289.0">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </TextField>
+                                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="116.0" text="Pesquisar">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <padding>
+                                        <Insets top="15.0" />
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets right="20.0" />
+                                    </VBox.margin>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+        <ScrollPane fitToWidth="true" layoutX="3.2" layoutY="159.2" prefHeight="673.0" prefWidth="1350.0" style="-fx-background-color: #E0E0E0;" AnchorPane.bottomAnchor="-64.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="159.0">
+            <content>
+                <VBox prefHeight="591.0" prefWidth="1336.0" style="-fx-background-color: #E0E0E0;">
+                    <children>
+                        <!-- Aqui entram todos os HBox dos alunos (copiados do seu FXML original) -->
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
 </AnchorPane>

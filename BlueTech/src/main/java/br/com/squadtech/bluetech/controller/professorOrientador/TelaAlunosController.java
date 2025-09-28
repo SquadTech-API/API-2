@@ -1,4 +1,4 @@
-package org.example;
+package br.com.squadtech.bluetech.controller.professorOrientador;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class ControllerTelaAlunos {
+public class TelaAlunosController {
 
 
     @FXML
