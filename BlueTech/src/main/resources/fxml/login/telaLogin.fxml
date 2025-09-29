@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.primeiracoisaController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.login.telaLoginController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="345.0" layoutX="526.0" layoutY="212.0" stroke="DODGERBLUE" strokeLineJoin="BEVEL" strokeType="INSIDE" width="315.0" AnchorPane.bottomAnchor="211.0" AnchorPane.leftAnchor="526.0" AnchorPane.rightAnchor="525.0" AnchorPane.topAnchor="212.0" />
       <Label fx:id="lbl_nome" layoutX="558.0" layoutY="285.0" prefHeight="18.0" prefWidth="48.0" text="Email:" />

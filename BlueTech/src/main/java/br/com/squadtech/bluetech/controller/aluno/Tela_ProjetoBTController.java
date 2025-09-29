@@ -7,20 +7,15 @@ import javafx.scene.layout.AnchorPane;
 
 public class Tela_ProjetoBTController {
 
+    @FXML
+    private Button btn_alunos_visualizar;
 
+    @FXML
+    private AnchorPane buttonEnviarN;
 
-        @FXML
-        private Button btn_estudante_visualizarArquivo;
-
-        @FXML
-        private AnchorPane buttonEnviarN;
-
-        @FXML
-        private Button buttonTodos;
-
-        @FXML
-        void visualizarArquivoCorrigido(ActionEvent event) {
-
-        }
+    @FXML
+    void visualizaArquivos(ActionEvent event) {
 
     }
+
+}

@@ -1,4 +1,4 @@
-package org.example;
+package br.com.squadtech.bluetech.controller.professorTG;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

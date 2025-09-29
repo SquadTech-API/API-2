@@ -8,15 +8,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="buttonEnviarN" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="buttonEnviarN" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.Tela_ProjetoBTController">
    <children>
       <Label layoutX="58.0" layoutY="42.0" prefHeight="6.0" prefWidth="194.0" text="Correções">
          <font>
             <Font name="System Bold" size="34.0" />
          </font>
       </Label>
-      <Button fx:id="buttonTodos" accessibleText="Azul" layoutX="60.0" layoutY="150.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5;" text="Todos">
+      <Button accessibleText="Azul" layoutX="60.0" layoutY="150.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5;" text="Todos">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
@@ -84,7 +83,7 @@
             <Font size="39.0" />
          </font>
       </Label>
-      <Button layoutX="817.0" layoutY="234.0" mnemonicParsing="false" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Visualisar arquivo corrigido">
+      <Button fx:id="btn_alunos_visualizar" layoutX="817.0" layoutY="234.0" mnemonicParsing="false" onAction="#visualizaArquivos" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Visualisar arquivo corrigido">
          <font>
             <Font size="16.0" />
          </font>
