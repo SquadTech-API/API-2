@@ -29,7 +29,7 @@
             <Font size="15.0" />
          </font>
       </MenuButton>
-      <Button layoutX="78.0" layoutY="682.0" mnemonicParsing="false" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Enviar nova versão">
+      <Button layoutX="83.0" layoutY="676.0" mnemonicParsing="false" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Enviar nova versão">
          <font>
             <Font size="16.0" />
          </font>
@@ -83,9 +83,9 @@
             <Font size="39.0" />
          </font>
       </Label>
-      <Button fx:id="btn_alunos_visualizar" layoutX="817.0" layoutY="234.0" mnemonicParsing="false" onAction="#visualizaArquivos" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Visualisar arquivo corrigido">
+      <Button fx:id="btn_aluno_visualizarArquivo" layoutX="766.0" layoutY="240.0" maxHeight="35.0" maxWidth="230.0" minHeight="35.0" minWidth="230.0" mnemonicParsing="false" onAction="#visualizarArquivo" prefHeight="35.0" prefWidth="230.0" style="-fx-background-color: #007bff;" text="Visualisar arquivo corrigido" textFill="WHITE">
          <font>
-            <Font size="16.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Button>
    </children>

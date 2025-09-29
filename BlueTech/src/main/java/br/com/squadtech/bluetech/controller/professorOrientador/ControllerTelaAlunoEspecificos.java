@@ -17,17 +17,18 @@ public class ControllerTelaAlunoEspecificos {
     private ToggleButton ButtonProximaTela2;
 
     @FXML
-    void passarTelaIndefinida(ActionEvent event) throws IOException {
-        // o metodo abaixo é onde passa para proxima tela, vc só precisa por pra qual tela vai ali entre as aspas
-        Parent root = FXMLLoader.load(getClass().getResource(""));
-        Scene scene = new Scene(root);
+    void passarTelaIndefinida(ActionEvent event) {
+        try {
+            // Carrega o FXML da tela Dashboard
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/professorTG/dashboard.fxml"));
+            Scene scene = new Scene(root);
 
-        // pega a janela atual
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+            // Pega a janela atual
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
-
-
-

@@ -1,8 +1,10 @@
 package br.com.squadtech.bluetech.controller.professorTG;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -22,15 +23,18 @@ public class DashboardController {
     @FXML
     private VBox cardsBox;
 
+    @FXML
+    private Label alertLabel;
+
     public void initialize() {
         List<AlunoPostagem> postagens = List.of(
-                new AlunoPostagem("Lívia Gomes",     "Prof. Amanda Lima",   1),
-                new AlunoPostagem("Thiago Menezes",  "Prof. Ricardo Melo",  2),
+                new AlunoPostagem("Lívia Gomes", "Prof. Amanda Lima", 1),
+                new AlunoPostagem("Thiago Menezes", "Prof. Ricardo Melo", 2),
                 new AlunoPostagem("Jéssica Azevedo", "Prof. Paulo Tavares", 3),
-                new AlunoPostagem("Lucas Martins",   "Prof. Ana Paula",     4),
-                new AlunoPostagem("Fernanda Rocha",  "Prof. Geraldo Alves", 5),
-                new AlunoPostagem("Mateus Viana",    "Prof. Camila Souza",  6),
-                new AlunoPostagem("João Pedro",  "Prof. José Paulo",       7)
+                new AlunoPostagem("Lucas Martins", "Prof. Ana Paula", 4),
+                new AlunoPostagem("Fernanda Rocha", "Prof. Geraldo Alves", 5),
+                new AlunoPostagem("Mateus Viana", "Prof. Camila Souza", 6),
+                new AlunoPostagem("João Pedro", "Prof. José Paulo", 7)
         );
 
         // Ordena do mais recente para o mais antigo
@@ -45,9 +49,6 @@ public class DashboardController {
         // Atualiza o texto do alerta com a quantidade real de TGs
         alertLabel.setText("Você tem " + postagens.size() + " TG's que ainda não foram abertos");
     }
-    @FXML
-    private Label alertLabel;
-
 
     private void addCard(String nome, String linha2, String linha3) {
         Label t1 = new Label(nome);
@@ -73,22 +74,23 @@ public class DashboardController {
 
         card.setOnMouseClicked((MouseEvent event) -> {
             System.out.println("Card clicado: " + nome);
-            handleCardClick(nome, linha2, linha3);
+            handleCardClick();
         });
 
         cardsBox.getChildren().add(card);
     }
+
     private record AlunoPostagem(String nome, String orientador, int dias) {}
 
-
-    private void handleCardClick(String nome, String linha2, String linha3) {
+    private void handleCardClick() {
         try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/TelaJoao.fxml"));
-            VBox telaJoao = loader.load();
+            // Carrega o FXML da tela VisualizadorTG
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorTG/VisualizadorTG.fxml"));
+            Parent telaVisualizador = loader.load();
 
             Stage stage = (Stage) cardsBox.getScene().getWindow();
-            stage.setScene(new Scene(telaJoao));
-
+            stage.setScene(new Scene(telaVisualizador));
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,4 +8,7 @@ module org.example {
 
     opens br.com.squadtech.bluetech to javafx.fxml;
     opens br.com.squadtech.bluetech.controller.professorOrientador to javafx.fxml;
+    opens br.com.squadtech.bluetech.controller.login to javafx.fxml;
+    opens br.com.squadtech.bluetech.controller.aluno to javafx.fxml;
+    opens br.com.squadtech.bluetech.controller.professorTG to javafx.fxml;
 }

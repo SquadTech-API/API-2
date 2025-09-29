@@ -13,7 +13,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaAlunoController">
    <children>
-      <ImageView fitHeight="452.0" fitWidth="673.0" layoutX="-20.0" layoutY="-162.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="btn_aluno_enviar" fitHeight="452.0" fitWidth="673.0" layoutX="-20.0" layoutY="-162.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../Downloads/WhatsApp%20Image%202025-09-22%20at%2014.49.40.jpeg" />
          </image>
