@@ -9,7 +9,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Caminho absoluto dentro do resources
         FXMLLoader fxmlLoader = new FXMLLoader(
                 getClass().getResource("/fxml/login/telaLogin.fxml")
         );

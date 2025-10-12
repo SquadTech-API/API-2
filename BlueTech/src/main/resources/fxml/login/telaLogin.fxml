@@ -1,27 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.login.telaLoginController">
+<HBox fx:id="paneSignHbox" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.login.TelaLoginController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="345.0" layoutX="526.0" layoutY="212.0" stroke="DODGERBLUE" strokeLineJoin="BEVEL" strokeType="INSIDE" width="315.0" AnchorPane.bottomAnchor="211.0" AnchorPane.leftAnchor="526.0" AnchorPane.rightAnchor="525.0" AnchorPane.topAnchor="212.0" />
-      <Label fx:id="lbl_nome" layoutX="558.0" layoutY="285.0" prefHeight="18.0" prefWidth="48.0" text="Email:" />
-      <Button fx:id="btn_salvar" layoutX="633.0" layoutY="432.0" mnemonicParsing="false" onAction="#clique_aqui" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: black; -fx-border-radius: 25;" text="Logar" />
-      <TextField fx:id="txf_senha" layoutX="557.0" layoutY="384.0" prefHeight="26.0" prefWidth="255.0" style="-fx-background-color: white;" />
-      <TextField fx:id="txf_email" layoutX="556.0" layoutY="312.0" prefHeight="26.0" prefWidth="255.0" style="-fx-background-color: white; -fx-border-radius: 50;" styleClass="-fx-background-radius: 15;" />
-      <Label fx:id="lbl_nome1" layoutX="558.0" layoutY="359.0" prefHeight="17.0" prefWidth="48.0" text="Senha:" />
-      <Label layoutX="556.0" layoutY="238.0" text="Bem vindo(a) a BlueTech!">
-         <font>
-            <Font name="Times New Roman" size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="lbl_acao1" layoutX="556.0" layoutY="517.0" style="-fx-underline: true;" text="Esqueceu sua senha?" textOverrun="WORD_ELLIPSIS" />
-      <Label layoutX="557.0" layoutY="563.0" text="É seu primeiro login? " />
-      <Label fx:id="lbl_acao2" layoutX="683.0" layoutY="563.0" style="-fx-underline: true;" text="Clique aqui" />
+      <AnchorPane fx:id="paneSignLogo" prefHeight="200.0" prefWidth="200.0" styleClass="left-anchor-pane" stylesheets="@../../css/LoginStyles.css">
+         <children>
+            <ImageView fitHeight="180.0" fitWidth="200.0" layoutX="15.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/Logo.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <SplitPane fx:id="paneSignSplit" dividerPositions="0.15641476274165203" orientation="VERTICAL" prefHeight="570.0" prefWidth="600.0" styleClass="right-anchor-pane" stylesheets="@../../css/LoginStyles.css">
+         <items>
+            <AnchorPane fx:id="paneSignBtns" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="600.0">
+               <children>
+                  <JFXButton fx:id="btnSignCadastro" layoutX="320.0" layoutY="30.0" onAction="#handleSignCadastro" text="Cadastro">
+                     <font>
+                        <Font name="Cascadia Mono Regular" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="btnSignLogin" layoutX="190.0" layoutY="30.0" onAction="#handleSignLogin" text="Login">
+                     <font>
+                        <Font name="Cascadia Mono Regular" size="12.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="paneSignData" minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="600.0">
+               <children>
+                  <AnchorPane fx:id="paneLoginAcc" prefHeight="498.0" prefWidth="594.0">
+                     <children>
+                        <PasswordField fx:id="txtFldPass" layoutX="208.0" layoutY="261.0" prefHeight="30.0" prefWidth="180.0" />
+                        <TextField fx:id="txtFldUser" layoutX="207.0" layoutY="205.0" prefHeight="30.0" prefWidth="180.0" />
+                        <Label layoutX="135.0" layoutY="211.0" text="Usuário">
+                           <font>
+                              <Font name="Cascadia Mono Regular" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="151.0" layoutY="267.0" text="Senha">
+                           <font>
+                              <Font name="Cascadia Mono Regular" size="14.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="btnLogar" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="2.0" layoutX="245.0" layoutY="323.0" prefHeight="46.0" prefWidth="103.0" styleClass="button-login" text="Logar">
+                           <font>
+                              <Font name="Cascadia Mono Regular" size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="238.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/login.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
    </children>
-</AnchorPane>
+</HBox>
