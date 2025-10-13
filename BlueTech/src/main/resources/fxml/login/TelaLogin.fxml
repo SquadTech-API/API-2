@@ -23,7 +23,7 @@
          </children></AnchorPane>
       <SplitPane fx:id="paneSignSplit" dividerPositions="0.15641476274165203" orientation="VERTICAL" prefHeight="570.0" prefWidth="600.0" styleClass="right-anchor-pane" stylesheets="@../../css/LoginStyles.css">
          <items>
-            <AnchorPane fx:id="paneSignBtns" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="600.0">
+            <AnchorPane fx:id="paneSignBtns" prefHeight="100.0" prefWidth="600.0">
                <children>
                   <JFXButton fx:id="btnSignCadastro" layoutX="320.0" layoutY="30.0" onAction="#handleSignCadastro" text="Cadastro">
                      <font>
@@ -37,23 +37,23 @@
                   </JFXButton>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="paneSignData" minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="600.0">
+            <AnchorPane fx:id="paneSignData" prefHeight="470.0" prefWidth="600.0">
                <children>
                   <AnchorPane fx:id="paneLoginAcc" prefHeight="498.0" prefWidth="594.0">
                      <children>
-                        <PasswordField fx:id="txtFldPass" layoutX="208.0" layoutY="261.0" prefHeight="30.0" prefWidth="180.0" />
-                        <TextField fx:id="txtFldUser" layoutX="207.0" layoutY="205.0" prefHeight="30.0" prefWidth="180.0" />
-                        <Label layoutX="135.0" layoutY="211.0" text="Usuário">
+                        <PasswordField fx:id="txtFldPass" layoutX="208.0" layoutY="255.0" prefHeight="30.0" prefWidth="180.0" />
+                        <TextField fx:id="txtFldUser" layoutX="207.0" layoutY="199.0" prefHeight="30.0" prefWidth="180.0" />
+                        <Label layoutX="135.0" layoutY="205.0" text="Usuário">
                            <font>
                               <Font name="Cascadia Mono Regular" size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="151.0" layoutY="267.0" text="Senha">
+                        <Label layoutX="151.0" layoutY="261.0" text="Senha">
                            <font>
                               <Font name="Cascadia Mono Regular" size="14.0" />
                            </font>
                         </Label>
-                        <JFXButton fx:id="btnLogar" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="2.0" layoutX="245.0" layoutY="323.0" prefHeight="46.0" prefWidth="103.0" styleClass="button-login" text="Logar">
+                        <JFXButton fx:id="btnLogar" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="2.0" layoutX="245.0" layoutY="310.0" prefHeight="46.0" prefWidth="103.0" styleClass="button-login" text="Logar">
                            <font>
                               <Font name="Cascadia Mono Regular" size="14.0" />
                            </font>

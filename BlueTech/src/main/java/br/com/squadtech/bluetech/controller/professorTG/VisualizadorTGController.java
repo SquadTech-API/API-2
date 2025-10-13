@@ -24,7 +24,7 @@ public class VisualizadorTGController {
     void finalizar(ActionEvent event) {
         try {
             // Carrega o FXML da tela de login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/telaLogin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/TelaLogin.fxml"));
             Parent root = loader.load();
 
             // Pega o Stage atual a partir do botão clicado

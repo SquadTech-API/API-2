@@ -87,7 +87,7 @@ public class TelaLoginController {
     @FXML
     void initialize() {
         assert btnLogar != null : "fx:id=\"btnLogar\" was not injected: check your FXML file 'TelaLogin.fxml'.";
-        assert btnSignCadastro != null : "fx:id=\"btnSignCadastro\" was not injected: check your FXML file 'telaLogin.fxml'.";
+        assert btnSignCadastro != null : "fx:id=\"btnSignCadastro\" was not injected: check your FXML file 'TelaLogin.fxml'.";
         assert btnSignLogin != null : "fx:id=\"btnSignLogin\" was not injected: check your FXML file 'TelaLogin.fxml'.";
         assert paneLoginAcc != null : "fx:id=\"paneLoginAcc\" was not injected: check your FXML file 'TelaLogin.fxml'.";
         assert paneSignBtns != null : "fx:id=\"paneSignBtns\" was not injected: check your FXML file 'TelaLogin.fxml'.";
