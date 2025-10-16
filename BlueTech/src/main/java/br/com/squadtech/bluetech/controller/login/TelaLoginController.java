@@ -9,11 +9,15 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 public class TelaLoginController {
 
@@ -57,6 +61,33 @@ public class TelaLoginController {
     private TextField txtFldUser;
 
     @FXML
+    void handleLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/login/PainelPrincipal.fxml")));
+            Parent root = loader.load();
+
+            PainelPrincipalController controller = loader.getController();
+            controller.loadMenu("/fxml/aluno/MenuAluno.fxml");
+            // Carrega uma tela inicial – padrão no painel de exibição (direita)
+            controller.loadContent("/fxml/aluno/TelaAluno.fxml");
+
+            Stage newStage = new Stage();
+            newStage.setTitle("BlueTech - Painel Principal");
+            newStage.setScene(new Scene(root));
+            // Tamanho mínimo para evitar quebra de layout em larguras/alturas muito pequenas
+            newStage.setMinWidth(960);
+            newStage.setMinHeight(600);
+            newStage.show();
+
+            // Fecha a janela atual após abrir a nova
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void handleSignCadastro(ActionEvent event) throws IOException {
         loadPane("/fxml/login/TelaCadastro.fxml");
     }
@@ -73,7 +104,7 @@ public class TelaLoginController {
     }
 
     private void loadPane(String fxmlPath) throws IOException {
-        AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+        Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
         paneSignData.getChildren().clear();
         paneSignData.getChildren().add(pane);
 

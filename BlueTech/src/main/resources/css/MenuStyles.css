@@ -3,11 +3,14 @@
     -fx-background-color:
         linear-gradient(
             to bottom right,
-            #0f172a 0%,
-            #1e3a8a 40%,
-            #2563eb 80%
+            #ffffff 0%,
+            #c1c5d1 30%,
+            #2563eb 60%,
+            #1e3a8a 80%,
+            #0f172a 100%
         );
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 20, 0.2, 0, 0);
+    -fx-background-radius: 0 20 20 0; /* canto arredondado à direita */
 }
 
 /* Título do Painel */

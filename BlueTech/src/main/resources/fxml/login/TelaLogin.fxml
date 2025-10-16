@@ -53,7 +53,7 @@
                               <Font name="Cascadia Mono Regular" size="14.0" />
                            </font>
                         </Label>
-                        <JFXButton fx:id="btnLogar" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="2.0" layoutX="245.0" layoutY="310.0" prefHeight="46.0" prefWidth="103.0" styleClass="button-login" text="Logar">
+                        <JFXButton fx:id="btnLogar" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="2.0" layoutX="245.0" layoutY="310.0" onAction="#handleLogin" prefHeight="46.0" prefWidth="103.0" styleClass="button-login" text="Logar">
                            <font>
                               <Font name="Cascadia Mono Regular" size="14.0" />
                            </font>
