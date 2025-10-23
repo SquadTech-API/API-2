@@ -21,11 +21,13 @@
                         <Font name="CaskaydiaMono NFM SemiBold" size="20.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="imgViewFotoAluno" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/Usuario.png" />
-                     </image>
-                  </ImageView>
+                   <StackPane fx:id="profileFrame" styleClass="profile-frame">
+                       <ImageView fx:id="imgViewFotoAluno" fitHeight="112.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                               <Image url="@../../images/Usuario.png" />
+                           </image>
+                       </ImageView>
+                   </StackPane>
                   <VBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="6.0">
                      <children>
                         <Label fx:id="txtMenuAlunoNomeAluno" text="Aluno:" textFill="WHITE" />

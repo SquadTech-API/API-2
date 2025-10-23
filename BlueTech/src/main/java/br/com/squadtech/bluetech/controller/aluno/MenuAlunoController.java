@@ -6,18 +6,21 @@ import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class MenuAlunoController {
@@ -64,6 +67,9 @@ public class MenuAlunoController {
     @FXML
     private VBox vboxMenuAluno;
 
+    @FXML
+    private StackPane profileFrame;
+
     //Referência para o controller principal, para podermos carregar conteúdos à direita
     private PainelPrincipalController painelPrincipalController;
 
@@ -102,6 +108,8 @@ public class MenuAlunoController {
         if (imagePath != null && !imagePath.isEmpty()) {
             Image image = new Image("file:" + imagePath);
             imgViewFotoAluno.setImage(image);
+            // Reaplique o processamento após atualizar a imagem
+            Platform.runLater(this::applyImageProcessing);
         }
     }
 
@@ -119,6 +127,7 @@ public class MenuAlunoController {
         assert txtMenuAlunoNomeAluno != null : "fx:id=\"txtMenuAlunoNomeAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert txtMenuAlunoOrientadorAluno != null : "fx:id=\"txtMenuAlunoOrientadorAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert vboxMenuAluno != null : "fx:id=\"vboxMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert profileFrame != null : "fx:id=\"profileFrame\" was not injected: check your FXML file 'MenuAluno.fxml'.";
 
         //Mantém o topo com altura estável (~260px) e o bottom responsivo
         paneSuperiorMenuAluno.setMinHeight(200.0);
@@ -154,6 +163,46 @@ public class MenuAlunoController {
         } else {
             txtMenuAlunoNomeAluno.setText("Bem-vindo!");
         }
+
+        // Garanta que o StackPane seja quadrado, combinando com os tamanhos do CSS (120x120)
+        profileFrame.setPrefWidth(120);
+        profileFrame.setPrefHeight(120);
+        profileFrame.setMinWidth(120);
+        profileFrame.setMinHeight(120);
+        profileFrame.setMaxWidth(120);
+        profileFrame.setMaxHeight(120);
+
+        // Aplique o processamento de imagem inicial após o layout
+        Platform.runLater(this::applyImageProcessing);
+    }
+
+    private void applyImageProcessing() {
+        Image image = imgViewFotoAluno.getImage();
+        if (image == null || image.getWidth() == 0 || image.getHeight() == 0) {
+            return; // Nada a processar se não houver imagem válida
+        }
+
+        // Defina o tamanho desejado para a imagem interna (subtraindo a largura da borda: 120 - 2*4 = 112px)
+        double fitSize = 112.0;
+
+        // Calcule o viewport para cropar a imagem ao centro em formato quadrado
+        double imageWidth = image.getWidth();
+        double imageHeight = image.getHeight();
+        double side = Math.min(imageWidth, imageHeight);
+        double x = (imageWidth - side) / 2.0;
+        double y = (imageHeight - side) / 2.0;
+        imgViewFotoAluno.setViewport(new Rectangle2D(x, y, side, side));
+
+        // Configure o ImageView para escalar o conteúdo cropado para o tamanho interno
+        imgViewFotoAluno.setPreserveRatio(false); // Desative preserveRatio após crop para quadrado
+        imgViewFotoAluno.setSmooth(true); // Melhora a qualidade do escalonamento
+        imgViewFotoAluno.setFitWidth(fitSize);
+        imgViewFotoAluno.setFitHeight(fitSize);
+
+        // Aplique o clip circular centralizado, ajustado para o tamanho interno
+        double radius = fitSize / 2.0;
+        Circle clip = new Circle(radius, radius, radius);
+        imgViewFotoAluno.setClip(clip);
     }
 
     private void fixDividerPosition() {

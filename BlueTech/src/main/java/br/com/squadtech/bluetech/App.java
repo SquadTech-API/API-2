@@ -1,7 +1,7 @@
 package br.com.squadtech.bluetech;
 
-import br.com.squadtech.bluetech.dao.ConnectionFactory;
-import br.com.squadtech.bluetech.dao.DatabaseInitializer;
+import br.com.squadtech.bluetech.config.ConnectionFactory;
+import br.com.squadtech.bluetech.config.DatabaseInitializer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

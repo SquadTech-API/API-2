@@ -1,5 +1,6 @@
 package br.com.squadtech.bluetech.dao;
 
+import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 
 import java.sql.Connection;
@@ -7,8 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PerfilAlunoDAO {
 

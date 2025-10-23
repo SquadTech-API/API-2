@@ -1,5 +1,6 @@
 package br.com.squadtech.bluetech.dao;
 
+import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.model.Usuario;
 import org.mindrot.jbcrypt.BCrypt;
 

@@ -125,3 +125,49 @@
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
 }
+
+/* Moldura de exibição da foto do usuário */
+.profile-frame {
+    /* Fundo levemente reflexivo, mais translúcido para integrar com o menu */
+    -fx-background-color: linear-gradient(to bottom, rgba(247, 249, 251, 0.8), rgba(217, 226, 241, 0.7), rgba(240, 244, 250, 0.6));
+
+    /* Borda metálica azulada com reflexo, mais suave */
+    -fx-border-color: linear-gradient(to bottom, rgba(30, 58, 138, 0.9), rgba(37, 99, 235, 0.8), rgba(90, 141, 238, 0.7), rgba(30, 58, 138, 0.9));
+    -fx-border-width: 4px;
+    -fx-border-style: solid;
+    -fx-border-radius: 50%; /* Circular completo */
+    -fx-background-radius: 50%; /* Circular completo */
+
+    /* Efeitos de relevo e brilho metálico aprimorados para look liquid glass */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.35, 0, 4),
+                innershadow(gaussian, rgba(255, 255, 255, 0.65), 4, 0.55, -1, -1),
+                innershadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.45, 1, 1),
+                innershadow(gaussian, rgba(255, 255, 255, 0.45), 3, 0.35, 0, -2);
+
+    /* Garanta que o frame seja quadrado para o círculo perfeito (ajuste os valores conforme o tamanho desejado) */
+    -fx-min-width: 120px; /* Exemplo: defina um tamanho fixo quadrado */
+    -fx-min-height: 120px;
+    -fx-pref-width: 120px;
+    -fx-pref-height: 120px;
+    -fx-max-width: 120px;
+    -fx-max-height: 120px;
+    -fx-alignment: center; /* Centraliza o conteúdo */
+}
+
+/* Imagem dentro da moldura (assumindo que isso será uma Region com background-image) */
+.profile-Image {
+    -fx-background-color: transparent;
+    -fx-border-radius: 50%; /* Circular */
+    -fx-background-radius: 50%; /* Circular */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.25, 0, 2);
+    -fx-background-size: cover; /* Ajusta a imagem para cobrir o círculo sem distorção */
+    -fx-background-position: center; /* Centraliza a imagem */
+
+    /* Garanta que a imagem interna seja quadrada e se encaixe no frame */
+    -fx-min-width: 112px; /* Subtraia a borda do frame, ex: 120 - 4*2 */
+    -fx-min-height: 112px;
+    -fx-pref-width: 112px;
+    -fx-pref-height: 112px;
+    -fx-max-width: 112px;
+    -fx-max-height: 112px;
+}
