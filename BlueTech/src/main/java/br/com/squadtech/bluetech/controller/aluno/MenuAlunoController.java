@@ -1,14 +1,19 @@
 package br.com.squadtech.bluetech.controller.aluno;
 
+import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
+import br.com.squadtech.bluetech.model.PerfilAluno;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
+import br.com.squadtech.bluetech.model.Usuario;
 import com.jfoenix.controls.JFXButton;
+import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
@@ -59,6 +64,47 @@ public class MenuAlunoController {
     @FXML
     private VBox vboxMenuAluno;
 
+    //Referência para o controller principal, para podermos carregar conteúdos à direita
+    private PainelPrincipalController painelPrincipalController;
+
+    //Setter chamado pelo PainelPrincipalController após carregar este menu
+    public void setPainelPrincipalController(PainelPrincipalController controller) {
+        this.painelPrincipalController = controller;
+    }
+
+    //Para carregar qualquer conteúdo no painel de exibição
+    private void loadContentIntoMain(String fxmlPath) {
+        if (painelPrincipalController == null) {
+            // Sem referência ao painel principal, não há onde injetar o conteúdo
+            System.err.println("[MenuAlunoController] painelPrincipalController é nulo. Verifique se foi configurado ao carregar o menu.");
+            return;
+        }
+        try {
+            painelPrincipalController.loadContent(fxmlPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    void AbrirEntregasSeccoes(ActionEvent event) {
+        loadContentIntoMain("/fxml/aluno/TelaEntregasAluno.fxml");
+    }
+
+    @FXML
+    void AbreTelaPerfilAluno(ActionEvent event) {
+        loadContentIntoMain("/fxml/aluno/TelaPerfilAluno.fxml");
+    }
+
+    //Atualizar a foto no menu
+    public void updateFotoAluno(String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            Image image = new Image("file:" + imagePath);
+            imgViewFotoAluno.setImage(image);
+        }
+    }
+
     @FXML
     void initialize() {
         assert bntAlunoBaixarMD != null : "fx:id=\"bntAlunoBaixarMD\" was not injected: check your FXML file 'MenuAluno.fxml'.";
@@ -92,6 +138,22 @@ public class MenuAlunoController {
                 }
             });
         }
+
+        //exibir o nome do Aluno logado na aplicação
+        Usuario usuario = SessaoUsuario.getUsuarioLogado();
+        if (usuario != null) {
+            txtMenuAlunoNomeAluno.setText("Nome: " + usuario.getNome());
+            //Carregar foto se existir perfil
+            PerfilAlunoDAO dao = new PerfilAlunoDAO();
+            if (dao.existePerfil(usuario.getEmail())) {
+                PerfilAluno perfil = dao.getPerfilByEmail(usuario.getEmail());
+                if (perfil != null && perfil.getFoto() != null) {
+                    updateFotoAluno(perfil.getFoto());
+                }
+            }
+        } else {
+            txtMenuAlunoNomeAluno.setText("Bem-vindo!");
+        }
     }
 
     private void fixDividerPosition() {
@@ -101,7 +163,7 @@ public class MenuAlunoController {
     private double computeDesiredDividerPosition() {
         double total = Math.max(1.0, splitPanelMenuAluno.getHeight());
         double desired = paneSuperiorMenuAluno.getPrefHeight() / total;
-        // Limita para evitar posições extremas em alturas pequenas/grandes
+        //Limita para evitar posições extremas em alturas pequenas/grandes
         return Math.max(0.1, Math.min(0.9, desired));
     }
 

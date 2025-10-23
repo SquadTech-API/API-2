@@ -1,5 +1,8 @@
 package br.com.squadtech.bluetech.controller.login;
 
+import br.com.squadtech.bluetech.dao.UsuarioDAO;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
+import br.com.squadtech.bluetech.model.Usuario;
 import com.jfoenix.controls.JFXButton;
 
 import java.io.IOException;
@@ -12,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
@@ -60,21 +64,34 @@ public class TelaLoginController {
     @FXML
     private TextField txtFldUser;
 
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
+
     @FXML
     void handleLogin(ActionEvent event) {
+        String email = txtFldUser.getText();
+        String senha = txtFldPass.getText();
+
+        if (email.isEmpty() || senha.isEmpty()) {
+            showAlert("Preencha usuário e senha!");
+            return;
+        }
+
+    Usuario usuario = usuarioDAO.findByEmailAndSenha(email, senha);
+    if (usuario != null) {
+        // Armazena o usuário na sessão
+        SessaoUsuario.setUsuarioLogado(usuario);
+
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/login/PainelPrincipal.fxml")));
             Parent root = loader.load();
 
             PainelPrincipalController controller = loader.getController();
             controller.loadMenu("/fxml/aluno/MenuAluno.fxml");
-            // Carrega uma tela inicial – padrão no painel de exibição (direita)
             controller.loadContent("/fxml/aluno/TelaAluno.fxml");
 
             Stage newStage = new Stage();
-            newStage.setTitle("BlueTech - Painel Principal");
+            newStage.setTitle("BlueTech - Plataforma de Gestão de TG do Tipo Portfólio");
             newStage.setScene(new Scene(root));
-            // Tamanho mínimo para evitar quebra de layout em larguras/alturas muito pequenas
             newStage.setMinWidth(960);
             newStage.setMinHeight(600);
             newStage.show();
@@ -85,6 +102,16 @@ public class TelaLoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    } else {
+        showAlert("Credenciais inválidas!");
+    }
+}
+
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message);
+        alert.show();
     }
 
     @FXML

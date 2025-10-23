@@ -15,9 +15,9 @@
 
 /* Título do Painel */
 #painelAluno {
-    -fx-text-fill: linear-gradient(to bottom, #FFD700 0%, #FFA500 50%, #FFE4B5 100%);
+    -fx-text-fill: linear-gradient(to bottom, rgba(26, 26, 26, 0.3) 0%, #000000 50%, rgba(30, 29, 29, 0.3) 100%);
     -fx-font-size: 24px;
-    -fx-font-family: 'Garamond', 'Georgia', 'Microsoft YaHei', '微软雅黑', serif;
+    -fx-font-family: 'Roboto', 'Arial', sans-serif; /* Mudado para sans-serif para um look mais moderno */
     -fx-font-weight: 700;
     -fx-effect:
         dropshadow(gaussian, #FFFFFF80, 1, 0.5, 0, 0),
@@ -27,95 +27,101 @@
     -fx-padding: 5 0;
 }
 
-/* Botão estilo liquid glass */
+/* Botão estilo liquid glass aprimorado */
 .menu-lateral .button {
-    /* Gradiente translúcido com tons suaves para simular vidro */
+    /* Gradiente mais sutil e translúcido para melhor integração com o fundo gradiente do menu */
     -fx-background-color:
         linear-gradient(
             from 0% 0% to 100% 100%,
-            rgba(255, 255, 255, 0.15) 0%,  /* Transparência leve */
-            rgba(200, 220, 255, 0.1) 50%,  /* Tom azulado sutil */
-            rgba(150, 180, 255, 0.05) 100%
+            rgba(255, 255, 255, 0.08) 0%, /* Reduzida opacidade para mais transparência */
+            rgba(200, 220, 255, 0.06) 50%,
+            rgba(150, 180, 255, 0.03) 100%
         ),
         radial-gradient(
             focus-angle 0deg,
             focus-distance 0%,
             center 50% 50%,
-            radius 60%,
-            rgba(255, 255, 255, 0.2) 0%,  /* Simula reflexo líquido */
-            rgba(200, 220, 255, 0.05) 70%
+            radius 70%, /* Aumentado raio para efeito mais difuso */
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(200, 220, 255, 0.04) 70%,
+            transparent 100%
         );
-    -fx-background-radius: 28;
+    -fx-background-radius: 30; /* Aumentado para cantos mais arredondados, look mais moderno */
     -fx-border-color:
         linear-gradient(
             to bottom,
-            rgba(255, 255, 255, 0.4),  /* Brilho na borda superior */
-            rgba(200, 220, 255, 0.2)   /* Suaviza na inferior */
+            rgba(37, 99, 235, 0.6), /* Reduzida opacidade para borda mais sutil */
+            rgba(30, 58, 138, 0.4)
         );
-    -fx-border-width: 1.2;
-    -fx-border-radius: 28;
-    -fx-text-fill: rgba(255, 255, 255, 0.9);  /* Texto com opacidade */
-    -fx-font-size: 12px;
-    -fx-font-family: 'Georgia', 'Microsoft YaHei', '微软雅黑', serif;
-    -fx-font-weight: 400;
-    /* Efeitos de sombra para profundidade e simulação de blur */
+    -fx-border-width: 1;
+    -fx-border-radius: 30;
+    -fx-text-fill: rgba(255, 255, 255, 0.9); /* Mudado para branco com leve opacidade para look moderno e melhor contraste */
+    -fx-font-size: 13px; /* Ligeiro aumento para legibilidade */
+    -fx-font-family: 'Roboto', 'Arial', sans-serif; /* Sans-serif para modernidade */
+    -fx-font-weight: 500;
+    /* Efeitos aprimorados para simular blur e profundidade de vidro líquido */
     -fx-effect:
-        dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.3, 0, 0),  /* Sombra externa leve */
-        innershadow(gaussian, rgba(255, 255, 255, 0.3), 8, 0.2, 0, -2);  /* Reflexo interno */
+        dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.35, 0, 2), /* Sombra externa mais suave */
+        innershadow(gaussian, rgba(255, 255, 255, 0.35), 10, 0.25, 0, -2), /* Reflexo interno mais pronunciado */
+        dropshadow(gaussian, rgba(37, 99, 235, 0.15), 5, 0.1, 0, 0); /* Adicionado glow azul sutil para destacar */
     -fx-padding: 12 32;
     -fx-cursor: hand;
-    -fx-opacity: 0.85;
+    -fx-opacity: 0.8; /* Reduzida para melhor integração, mas ainda visível */
     -fx-background-insets: 0;
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
 
-/* Efeito de hover para simular interação líquida */
+/* Efeito de hover aprimorado para interação mais fluida e destaque */
 .menu-lateral .button:hover {
     -fx-background-color:
         linear-gradient(
             from 0% 0% to 100% 100%,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(200, 220, 255, 0.15) 50%,
-            rgba(150, 180, 255, 0.1) 100%
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(200, 220, 255, 0.12) 50%,
+            rgba(150, 180, 255, 0.08) 100%
+        ),
+        radial-gradient(
+            focus-angle 0deg,
+            focus-distance 0%,
+            center 50% 50%,
+            radius 80%, /* Aumentado para brilho mais espalhado */
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(200, 220, 255, 0.08) 70%,
+            transparent 100%
+        );
+    -fx-effect:
+        dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.45, 1, 3),
+        innershadow(gaussian, rgba(255, 255, 255, 0.45), 12, 0.35, 0, -3),
+        dropshadow(gaussian, rgba(37, 99, 235, 0.25), 8, 0.2, 0, 0); /* Glow mais forte para destaque */
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1.03; /* Reduzido escala para efeito mais sutil */
+    -fx-scale-y: 1.03;
+}
+
+/* Efeito de clique para feedback visual mais suave */
+.menu-lateral .button:pressed {
+    -fx-background-color:
+        linear-gradient(
+            from 0% 0% to 100% 100%,
+            rgba(150, 180, 255, 0.08) 0%,
+            rgba(100, 140, 255, 0.04) 50%,
+            rgba(50, 100, 255, 0.01) 100%
         ),
         radial-gradient(
             focus-angle 0deg,
             focus-distance 0%,
             center 50% 50%,
             radius 70%,
-            rgba(255, 255, 255, 0.3) 0%,  /* Brilho mais forte */
-            rgba(200, 220, 255, 0.1) 70%
+            rgba(200, 220, 255, 0.15) 0%,
+            rgba(150, 180, 255, 0.04) 70%,
+            transparent 100%
         );
     -fx-effect:
-        dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.4, 1, 2),  /* Sombra mais pronunciada */
-        innershadow(gaussian, rgba(255, 255, 255, 0.4), 10, 0.3, 0, -3);
-    -fx-opacity: 1.0;
-    -fx-scale-x: 1.05;  /* Efeito de ampliação */
-    -fx-scale-y: 1.05;
-}
-
-/* Efeito de clique para feedback */
-.menu-lateral .button:pressed {
-    -fx-background-color:
-        linear-gradient(
-            from 0% 0% to 100% 100%,
-            rgba(150, 180, 255, 0.1) 0%,
-            rgba(100, 140, 255, 0.05) 50%,
-            rgba(50, 100, 255, 0.02) 100%
-        ),
-        radial-gradient(
-            focus-angle 0deg,
-            focus-distance 0%,
-            center 50% 50%,
-            radius 60%,
-            rgba(200, 220, 255, 0.2) 0%,
-            rgba(150, 180, 255, 0.05) 70%
-        );
-    -fx-effect:
-        dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6, 0.2, 0, 0),
-        innershadow(gaussian, rgba(255, 255, 255, 0.2), 8, 0.2, 0, -1);
-    -fx-opacity: 0.8;
-    -fx-scale-x: 0.98;  /* Contração leve */
-    -fx-scale-y: 0.98;
+        dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.25, 0, 1),
+        innershadow(gaussian, rgba(255, 255, 255, 0.25), 8, 0.25, 0, -1),
+        dropshadow(gaussian, rgba(37, 99, 235, 0.1), 4, 0.1, 0, 0);
+    -fx-opacity: 0.85;
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
 }

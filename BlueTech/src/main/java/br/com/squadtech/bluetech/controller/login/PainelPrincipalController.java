@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import br.com.squadtech.bluetech.controller.SupportsMainController;
+import br.com.squadtech.bluetech.controller.aluno.MenuAlunoController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,11 +32,23 @@ public class PainelPrincipalController {
     @FXML
     private AnchorPane painelPrincipalMenu;
 
+    // Mantém referência ao controller do menu atual (para atualizar avatar, etc.)
+    private MenuAlunoController menuAlunoController;
+
     /**
      * Carrega um FXML dentro do painel lateral de menu (painelPrincipalMenu).
      */
     public void loadMenu(String fxmlPath) throws IOException {
-        Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+        Parent pane = loader.load();
+
+        // Injeta este controller no menu se ele suportar tal referência
+        Object controller = loader.getController();
+        if (controller instanceof MenuAlunoController menuAlunoController) {
+            this.menuAlunoController = menuAlunoController;
+            menuAlunoController.setPainelPrincipalController(this);
+        }
+
         painelPrincipalMenu.getChildren().clear();
         painelPrincipalMenu.getChildren().add(pane);
 
@@ -47,9 +61,17 @@ public class PainelPrincipalController {
 
     /**
      * Carrega um FXML dentro do painel de exibição (direita) do SplitPane.
+     * Se o controller carregado implementar SupportsMainController, injeta este controller principal nele.
      */
     public void loadContent(String fxmlPath) throws IOException {
-        Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+        Parent pane = loader.load();
+
+        Object controller = loader.getController();
+        if (controller instanceof SupportsMainController supportsMain) {
+            supportsMain.setPainelPrincipalController(this);
+        }
+
         painelPrincipalExibicao.getChildren().clear();
         painelPrincipalExibicao.getChildren().add(pane);
 
@@ -57,6 +79,15 @@ public class PainelPrincipalController {
         AnchorPane.setRightAnchor(pane, 0.0);
         AnchorPane.setBottomAnchor(pane, 0.0);
         AnchorPane.setLeftAnchor(pane, 0.0);
+    }
+
+    /**
+     * Atualiza a imagem de perfil exibida no menu do aluno, caso esteja carregado.
+     */
+    public void updateFotoMenuAluno(String imagePath) {
+        if (menuAlunoController != null) {
+            menuAlunoController.updateFotoAluno(imagePath);
+        }
     }
 
     @FXML
@@ -82,7 +113,7 @@ public class PainelPrincipalController {
         painelPrincipalExibicao.setClip(clipExibicao);
 
         //Ajusta a posição do divisor para refletir a largura preferida do menu (aprox. 300px)
-        Platform.runLater(() -> fixDividerPosition());
+        Platform.runLater(this::fixDividerPosition);
 
         //Mantém a largura do menu estável em redimensionamentos de largura do SplitPane
         painelPrincipal.widthProperty().addListener((obs, oldW, newW) -> fixDividerPosition());

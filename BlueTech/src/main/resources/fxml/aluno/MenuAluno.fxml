@@ -11,9 +11,9 @@
   <items>
     <AnchorPane fx:id="paneSuperiorMenuAluno" minHeight="200.0" prefHeight="260.0">
          <children>
-            <VBox alignment="TOP_CENTER" spacing="12.0" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <VBox alignment="TOP_CENTER" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <padding>
-                  <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
                <children>
                   <Label fx:id="painelAluno" text="Painel do Aluno" textFill="#ffd400">
@@ -21,12 +21,12 @@
                         <Font name="CaskaydiaMono NFM SemiBold" size="20.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="imgViewFotoAluno" fitWidth="100.0" preserveRatio="true" pickOnBounds="true">
+                  <ImageView fx:id="imgViewFotoAluno" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/Usuario.png" />
                      </image>
                   </ImageView>
-                  <VBox alignment="CENTER_LEFT" spacing="6.0" maxWidth="Infinity">
+                  <VBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="6.0">
                      <children>
                         <Label fx:id="txtMenuAlunoNomeAluno" text="Aluno:" textFill="WHITE" />
                         <Label fx:id="txtMenuAlunoCursoAluno" text="Curso:" textFill="WHITE" />
@@ -37,15 +37,15 @@
             </VBox>
          </children>
     </AnchorPane>
-    <VBox fx:id="vboxMenuAluno" spacing="16.0" alignment="TOP_CENTER" prefWidth="200.0" fillWidth="true">
+    <VBox fx:id="vboxMenuAluno" alignment="TOP_CENTER" fillWidth="true" prefWidth="200.0" spacing="16.0">
        <padding>
-          <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
+          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
        </padding>
        <children>
-          <JFXButton fx:id="btnAlunoEntregas" text="Entregas" maxWidth="Infinity" />
-          <JFXButton fx:id="btnAlunoPortifolio" text="Portifólio" maxWidth="Infinity" />
-          <JFXButton fx:id="bntAlunoBaixarMD" text="Baixar Readme" maxWidth="Infinity" />
-          <JFXButton fx:id="btnAlunoPerfil" text="Perfil" maxWidth="Infinity" />
+          <JFXButton fx:id="btnAlunoEntregas" maxWidth="Infinity" onAction="#AbrirEntregasSeccoes" text="Entregas" />
+          <JFXButton fx:id="btnAlunoPortifolio" maxWidth="Infinity" text="Portifólio" />
+          <JFXButton fx:id="bntAlunoBaixarMD" maxWidth="Infinity" text="Baixar Readme" />
+          <JFXButton fx:id="btnAlunoPerfil" maxWidth="Infinity" onAction="#AbreTelaPerfilAluno" text="Perfil" />
        </children>
     </VBox>
   </items>
