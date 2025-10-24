@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@../../css/Style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaSecaoAPIController">
+<BorderPane stylesheets="@../../css/Style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21.0.8" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaSecaoAPIController">
 
     <!-- Cabeçalho -->
     <top>

@@ -1,18 +1,22 @@
 package br.com.squadtech.bluetech.controller.aluno;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import br.com.squadtech.bluetech.controller.SupportsMainController;
+import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.model.SecaoContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class TelaSecaoAPIController {
+public class TelaSecaoAPIController implements SupportsMainController {
 
     @FXML
     private ResourceBundle resources;
@@ -44,13 +48,30 @@ public class TelaSecaoAPIController {
     @FXML
     private TextField txtMensagem;
 
+    // Ajustado para assinar ActionEvent conforme esperado pelo FXML (onAction)
     @FXML
     void abrirEdicaoSecao(ActionEvent event) {
-
+        if (painelPrincipalController != null) {
+            try {
+                // Recupera a seção atual do contexto (definida na tela anterior)
+                Integer idSecao = SecaoContext.getIdSecaoSelecionada();
+                if (idSecao == null) {
+                    // Sem seção selecionada, apenas não navega (ou poderia exibir um alerta futuramente)
+                    return;
+                }
+                String fxmlPath = "/fxml/aluno/EditarSecaoAPI.fxml";
+                painelPrincipalController.loadContent(fxmlPath);
+            } catch (IOException e) {
+                System.err.println("Falha ao carregar EditarSecaoAPI.fxml");
+                e.printStackTrace();
+            }
+        }
     }
+
 
     @FXML
     void enviarMensagemOrientador(ActionEvent event) {
+
 
     }
 
@@ -65,6 +86,25 @@ public class TelaSecaoAPIController {
         assert txtMarkdown != null : "fx:id=\"txtMarkdown\" was not injected: check your FXML file 'TelaSecaoAPI.fxml'.";
         assert txtMensagem != null : "fx:id=\"txtMensagem\" was not injected: check your FXML file 'TelaSecaoAPI.fxml'.";
 
+        carregarMarkdownDaUltimaVersaoSelecionada();
     }
 
+    private void carregarMarkdownDaUltimaVersaoSelecionada() {
+        Integer idSecao = SecaoContext.getIdSecaoSelecionada();
+        if (idSecao == null) {
+            txtMarkdown.setText("Nenhuma seção selecionada.");
+            return;
+        }
+        // TODO: Buscar do banco os dados da versão mais recente da seção (usando idSecao -> TG_Secao -> TG_Versao)
+        // Por enquanto, placeholder simples
+        txtMarkdown.setText("# Seção API\n\nDados da última versão serão carregados aqui.");
+    }
+
+    private PainelPrincipalController painelPrincipalController;
+
+    @Override
+    public void setPainelPrincipalController(PainelPrincipalController controller) {
+        this.painelPrincipalController = controller;
+
+    }
 }

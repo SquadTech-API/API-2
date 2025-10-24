@@ -2,6 +2,8 @@ package br.com.squadtech.bluetech.config;
 
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.UsuarioDAO;
+import br.com.squadtech.bluetech.dao.SecaoAPIDAO;
+import br.com.squadtech.bluetech.dao.TGSecaoDAO;
 import br.com.squadtech.bluetech.model.Usuario;
 
 public class DatabaseInitializer {
@@ -13,10 +15,14 @@ public class DatabaseInitializer {
         //Agora que o DB existe, podemos criar DAOs com segurança
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
+        SecaoAPIDAO secaoAPIDAO = new SecaoAPIDAO();
+        TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
 
         //Parte 1: Cria tabelas se não existirem
         usuarioDAO.createTableIfNotExists();
         perfilAlunoDAO.createTableIfNotExists();
+        secaoAPIDAO.createTableIfNotExists();
+        tgSecaoDAO.createTableIfNotExists();
 
         //Parte 2: Verifica se há dados e seed admin se vazio
         if (usuarioDAO.countUsuarios() == 0) {

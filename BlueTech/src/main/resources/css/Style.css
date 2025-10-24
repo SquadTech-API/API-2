@@ -63,6 +63,12 @@
     -fx-transition: 0.3s;
 }
 
+/* Alias para botão primário explícito */
+.button-primary {
+    /* herda de .button; ajustes leves */
+    -fx-font-weight: 600;
+}
+
 /* Hover (quando o mouse passa por cima) */
 .button:hover {
     -fx-background-color:
