@@ -52,16 +52,26 @@
                             <Label text="Link do Repositório Git:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
                             <TextField fx:id="txtRepositorio" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-                            <Label text="Tecnologias Utilizadas:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                            <TextArea fx:id="txtTecnologias" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                            <!-- Novo campo: LinkedIn -->
+                            <Label text="Link do Linkedin:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                            <TextField fx:id="txtLinkedin" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 
-                            <Label text="Contribuições Pessoais:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-                            <TextArea fx:id="txtContribuicoes" prefRowCount="4" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                            <Label text="Tecnologias Utilizadas:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                            <TextArea fx:id="txtTecnologias" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
-                            <Label text="Hard Skills:" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-                            <TextArea fx:id="txtHardSkills" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                            <Label text="Contribuições Pessoais:" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+                            <TextArea fx:id="txtContribuicoes" prefRowCount="4" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+
+                            <Label text="Hard Skills:" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+                            <TextArea fx:id="txtHardSkills" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+
+                            <!-- Novo campo: Soft Skills -->
+                            <Label text="Soft Skills:" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+                            <TextArea fx:id="txtSoftSkills" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                         </children>
                   <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
                      <RowConstraints />
                      <RowConstraints />
                      <RowConstraints />
@@ -86,6 +96,7 @@
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
             <Button fx:id="btnVoltar" onAction="#voltarEntregasAluno" styleClass="button-secondary" text="Voltar" />
+            <Button fx:id="btnCancelar" onAction="#handleCancelar" styleClass="button-secondary" text="Cancelar" />
             <Button fx:id="btnSalvar" onAction="#salvarNovaSecaoAPI" styleClass="button-primary" text="Salvar" />
         </HBox>
     </bottom>

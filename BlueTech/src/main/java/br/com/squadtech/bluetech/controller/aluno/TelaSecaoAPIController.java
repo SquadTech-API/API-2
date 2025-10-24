@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import br.com.squadtech.bluetech.controller.SupportsMainController;
+import br.com.squadtech.bluetech.model.SecaoContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -65,6 +66,17 @@ public class TelaSecaoAPIController {
         assert txtMarkdown != null : "fx:id=\"txtMarkdown\" was not injected: check your FXML file 'TelaSecaoAPI.fxml'.";
         assert txtMensagem != null : "fx:id=\"txtMensagem\" was not injected: check your FXML file 'TelaSecaoAPI.fxml'.";
 
+        carregarMarkdownDaUltimaVersaoSelecionada();
     }
 
+    private void carregarMarkdownDaUltimaVersaoSelecionada() {
+        Integer idSecao = SecaoContext.getIdSecaoSelecionada();
+        if (idSecao == null) {
+            txtMarkdown.setText("Nenhuma seção selecionada.");
+            return;
+        }
+        // TODO: Buscar do banco os dados da versão mais recente da seção (usando idSecao -> TG_Secao -> TG_Versao)
+        // Por enquanto, placeholder simples
+        txtMarkdown.setText("# Seção API\n\nDados da última versão serão carregados aqui.");
+    }
 }
