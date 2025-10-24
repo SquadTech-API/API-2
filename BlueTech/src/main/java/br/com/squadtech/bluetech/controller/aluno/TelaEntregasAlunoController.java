@@ -82,8 +82,12 @@ public class TelaEntregasAlunoController implements SupportsMainController {
                 default -> "status-em-andamento";
             };
             status.getStyleClass().add(statusClass);
+<<<<<<< HEAD
             String ultimaAtualizacaoTxt = (c.dataEnvio != null) ? fmt.format(c.dataEnvio) : "—";
             Label ultimaAtualizacao = new Label("Última atualização: " + ultimaAtualizacaoTxt);
+=======
+            Label ultimaAtualizacao = new Label("Última atualização: " + fmt.format(c.dataEnvio));
+>>>>>>> origin/SPRINT_2
             ultimaAtualizacao.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 11px;");
 
             card.getChildren().addAll(titulo, status, ultimaAtualizacao);
