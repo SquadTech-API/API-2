@@ -20,7 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
-//Implementando a classe de Interface para chamar o Painel Principal
+// Implementando a classe de Interface para chamar o Painel Principal
 public class TelaEntregasAlunoController implements SupportsMainController {
 
     @FXML
@@ -35,18 +35,24 @@ public class TelaEntregasAlunoController implements SupportsMainController {
     @FXML
     private FlowPane flowCards;
 
+    // Variável para guardar a referência do PainelPrincipalController
+    private PainelPrincipalController painelPrincipalController;
+
+    // Método da Interface para injetar a referência
+    @Override
+    public void setPainelPrincipalController(PainelPrincipalController controller) {
+        this.painelPrincipalController = controller;
+    }
+
     @FXML
     void CriarEntregaSessaoAPI(ActionEvent event) {
-        //Usa a referência para carregar o novo conteúdo
         if (painelPrincipalController != null) {
             try {
                 String fxmlPath = "/fxml/aluno/CriarSecaoAPI.fxml";
-
                 painelPrincipalController.loadContent(fxmlPath);
             } catch (IOException e) {
                 System.err.println("Falha ao carregar CriarSecaoAPI.fxml");
                 e.printStackTrace();
-
             }
         } else {
             System.err.println("Erro: PainelPrincipalController não foi injetado em TelaEntregasAlunoController.");
@@ -75,6 +81,7 @@ public class TelaEntregasAlunoController implements SupportsMainController {
 
             Label titulo = new Label(String.format("%dº Semestre - %d/%s", c.apiNumero, c.ano, c.semestreAno));
             titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
             Label status = new Label("Status: " + c.status);
             String statusClass = switch (c.status == null ? "" : c.status.toLowerCase()) {
                 case "entregue", "aprovada" -> "status-entregue";
@@ -82,12 +89,9 @@ public class TelaEntregasAlunoController implements SupportsMainController {
                 default -> "status-em-andamento";
             };
             status.getStyleClass().add(statusClass);
-<<<<<<< HEAD
+
             String ultimaAtualizacaoTxt = (c.dataEnvio != null) ? fmt.format(c.dataEnvio) : "—";
             Label ultimaAtualizacao = new Label("Última atualização: " + ultimaAtualizacaoTxt);
-=======
-            Label ultimaAtualizacao = new Label("Última atualização: " + fmt.format(c.dataEnvio));
->>>>>>> origin/SPRINT_2
             ultimaAtualizacao.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 11px;");
 
             card.getChildren().addAll(titulo, status, ultimaAtualizacao);
@@ -108,14 +112,5 @@ public class TelaEntregasAlunoController implements SupportsMainController {
                 e.printStackTrace();
             }
         }
-    }
-
-    //Variável para guardar a referência
-    private PainelPrincipalController painelPrincipalController;
-
-    //Método da Interface para injetar a referência
-    @Override
-    public void setPainelPrincipalController(PainelPrincipalController controller) {
-        this.painelPrincipalController = controller;
     }
 }

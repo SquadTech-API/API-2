@@ -5,10 +5,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import br.com.squadtech.bluetech.controller.SupportsMainController;
-<<<<<<< HEAD
+
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
-=======
->>>>>>> origin/SPRINT_2
+
 import br.com.squadtech.bluetech.model.SecaoContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -102,7 +101,7 @@ public class TelaSecaoAPIController implements SupportsMainController {
         // Por enquanto, placeholder simples
         txtMarkdown.setText("# Seção API\n\nDados da última versão serão carregados aqui.");
     }
-<<<<<<< HEAD
+
 
     private PainelPrincipalController painelPrincipalController;
 
@@ -111,6 +110,5 @@ public class TelaSecaoAPIController implements SupportsMainController {
         this.painelPrincipalController = controller;
 
     }
-=======
->>>>>>> origin/SPRINT_2
+
 }

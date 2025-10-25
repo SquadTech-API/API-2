@@ -6,6 +6,6 @@ USE blue_tech;
 
 CREATE USER IF NOT EXISTS 'usuarioBlueTech'@'localhost' IDENTIFIED BY 'BlueTechADM123';
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON bluetech.* TO 'usuarioBlueTech'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON blue_tech.* TO 'usuarioBlueTech'@'localhost';
 
 FLUSH PRIVILEGES;
