@@ -14,177 +14,134 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;" stylesheets="@../../css/telaAlunoEspecifico.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.ControllerTelaAlunoEspecificos">
+<AnchorPane prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;"
+            stylesheets="@../../css/telaAlunoEspecifico.css"
+            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.ControllerTelaAlunoEspecificos">
 
     <!-- HEADER -->
-    <children>
-        <HBox prefHeight="140.0" prefWidth="1356.0" style="-fx-border-color: transparent transparent #999999 transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
+    <HBox prefHeight="140.0" prefWidth="1356.0" style="-fx-border-color: transparent transparent #999999 transparent;"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
+        <children>
+            <HBox prefHeight="181.0" prefWidth="805.0">
+                <VBox prefHeight="163.0" prefWidth="670.0">
+                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10">
+                        <children>
+                            <Label text="Aluno:">
+                                <font>
+                                    <Font name="System Bold" size="20"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="lblNomeAluno" text="">
+                                <font>
+                                    <Font name="System Bold" size="15"/>
+                                </font>
+                            </Label>
+                        </children>
+                        <padding>
+                            <Insets top="10" right="0" bottom="10" left="10"/>
+                        </padding>
+                    </HBox>
+                </VBox>
+            </HBox>
 
+            <HBox alignment="TOP_RIGHT" prefHeight="163.0" prefWidth="727.0">
+                <VBox prefHeight="163.0" prefWidth="623.0">
+                    <HBox alignment="TOP_RIGHT" prefHeight="164.0" prefWidth="610.0">
+                        <padding>
+                            <Insets top="15" right="20" bottom="0" left="0"/>
+                        </padding>
+                        <children>
+                            <Label text="6ºSEM">
+                                <font>
+                                    <Font name="System Bold" size="20"/>
+                                </font>
+                            </Label>
+                        </children>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </children>
+    </HBox>
+
+    <!-- CORPO -->
+    <HBox spacing="16" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0"
+          AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="159.0">
+
+        <!-- SIDEBAR -->
+        <VBox prefWidth="220" styleClass="sidebar" spacing="10">
+            <padding>
+                <Insets top="20" right="12" bottom="20" left="12"/>
+            </padding>
             <children>
-                <HBox prefHeight="181.0" prefWidth="805.0">
-                    <children>
-                        <VBox prefHeight="163.0" prefWidth="670.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                    <children>
-                                        <Label prefHeight="70.0" prefWidth="69.0" text="Aluno:">
-                                            <font><Font name="System Bold" size="20.0" /></font>
-                                        </Label>
-                                        <!-- AQUI RECEBE O NOME VIA CONTROLLER -->
-                                        <Label fx:id="lblNomeAluno" prefHeight="21.0" text="">
-                                            <font><Font name="System Bold" size="15.0" /></font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-
-                                <HBox alignment="CENTER_LEFT" spacing="20.0" />
-                            </children>
-                        </VBox>
-                    </children>
-                    <HBox.margin><Insets bottom="20.0" /></HBox.margin>
-                    <padding><Insets left="20.0" /></padding>
-                </HBox>
-
-                <HBox alignment="TOP_RIGHT" prefHeight="163.0" prefWidth="727.0">
-                    <children>
-                        <VBox prefHeight="163.0" prefWidth="623.0">
-                            <children>
-                                <HBox alignment="TOP_RIGHT" prefHeight="164.0" prefWidth="610.0">
-                                    <padding><Insets top="15.0" /></padding>
-                                    <children>
-                                        <Label text="6ºSEM">
-                                            <font><Font name="System Bold" size="20.0" /></font>
-                                 <HBox.margin>
-                                    <Insets right="20.0" top="30.0" />
-                                 </HBox.margin>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                            </children>
-                        </VBox>
-                    </children>
-                </HBox>
+                <Label styleClass="sidebar-title" text="Sessões"/>
+                <ToggleButton prefHeight="37.0" prefWidth="200.0" selected="true" styleClass="sidebar-tab" text="Sessão 1">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="tgSessoes"/>
+                    </toggleGroup>
+                </ToggleButton>
+                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 2" toggleGroup="$tgSessoes"/>
+                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 3" toggleGroup="$tgSessoes"/>
+                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 4" toggleGroup="$tgSessoes"/>
+                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 5" toggleGroup="$tgSessoes"/>
+                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 6" toggleGroup="$tgSessoes"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                <ImageView fitHeight="81.0" fitWidth="56.0" preserveRatio="true">
+                    <image><Image url="@../../images/check.png"/></image>
+                </ImageView>
             </children>
-        </HBox>
+        </VBox>
 
-        <!-- CORPO COM SIDEBAR + CONTEÚDO -->
-        <HBox spacing="16" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="159.0">
+        <!-- CONTEÚDO -->
+        <StackPane HBox.hgrow="ALWAYS">
+            <!-- Cada ScrollPane com VBox separado -->
+            <ScrollPane fx:id="spSessao1" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="true">
+                <content>
+                    <VBox fx:id="VBoxSessao1" spacing="14" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
 
-            <!-- SIDEBAR SESSÕES -->
-            <VBox prefWidth="220" styleClass="sidebar">
-                <padding><Insets bottom="20" left="12" right="12" top="20" /></padding>
-                <children>
-                    <Label styleClass="sidebar-title" text="Sessões" />
-                    <ToggleButton prefHeight="37.0" prefWidth="200.0" selected="true" styleClass="sidebar-tab" text="Sessão 1">
-                        <toggleGroup>
-                            <ToggleGroup fx:id="tgSessoes" />
-                        </toggleGroup>
-                    </ToggleButton>
-                    <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 2" toggleGroup="$tgSessoes" />
-                    <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 3" toggleGroup="$tgSessoes" />
-                    <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 4" toggleGroup="$tgSessoes" />
-                    <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 5" toggleGroup="$tgSessoes" />
-                    <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 6" toggleGroup="$tgSessoes" />
-                    <Region VBox.vgrow="ALWAYS" />
-                    <ImageView fitHeight="81.0" fitWidth="56.0" preserveRatio="true">
-                        <image><Image url="@../../images/check.png" /></image>
-                    </ImageView>
-                </children>
-            </VBox>
+            <ScrollPane fx:id="spSessao2" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao2" spacing="14" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
 
-            <!-- CONTEÚDO DAS SESSÕES -->
-            <StackPane HBox.hgrow="ALWAYS">
+            <ScrollPane fx:id="spSessao3" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao3" spacing="14" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
 
-                <!-- SESSÃO 1 -->
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" managed="true" styleClass="list-cards" visible="true">
-                    <content>
-                        <VBox fx:id="VBoxSessao1" spacing="14" style="-fx-background-color: transparent;">
-                            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+            <ScrollPane fx:id="spSessao4" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao4" spacing="14" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
 
-                            <HBox alignment="CENTER_LEFT" styleClass="card, student-row">
-                                <children>
-                                    <Label text="EntregaTg.md"><font><Font size="24.0" /></font></Label>
-                                    <Region HBox.hgrow="ALWAYS"><padding><Insets left="20" /></padding></Region>
-                                    <Label text="há 14 dias"><font><Font size="24.0" /></font></Label>
-                                    <ImageView fitHeight="61" fitWidth="76" preserveRatio="true">
-                                        <HBox.margin><Insets right="10" /></HBox.margin>
-                                        <image><Image url="@../../images/excla.png" /></image>
-                                    </ImageView>
-                                </children>
-                                <padding><Insets left="20" /></padding>
-                            </HBox>
+            <ScrollPane fx:id="spSessao5" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao5" spacing="14" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
 
-                            <HBox alignment="CENTER_LEFT" styleClass="card, student-row">
-                                <children>
-                                    <Label text="EntregaTg.md"><font><Font size="24.0" /></font></Label>
-                                    <Region HBox.hgrow="ALWAYS"><padding><Insets left="20" /></padding></Region>
-                                    <Label text="22/08/25"><font><Font size="24.0" /></font></Label>
-                                    <ImageView fitHeight="61" fitWidth="76" preserveRatio="true">
-                                        <HBox.margin><Insets right="10" /></HBox.margin>
-                                        <image><Image url="@../../images/check.png" /></image>
-                                    </ImageView>
-                                </children>
-                                <padding><Insets left="20" /></padding>
-                            </HBox>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-
-                <!-- SESSÃO 2 -->
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" managed="false" styleClass="list-cards" visible="false">
-                    <content>
-                        <VBox fx:id="VBoxSessao2" spacing="14" style="-fx-background-color: transparent;">
-                            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
-                            <HBox alignment="CENTER_LEFT" styleClass="card, student-row">
-                                <children>
-                                    <Label text="EntregaTg.md (S2)"><font><Font size="24.0" /></font></Label>
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <Label text="02/08/25"><font><Font size="24.0" /></font></Label>
-                                    <ImageView fitHeight="61" fitWidth="76" preserveRatio="true">
-                                        <HBox.margin><Insets right="10" /></HBox.margin>
-                                        <image><Image url="@../../images/check.png" /></image>
-                                    </ImageView>
-                                </children>
-                                <padding><Insets left="20" /></padding>
-                            </HBox>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-
-                <!-- SESSÃO 3 -->
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" managed="false" styleClass="list-cards" visible="false">
-                    <content>
-                        <VBox fx:id="VBoxSessao3" spacing="14" style="-fx-background-color: transparent;">
-                            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-
-                <!-- SESSÃO 4 -->
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" managed="false" styleClass="list-cards" visible="false">
-                    <content>
-                        <VBox fx:id="VBoxSessao4" spacing="14" style="-fx-background-color: transparent;">
-                            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-
-                <!-- SESSÃO 5 -->
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" managed="false" styleClass="list-cards" visible="false">
-                    <content>
-                        <VBox fx:id="VBoxSessao5" spacing="14" style="-fx-background-color: transparent;">
-                            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" managed="false" styleClass="list-cards" visible="false">
-                    <content>
-                        <VBox fx:id="VBoxSessao6" spacing="14" style="-fx-background-color: transparent;">
-                            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-            </StackPane>
-        </HBox>
-    </children>
+            <ScrollPane fx:id="spSessao6" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao6" spacing="14" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </StackPane>
+    </HBox>
 </AnchorPane>
