@@ -1,0 +1,103 @@
+/* === ScrollPane “naked” + container === */
+.scroll-pane.list-cards,
+.scroll-pane.list-cards > .viewport,
+.scroll-pane.list-cards .corner { -fx-background-color: transparent; }
+
+#VBoxListaAlunos, #VBoxSessao1, #VBoxSessao2, #VBoxSessao3, #VBoxSessao4, #VBoxSessao5 {
+    -fx-background-color: transparent;
+    -fx-spacing: 14;
+}
+
+/* === Card arredondado === */
+.card {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(255,255,255,0.92), rgba(248,250,252,0.96)),
+        white;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 16,16;
+    -fx-border-radius: 16;
+    -fx-border-color: rgba(2, 6, 23, 0.06);
+    -fx-border-width: 1;
+    -fx-padding: 12 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0.25, 0, 2);
+}
+.card:hover  { -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0.3, 0, 4); }
+.card:pressed{ -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.20), 14, 0.45, 0, 0); }
+
+/* === Linha de item === */
+.student-row {
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-min-height: 18px;
+}
+.student-row .label { -fx-text-fill: #0f172a; -fx-font-size: 18px; -fx-font-weight: 700; }
+
+/* ===========================
+   SIDEBAR (Sessões 1–5)
+   =========================== */
+.sidebar {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(245,247,250,0.90)),
+        white;
+    -fx-background-radius: 18,18;
+    -fx-border-radius: 18;
+    -fx-border-color: rgba(2,6,23,0.08);
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0.3, 0, 2);
+    -fx-spacing: 10;
+}
+.sidebar-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-padding: 0 0 8 6;
+}
+
+/* abas de sessão (ToggleButtons) */
+.sidebar-tab {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(255,255,255,0.92), rgba(245,246,250,0.96));
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(37, 99, 235, 0.30);
+    -fx-border-width: 2;
+    -fx-padding: 10 14;
+    -fx-cursor: hand;
+}
+.sidebar-tab:hover {
+    -fx-border-color: rgba(37,99,235,0.55);
+}
+.sidebar-tab:selected {
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #1e3a8a);
+    -fx-text-fill: white;
+    -fx-border-color: #FFD700;
+}
+
+/* === Busca / Botões genéricos (mantém identidade) === */
+.toggle-button:selected {
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #1e3a8a);
+    -fx-text-fill: white; -fx-font-weight: 700;
+    -fx-background-radius: 12; -fx-border-radius: 12;
+    -fx-border-color: #FFD700; -fx-border-width: 2;
+    -fx-padding: 8 16; -fx-cursor: hand;
+}
+.toggle-button {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(245,246,250,0.95));
+    -fx-text-fill: #0f172a; -fx-font-weight: 700;
+    -fx-background-radius: 12; -fx-border-radius: 12;
+    -fx-border-color: rgba(37, 99, 235, 0.30);
+    -fx-border-width: 2;
+}
+
+/* Foco acessível */
+.toggle-button:focused, .card:focused {
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.35), 10, 0.3, 0, 0);
+    -fx-border-color: #2563eb;
+}
+
+/* tipografia base (opcional) */
+.anchor-pane { -fx-font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial; -fx-text-fill: #0f172a; }

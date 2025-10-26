@@ -7,9 +7,13 @@
             #2563eb 60%,
             #1e3a8a 80%,
             #0f172a 100%
+
+            /*#0f172a 0%, */
+            /*#1e3a8a 40%,  */
+            /*#2563eb 80%  */
         );
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 20, 0.2, 0, 0);
-    -fx-background-radius: 0 20 20 0;
+    -fx-background-radius: 0 20 20 0; /* canto arredondado à direita */
 }
 
 .right-anchor-pane {
@@ -20,9 +24,9 @@
             rgba(255, 255, 255, 0.05) 100%
         );
     -fx-background-insets: 0;
-    -fx-background-radius: 20 0 0 20;
+    -fx-background-radius: 20 0 0 20; /* canto arredondado à esquerda */
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 15, 0.2, 0, 0);
-    -fx-border-color: rgba(255, 215, 0, 0.3);
+    -fx-border-color: rgba(255, 215, 0, 0.3); /* detalhe dourado translúcido */
     -fx-border-width: 3;
     -fx-border-radius: 20 20 20 20;
 }
@@ -35,7 +39,7 @@
             rgba(255, 255, 255, 0.05) 100%
         );
     -fx-background-insets: 0;
-    -fx-background-radius: 20 0 0 20;
+    -fx-background-radius: 20 0 0 20; /* canto arredondado à esquerda */
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 15, 0.2, 0, 0);
 }
 
@@ -98,10 +102,10 @@
    Botão de Login (Destaque)
    =========================== */
 .button-login {
-    -fx-background-color: linear-gradient(to bottom, #1e3a8a, #2563eb);
+    -fx-background-color: linear-gradient(to bottom, #1e3a8a, #2563eb); /* Azul nobre */
     -fx-text-fill: white;
     -fx-padding: 12 28;
-    -fx-background-radius: 30;
+    -fx-background-radius: 30; /* Mais arredondado que os outros */
     -fx-border-color: #FFD700;
     -fx-border-width: 2;
     -fx-border-radius: 30;

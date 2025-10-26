@@ -2,38 +2,42 @@ package br.com.squadtech.bluetech.controller.professorOrientador;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class ControllerTelaAlunoEspecificos {
 
-    @FXML
-    private ToggleButton ButtonProximaTela2;
+    @FXML private ToggleButton ButtonProximaTela2;
+    @FXML private Label lblNomeAluno; // <- precisa existir no FXML
 
-    @FXML
-    void passarTelaIndefinida(ActionEvent event) {
-        try {
-            // Carrega o FXML da tela Dashboard
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/professorTG/dashboard.fxml"));
-            Scene scene = new Scene(root);
+    private PainelPrincipalOrientadorController painelPrincipalController;
+    private String nomePendente; // caso definirAluno seja chamado antes do initialize()
 
-            // Pega a janela atual
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void setPainelPrincipalController(PainelPrincipalOrientadorController painelPrincipalController) {
+        this.painelPrincipalController = painelPrincipalController;
+    }
+
+    /** Recebe o nome do aluno a ser exibido. */
+    public void definirAluno(String nomeAluno) {
+        if (lblNomeAluno != null) {
+            lblNomeAluno.setText(nomeAluno != null ? nomeAluno : "");
+        } else {
+            nomePendente = nomeAluno;
         }
     }
 
-    public void receberAluno(Integer idAluno, String nomeAluno) {
-        // Aqui você pode guardar esses dados para usar na tela
-        System.out.println("Aluno: " + nomeAluno + " | ID: " + idAluno);
+    @FXML
+    public void initialize() {
+        if (nomePendente != null && lblNomeAluno != null) {
+            lblNomeAluno.setText(nomePendente);
+            nomePendente = null;
+        }
+    }
+
+    @FXML
+    void passarTelaIndefinida(ActionEvent event) {
+        if (painelPrincipalController != null) {
+            painelPrincipalController.enviarEmail();
+        }
     }
 }

@@ -25,7 +25,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MenuAlunoController {
@@ -113,17 +112,12 @@ public class MenuAlunoController {
     @FXML
     void AbreTelaOrientador(ActionEvent event) {
         try {
-            // Carregar o FXML da tela do orientador
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/TelaAlunos.fxml"));
-            Parent root = loader.load();
-
-            // Criar nova Stage
+            // Simples: abrir a tela do orientador em nova janela
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/professorOrientador/TelaAlunos.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Tela do Orientador");
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL); // Bloqueia interação com outras janelas se desejar
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
