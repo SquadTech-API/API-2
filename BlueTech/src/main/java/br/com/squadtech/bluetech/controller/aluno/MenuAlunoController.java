@@ -1,6 +1,7 @@
 package br.com.squadtech.bluetech.controller.aluno;
 
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.controller.professorOrientador.PainelPrincipalOrientadorController;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
@@ -112,16 +113,28 @@ public class MenuAlunoController {
     @FXML
     void AbreTelaOrientador(ActionEvent event) {
         try {
-            // Simples: abrir a tela do orientador em nova janela
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/professorOrientador/TelaAlunos.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    getClass().getResource("/fxml/professorOrientador/painelprincipal_orientador.fxml")
+            );
+
+            Parent root = fxmlLoader.load();
+
+            // Obtém o controller e inicializa os paineis internos
+            PainelPrincipalOrientadorController controller = fxmlLoader.getController();
+            controller.loadMenuOrientador();        // Carrega o menu lateral
+            controller.mostrarTelaAlunos();        // Carrega a tela central de boas-vindas
+
+            Scene scene = new Scene(root);
             Stage stage = new Stage();
-            stage.setTitle("Tela do Orientador");
-            stage.setScene(new Scene(root));
+            stage.setTitle("BlueTech - Painel do Professor Orientador");
+            stage.setScene(scene);
+            stage.setResizable(true);
             stage.show();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     //Atualizar a foto no menu
     public void updateFotoAluno(String imagePath) {

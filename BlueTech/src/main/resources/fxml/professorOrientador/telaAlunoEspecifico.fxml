@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;" stylesheets="@../../css/telaAlunoEspecifico.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaAlunoEspecificoController">
+<AnchorPane prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;" stylesheets="@../../css/telaAlunoEspecifico.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.ControllerTelaAlunoEspecificos">
 
     <!-- HEADER -->
     <children>

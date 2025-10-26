@@ -1,13 +1,14 @@
 package br.com.squadtech.bluetech.controller.professorOrientador;
 
-import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.service.EmailService;
+import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.config.SmtpProps;
 import br.com.squadtech.bluetech.service.NotificationService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+
 import java.io.IOException;
 import java.sql.Connection;
 
@@ -71,19 +72,19 @@ public class PainelPrincipalOrientadorController {
     /** Abre a tela do aluno específico, opcionalmente recebendo o nome do aluno */
     public void mostrarTelaAlunoEspecifico(String nomeAluno) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/telaAlunoEspecifico.fxml"));
-            Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/telaAlunoEspecifico.fxml"));
+            Parent tela = loader.load();
 
-            TelaAlunoEspecificoController controller = loader.getController();
-            controller.setPainelPrincipalController(this);
-            controller.definirAluno(nomeAluno); // <- aqui passa só o nome, não o objeto completo
+            ControllerTelaAlunoEspecificos controller = loader.getController();
+            if (controller != null) {
+                controller.setPainelPrincipalController(this);
+                controller.definirAluno(nomeAluno); // passa o nome para a tela
+            }
 
-            // Exibe a tela no painel principal
-            painelPrincipalExibicao.getChildren().clear();
-            painelPrincipalExibicao.getChildren().add(root);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            painelPrincipalExibicao.getChildren().setAll(tela);
+            setAnchors(tela);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -124,7 +125,6 @@ public class PainelPrincipalOrientadorController {
         }
 
     }
-
     private void showInfo(String msg) {
         var alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setHeaderText("Notificação");

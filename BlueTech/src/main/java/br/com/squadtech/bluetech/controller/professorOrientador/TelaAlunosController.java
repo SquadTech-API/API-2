@@ -1,14 +1,9 @@
 package br.com.squadtech.bluetech.controller.professorOrientador;
 
-import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
-import br.com.squadtech.bluetech.model.PerfilAluno;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -18,14 +13,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class TelaAlunosController {
 
@@ -38,10 +31,8 @@ public class TelaAlunosController {
 
     private PainelPrincipalOrientadorController painelPrincipalController;
 
-    private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
-
-    // Lista de alunos carregada do banco
-    private List<PerfilAluno> todosAlunos = new ArrayList<>();
+    // mock: “banco” em memória
+    private final List<Aluno> todosAlunos = new ArrayList<>();
 
     public void setPainelPrincipalController(PainelPrincipalOrientadorController painelPrincipalController) {
         this.painelPrincipalController = painelPrincipalController;
@@ -49,13 +40,13 @@ public class TelaAlunosController {
 
     @FXML
     public void initialize() {
-        carregarAlunosDoBanco();
+        carregarMock();
 
         ToggleButonTodosAlunos.setSelected(true);
 
         ToggleButonTodosAlunos.setOnAction(e -> {
             ToggleButton tb = ToggleButonTodosAlunos;
-            if (!tb.isSelected()) tb.setSelected(true);
+            if (!tb.isSelected()) tb.setSelected(true); // sempre um ativo
             ToggleButtonCorrigidos.setSelected(false);
             ToggleButtonNaoCorrigidos.setSelected(false);
             aplicarFiltroERender();
@@ -81,38 +72,51 @@ public class TelaAlunosController {
         aplicarFiltroERender();
     }
 
-    // -------- Carrega alunos do banco --------
-    private void carregarAlunosDoBanco() {
-        todosAlunos = perfilAlunoDAO.listarAlunosComNome(); // <-- use listarAlunosComNome para pegar o nome
+    // -------- Mock data ----------
+    private void carregarMock() {
+        todosAlunos.clear();
+        todosAlunos.add(new Aluno("Elder Henrique Menezes", 45, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("Jhonatan Rossi", 14, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("Guilherme Valim da Silva", 14, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("Manuela Brito", 12, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("Caio Castro da Silva", 12, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("João Pedro Meneguel", 10, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("Giovanna Faria Lima", 6, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("Kelvin Diogo Nogueira", 2, Status.NAO_CORRIGIDO));
+        todosAlunos.add(new Aluno("João Juscelino Santos", 0, Status.CORRIGIDO));
+        todosAlunos.add(new Aluno("Maria Isabel Costa", 0, Status.CORRIGIDO));
+        todosAlunos.add(new Aluno("Sarah Leal Oliveira", 0, Status.CORRIGIDO));
+        todosAlunos.add(new Aluno("Jorge Benjoir Nair", 0, Status.CORRIGIDO));
+        todosAlunos.add(new Aluno("Gabriel Teixeira Ribeiro", 0, Status.CORRIGIDO));
+        todosAlunos.add(new Aluno("Gisele Silva de Castro", 0, Status.CORRIGIDO));
     }
 
     // -------- Filtro + render --------
     private void aplicarFiltroERender() {
         String termo = TextFieldNomePesquisa.getText() == null ? "" : TextFieldNomePesquisa.getText().trim().toLowerCase(Locale.ROOT);
 
-        List<PerfilAluno> filtrados = new ArrayList<>();
-        for (PerfilAluno a : todosAlunos) {
-            boolean matchesNome = termo.isEmpty() || (a.getNomeAluno() != null && a.getNomeAluno().toLowerCase(Locale.ROOT).contains(termo));
-            boolean matchesStatus = ToggleButonTodosAlunos.isSelected() ||
-                    (ToggleButtonCorrigidos.isSelected() && a.getIdade() != null && a.getIdade() == 0) ||
-                    (ToggleButtonNaoCorrigidos.isSelected() && (a.getIdade() == null || a.getIdade() > 0));
-            if (matchesNome && matchesStatus) {
-                filtrados.add(a);
-            }
-        }
+        List<Aluno> filtrados = todosAlunos.stream()
+                .filter(a -> termo.isEmpty() || a.nome.toLowerCase(Locale.ROOT).contains(termo))
+                .filter(a -> {
+                    if (ToggleButonTodosAlunos.isSelected()) return true;
+                    if (ToggleButtonCorrigidos.isSelected()) return a.status == Status.CORRIGIDO;
+                    if (ToggleButtonNaoCorrigidos.isSelected()) return a.status == Status.NAO_CORRIGIDO;
+                    return true; // fallback
+                })
+                .collect(Collectors.toList());
 
         renderizarCards(filtrados);
     }
 
-    private void renderizarCards(List<PerfilAluno> alunos) {
+    private void renderizarCards(List<Aluno> alunos) {
         VBoxListaAlunos.getChildren().clear();
-        for (PerfilAluno a : alunos) {
+        for (Aluno a : alunos) {
             VBoxListaAlunos.getChildren().add(criarCard(a));
         }
     }
 
     // -------- UI do card --------
-    private Node criarCard(PerfilAluno a) {
+    private Node criarCard(Aluno a) {
         HBox card = new HBox(8);
         card.getStyleClass().addAll("card", "student-row");
         card.setAlignment(Pos.CENTER_LEFT);
@@ -120,7 +124,7 @@ public class TelaAlunosController {
         card.setPrefHeight(65);
 
         // Nome
-        Label lblNome = new Label(a.getNomeAluno());
+        Label lblNome = new Label(a.nome);
         lblNome.setStyle("-fx-font-size: 18px;");
         lblNome.setPrefWidth(438);
 
@@ -129,16 +133,16 @@ public class TelaAlunosController {
         spacer.setPrefWidth(20);
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        // “há X dias”
-        Label lblDias = new Label("");
+        // “há X dias” (só para não corrigidos)
+        Label lblDias = new Label(a.status == Status.NAO_CORRIGIDO ? "há " + a.diasSemEnvio + " dias" : "");
         lblDias.setStyle("-fx-font-size: 18px;");
         lblDias.setPrefWidth(150);
         lblDias.setAlignment(Pos.CENTER_RIGHT);
 
-        // Ícone de status
-        String iconPath = (a.getIdade() != null && a.getIdade() == 0)
+        // Ícone de status — carregado com classpath-safe
+        String iconPath = (a.status == Status.CORRIGIDO)
                 ? "/images/check.png"
-                : "/images/excla.png";
+                : (a.diasSemEnvio >= 30 ? "/images/exclav.png" : "/images/excla.png");
 
         ImageView iv = new ImageView(loadImageSafe(iconPath));
         iv.setFitWidth(28);
@@ -148,44 +152,45 @@ public class TelaAlunosController {
         // Monta o card
         card.getChildren().addAll(lblNome, spacer, lblDias, iv);
 
+        // Hover/efeito opcional
         card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: rgba(0,0,0,0.04); -fx-background-radius: 8;"));
         card.setOnMouseExited(e -> card.setStyle(""));
 
-        // Clique: abre tela do aluno específico
-        card.setOnMouseClicked(e -> abrirTelaAlunoEspecifico(a));
+        // Clique: abre tela do aluno específico (passando o nome)
+        card.setOnMouseClicked(e -> {
+            if (painelPrincipalController != null) {
+                painelPrincipalController.mostrarTelaAlunoEspecifico(a.nome);
+            }
+        });
 
         return card;
     }
 
+    /** Carrega imagem do classpath com fallback suave (evita IllegalArgumentException) */
     private Image loadImageSafe(String classpathAbsolutePath) {
         try {
             URL url = getClass().getResource(classpathAbsolutePath);
-            if (url != null) return new Image(url.toExternalForm());
+            if (url != null) {
+                return new Image(url.toExternalForm());
+            }
         } catch (Exception ignored) {}
+        // fallback: 1x1 transparente (ou você pode apontar para um placeholder seu)
         return new Image("data:image/png;base64,"
                 + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9b2Yw5sAAAAASUVORK5CYII=");
     }
 
-    // -------- Abre tela aluno específico --------
-    private void abrirTelaAlunoEspecifico(PerfilAluno aluno) {
-        try {
-            // Ajuste do caminho para refletir a pasta professorOrientador
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/telaAlunoEspecifico.fxml"));
-            Parent root = loader.load();
+    // -------- “Modelo” simples --------
+    private enum Status { CORRIGIDO, NAO_CORRIGIDO }
 
-            // Recupera o controller da nova tela
-            TelaAlunoEspecificoController controller = loader.getController();
-            controller.definirAluno(aluno.getNomeAluno());
+    private static class Aluno {
+        final String nome;
+        final int diasSemEnvio; // só usado para exibir "há X dias"
+        final Status status;
 
-            // Cria a nova janela
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle(aluno.getNomeAluno());
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        Aluno(String nome, int diasSemEnvio, Status status) {
+            this.nome = nome;
+            this.diasSemEnvio = diasSemEnvio;
+            this.status = status;
         }
     }
 }
