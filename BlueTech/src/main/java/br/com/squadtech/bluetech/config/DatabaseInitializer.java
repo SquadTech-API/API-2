@@ -1,30 +1,38 @@
 package br.com.squadtech.bluetech.config;
 
-import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
-import br.com.squadtech.bluetech.dao.UsuarioDAO;
-import br.com.squadtech.bluetech.dao.SecaoAPIDAO;
-import br.com.squadtech.bluetech.dao.TGSecaoDAO;
+import br.com.squadtech.bluetech.dao.*;
 import br.com.squadtech.bluetech.model.Usuario;
 
 public class DatabaseInitializer {
 
     public static void init() {
-        //Parte 0: Cria o database se não existir
+        // Parte 0: Cria o database se não existir
         ConnectionFactory.createDatabaseIfNotExists();
 
-        //Agora que o DB existe, podemos criar DAOs com segurança
+        // Parte 1: Instancia todos os DAOs
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
-        SecaoAPIDAO secaoAPIDAO = new SecaoAPIDAO();
+        ProfessorDAO professorDAO = new ProfessorDAO();
+        OrientaDAO orientaDAO = new OrientaDAO();
+        TGPortifolioDAO tgPortifolioDAO = new TGPortifolioDAO();
         TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
+        TGVersaoDAO tgVersaoDAO = new TGVersaoDAO();
+        FeedbackDAO feedbackDAO = new FeedbackDAO();
 
-        //Parte 1: Cria tabelas se não existirem
+        // Parte 2: Criação das tabelas na ordem correta
+        // Tabelas independentes primeiro
         usuarioDAO.createTableIfNotExists();
+        professorDAO.createTableIfNotExists();
         perfilAlunoDAO.createTableIfNotExists();
-        secaoAPIDAO.createTableIfNotExists();
-        tgSecaoDAO.createTableIfNotExists();
+        tgPortifolioDAO.createTableIfNotExists();
 
-        //Parte 2: Verifica se há dados e seed admin se vazio
+        // Agora tabelas que dependem de outras
+        tgSecaoDAO.createTableIfNotExists();   // depende de TGPortifolio
+        tgVersaoDAO.createTableIfNotExists();  // depende de TGSecao
+        orientaDAO.createTableIfNotExists();   // depende de Usuario (professor/aluno)
+        feedbackDAO.createTableIfNotExists();  // depende de TGVersao e Usuario
+
+        // Parte 3: Seed admin caso não existam usuários
         if (usuarioDAO.countUsuarios() == 0) {
             seedAdminInicial(usuarioDAO);
         }

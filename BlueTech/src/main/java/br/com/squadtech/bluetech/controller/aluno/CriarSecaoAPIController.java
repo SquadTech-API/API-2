@@ -2,6 +2,7 @@ package br.com.squadtech.bluetech.controller.aluno;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,11 +10,12 @@ import java.util.ResourceBundle;
 
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
-import br.com.squadtech.bluetech.dao.SecaoAPIDAO;
+import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
-import br.com.squadtech.bluetech.model.SecaoAPI;
+import br.com.squadtech.bluetech.dao.TGVersaoDAO;
 import br.com.squadtech.bluetech.model.TGSecao;
-import java.time.LocalDateTime;
+import br.com.squadtech.bluetech.model.TGVersao;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,63 +27,20 @@ import javafx.scene.control.TextInputControl;
 
 public class CriarSecaoAPIController implements SupportsMainController {
 
-    @FXML
-    private ResourceBundle resources;
+    @FXML private ResourceBundle resources;
+    @FXML private URL location;
 
-    @FXML
-    private URL location;
+    @FXML private Button btnSalvar, btnVoltar, btnCancelar;
 
-    @FXML
-    private Button btnSalvar;
+    @FXML private TextField txtAno, txtEmpresa, txtRepositorio, txtLinkedin, txtSemestre, txtSemestreAno;
+    @FXML private TextArea txtContribuicoes, txtHardSkills, txtProblema, txtSolucao, txtTecnologias, txtSoftSkills;
 
-    @FXML
-    private Button btnVoltar;
-
-    @FXML
-    private Button btnCancelar;
-
-    @FXML
-    private TextField txtAno;
-
-    @FXML
-    private TextArea txtContribuicoes;
-
-    @FXML
-    private TextField txtEmpresa;
-
-    @FXML
-    private TextArea txtHardSkills;
-
-    @FXML
-    private TextArea txtProblema;
-
-    @FXML
-    private TextField txtRepositorio;
-
-    @FXML
-    private TextField txtLinkedin;
-
-    @FXML
-    private TextField txtSemestre;
-
-    @FXML
-    private TextField txtSemestreAno;
-
-    @FXML
-    private TextArea txtSolucao;
-
-    @FXML
-    private TextArea txtTecnologias;
-
-    @FXML
-    private TextArea txtSoftSkills;
-
-    // Guarda os valores iniciais para permitir cancelar e reverter mudanças
     private final Map<TextInputControl, String> initialValues = new HashMap<>();
+    private PainelPrincipalController painelPrincipalController;
 
     @FXML
     void salvarNovaSecaoAPI(ActionEvent event) {
-        // Usuário não é mais necessário para TG_Versao
+        // 1️⃣ Validação do ano
         Integer ano = null;
         String anoStr = txtAno.getText();
         if (anoStr != null && !anoStr.isBlank()) {
@@ -93,94 +52,98 @@ public class CriarSecaoAPIController implements SupportsMainController {
             }
         }
 
-        SecaoAPI secao = new SecaoAPI(
-                safeText(txtSemestre),
-                ano,
-                safeText(txtSemestreAno),
-                safeText(txtEmpresa),
-                safeText(txtProblema),
-                safeText(txtSolucao),
-                safeText(txtRepositorio),
-                safeText(txtLinkedin),
-                safeText(txtTecnologias),
-                safeText(txtContribuicoes),
-                safeText(txtHardSkills),
-                safeText(txtSoftSkills)
-        );
+        try {
+            // 2️⃣ Garantir que o portfólio exista
+            TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
+            portifolioDAO.createTableIfNotExists();
 
-        SecaoAPIDAO dao = new SecaoAPIDAO();
-        Integer idVersao = dao.insertReturningId(secao);
-        if (idVersao != null) {
-            // Upsert em TG_Secao
-            TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
-            tgSecaoDAO.createTableIfNotExists();
+            Long alunoId = getAlunoIdAtual(); // ID do aluno logado
+            Long portifolioId = portifolioDAO.getOrCreatePortifolioForAluno(alunoId);
 
-            // Deriva API_Numero do campo semestre (ex: "1º Semestre" -> 1). Fallback para 1 se inválido.
-            int apiNumero = parseApiNumeroFromSemestre(safeText(txtSemestre));
-            TGSecao tgSecao = new TGSecao(apiNumero, LocalDateTime.now(), "Em andamento", idVersao);
-            tgSecaoDAO.upsertByApiNumero(tgSecao);
+            // 3️⃣ Criar nova seção sempre com api_numero único
+            TGSecaoDAO secaoDAO = new TGSecaoDAO();
+            secaoDAO.createTableIfNotExists();
 
-            showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Seção API salva com sucesso.");
-            clearAllInputs();
-            snapshotInitialValues();
+            // Encontrar o próximo api_numero disponível (1 a 6)
+            int apiNumero = 1;
+            while (secaoDAO.findByApiNumeroAndPortifolio(apiNumero, portifolioId) != null) {
+                apiNumero++;
+                if (apiNumero > 6) {
+                    showAlert(Alert.AlertType.ERROR, "Limite de seções", "Todas as 6 seções já foram criadas para este portfólio.");
+                    return;
+                }
+            }
 
-            // Volta para a tela de entregas para exibir os cards atualizados
-            voltarEntregasAluno(null);
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Erro", "Falha ao salvar a Seção API. Verifique os dados e tente novamente.");
+            TGSecao novaSecao = new TGSecao(portifolioId, apiNumero, "PENDENTE", false);
+            novaSecao.setDataValidacao(LocalDateTime.now());
+
+            Long secaoId = secaoDAO.insertReturningId(novaSecao);
+            if (secaoId == null) {
+                showAlert(Alert.AlertType.ERROR, "Erro", "Falha ao criar a nova seção.");
+                return;
+            }
+
+            // 4️⃣ Criar o objeto TGVersao vinculado à nova seção
+            TGVersao versao = new TGVersao(
+                    safeText(txtSemestre),
+                    ano,
+                    safeText(txtSemestreAno),
+                    safeText(txtEmpresa),
+                    safeText(txtProblema),
+                    safeText(txtSolucao),
+                    safeText(txtRepositorio),
+                    safeText(txtLinkedin),
+                    safeText(txtTecnologias),
+                    safeText(txtContribuicoes),
+                    safeText(txtHardSkills),
+                    safeText(txtSoftSkills)
+            );
+            versao.setSecaoId(secaoId);
+
+            // 5️⃣ Salvar a versão no banco
+            TGVersaoDAO versaoDAO = new TGVersaoDAO();
+            versaoDAO.createTableIfNotExists();
+
+            int proximoNumeroVersao = versaoDAO.getUltimoNumeroVersao(secaoId) + 1;
+            Long idVersao = versaoDAO.insertReturningId(versao, proximoNumeroVersao);
+
+            if (idVersao != null) {
+                showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Nova entrega criada com sucesso.");
+                clearAllInputs();
+                snapshotInitialValues();
+                voltarEntregasAluno(null);
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erro", "Falha ao salvar a versão da nova seção.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erro", "Ocorreu um erro: " + e.getMessage());
         }
     }
 
-    private int parseApiNumeroFromSemestre(String semestre) {
-        if (semestre == null) return 1;
-        String s = semestre.replaceAll("[^0-9]", "");
-        try { int n = Integer.parseInt(s); return (n >=1 && n <=6) ? n : 1; } catch (Exception e) { return 1; }
-    }
-
+    // ----------------- Métodos auxiliares -----------------
     @FXML
     void voltarEntregasAluno(ActionEvent event) {
         if (painelPrincipalController != null) {
             try {
-                String fxmlPath = "/fxml/aluno/TelaEntregasAluno.fxml";
-
-                painelPrincipalController.loadContent(fxmlPath);
+                painelPrincipalController.loadContent("/fxml/aluno/TelaEntregasAluno.fxml");
             } catch (IOException e) {
-                System.err.println("Falha ao carregar TelaEntregasAluno.fxml");
                 e.printStackTrace();
-
+                showAlert(Alert.AlertType.ERROR, "Erro", "Falha ao carregar TelaEntregasAluno.fxml");
             }
         } else {
-            System.err.println("Erro: PainelPrincipalController não foi injetado em CriarSecaoAPIController.");
+            System.err.println("PainelPrincipalController não foi injetado em CriarSecaoAPIController.");
         }
-
     }
 
     @FXML
     void handleCancelar(ActionEvent event) {
-        clearAllInputs();
-        // Também atualiza o snapshot, para o estado atual vazio ser o novo "inicial"
-        snapshotInitialValues();
+        restoreInitialValues();
     }
 
     @FXML
     void initialize() {
-        assert btnSalvar != null : "fx:id=\"btnSalvar\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert btnVoltar != null : "fx:id=\"btnVoltar\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert btnCancelar != null : "fx:id=\"btnCancelar\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtAno != null : "fx:id=\"txtAno\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtContribuicoes != null : "fx:id=\"txtContribuicoes\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtEmpresa != null : "fx:id=\"txtEmpresa\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtHardSkills != null : "fx:id=\"txtHardSkills\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtProblema != null : "fx:id=\"txtProblema\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtRepositorio != null : "fx:id=\"txtRepositorio\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtLinkedin != null : "fx:id=\"txtLinkedin\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtSemestre != null : "fx:id=\"txtSemestre\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtSemestreAno != null : "fx:id=\"txtSemestreAno\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtSolucao != null : "fx:id=\"txtSolucao\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtTecnologias != null : "fx:id=\"txtTecnologias\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-        assert txtSoftSkills != null : "fx:id=\"txtSoftSkills\" was not injected: check your FXML file 'CriarSecaoAPI.fxml'.";
-
-        // Snapshot dos valores iniciais (após qualquer preenchimento automático externo)
         Platform.runLater(this::snapshotInitialValues);
     }
 
@@ -211,18 +174,8 @@ public class CriarSecaoAPIController implements SupportsMainController {
 
     private java.util.List<TextInputControl> getAllInputs() {
         return Arrays.asList(
-                txtSemestre,
-                txtAno,
-                txtSemestreAno,
-                txtEmpresa,
-                txtProblema,
-                txtSolucao,
-                txtRepositorio,
-                txtLinkedin,
-                txtTecnologias,
-                txtContribuicoes,
-                txtHardSkills,
-                txtSoftSkills
+                txtSemestre, txtAno, txtSemestreAno, txtEmpresa, txtProblema, txtSolucao,
+                txtRepositorio, txtLinkedin, txtTecnologias, txtContribuicoes, txtHardSkills, txtSoftSkills
         );
     }
 
@@ -234,10 +187,14 @@ public class CriarSecaoAPIController implements SupportsMainController {
         alert.showAndWait();
     }
 
-    private PainelPrincipalController painelPrincipalController;
-
     @Override
     public void setPainelPrincipalController(PainelPrincipalController controller) {
         this.painelPrincipalController = controller;
+    }
+
+    // ----------------- Método fictício para o ID do aluno -----------------
+    private Long getAlunoIdAtual() {
+        // Retornar o ID do aluno logado no sistema
+        return 1L; // substituir pelo valor real
     }
 }

@@ -3,37 +3,62 @@ package br.com.squadtech.bluetech.model;
 import java.time.LocalDateTime;
 
 public class TGSecao {
-    private Integer idSecao;
+
+    private Long id;
+    private Long portifolioId; // FK para TGPortifolio
     private Integer apiNumero; // 1..6
-    private LocalDateTime dataEnvio;
-    private LocalDateTime dataAprovacao; // pode ser null
-    private String status; // Aprovada, Revisar, Aguardando Feedback
-    private Integer idVersao; // FK para TG_Versao
+    private String status; // "PENDENTE", "CONCLUIDA"
+    private Boolean versaoValidada;
+    private LocalDateTime dataValidacao;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public TGSecao() {}
 
-    public TGSecao(Integer apiNumero, LocalDateTime dataEnvio, String status, Integer idVersao) {
+    // Construtor completo e correto
+    public TGSecao(Long portifolioId, Integer apiNumero, String status, Boolean versaoValidada) {
+        this.portifolioId = portifolioId;
         this.apiNumero = apiNumero;
-        this.dataEnvio = dataEnvio;
         this.status = status;
-        this.idVersao = idVersao;
+        this.versaoValidada = versaoValidada;
     }
 
-    public Integer getIdSecao() { return idSecao; }
-    public void setIdSecao(Integer idSecao) { this.idSecao = idSecao; }
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getPortifolioId() { return portifolioId; }
+    public void setPortifolioId(Long portifolioId) { this.portifolioId = portifolioId; }
 
     public Integer getApiNumero() { return apiNumero; }
     public void setApiNumero(Integer apiNumero) { this.apiNumero = apiNumero; }
 
-    public LocalDateTime getDataEnvio() { return dataEnvio; }
-    public void setDataEnvio(LocalDateTime dataEnvio) { this.dataEnvio = dataEnvio; }
-
-    public LocalDateTime getDataAprovacao() { return dataAprovacao; }
-    public void setDataAprovacao(LocalDateTime dataAprovacao) { this.dataAprovacao = dataAprovacao; }
-
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public Integer getIdVersao() { return idVersao; }
-    public void setIdVersao(Integer idVersao) { this.idVersao = idVersao; }
+    public Boolean getVersaoValidada() { return versaoValidada; }
+    public void setVersaoValidada(Boolean versaoValidada) { this.versaoValidada = versaoValidada; }
+
+    public LocalDateTime getDataValidacao() { return dataValidacao; }
+    public void setDataValidacao(LocalDateTime dataValidacao) { this.dataValidacao = dataValidacao; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    @Override
+    public String toString() {
+        return "TGSecao{" +
+                "id=" + id +
+                ", portifolioId=" + portifolioId +
+                ", apiNumero=" + apiNumero +
+                ", status='" + status + '\'' +
+                ", versaoValidada=" + versaoValidada +
+                ", dataValidacao=" + dataValidacao +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

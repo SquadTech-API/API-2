@@ -1,37 +1,38 @@
 package br.com.squadtech.bluetech.model;
 
 public class PerfilAluno {
-    private Integer idPerfilAluno;
-    private String emailUsuario; //FK para usuario.email
-    private Integer idade; //pode ser nulo
-    private String foto; //caminho absoluto para o arquivo
+
+    private Integer idPerfilAluno;          // PK da tabela perfil_aluno
+    private String emailUsuario;            // FK para usuario.email
+    private Integer idade;                  // pode ser nulo
+    private String foto;                    // caminho absoluto para o arquivo
     private String historicoAcademico;
-    private String motivacao;
     private String historicoProfissional;
+    private String motivacao;
     private String linkGithub;
     private String linkLinkedin;
     private String conhecimentosTecnicos;
-    private String nomeAluno;
+    private String nomeAluno;               // atributo extra para consultas via JOIN
 
-    //Construtores, getters e setters
+    // Construtores
     public PerfilAluno() {}
 
     public PerfilAluno(Integer idPerfilAluno, String emailUsuario, Integer idade, String foto,
-                       String historicoAcademico, String motivacao, String historicoProfissional,
+                       String historicoAcademico, String historicoProfissional, String motivacao,
                        String linkGithub, String linkLinkedin, String conhecimentosTecnicos) {
         this.idPerfilAluno = idPerfilAluno;
         this.emailUsuario = emailUsuario;
         this.idade = idade;
         this.foto = foto;
         this.historicoAcademico = historicoAcademico;
-        this.motivacao = motivacao;
         this.historicoProfissional = historicoProfissional;
+        this.motivacao = motivacao;
         this.linkGithub = linkGithub;
         this.linkLinkedin = linkLinkedin;
         this.conhecimentosTecnicos = conhecimentosTecnicos;
     }
 
-
+    // Getters e Setters
     public Integer getIdPerfilAluno() { return idPerfilAluno; }
     public void setIdPerfilAluno(Integer idPerfilAluno) { this.idPerfilAluno = idPerfilAluno; }
 
@@ -47,11 +48,11 @@ public class PerfilAluno {
     public String getHistoricoAcademico() { return historicoAcademico; }
     public void setHistoricoAcademico(String historicoAcademico) { this.historicoAcademico = historicoAcademico; }
 
-    public String getMotivacao() { return motivacao; }
-    public void setMotivacao(String motivacao) { this.motivacao = motivacao; }
-
     public String getHistoricoProfissional() { return historicoProfissional; }
     public void setHistoricoProfissional(String historicoProfissional) { this.historicoProfissional = historicoProfissional; }
+
+    public String getMotivacao() { return motivacao; }
+    public void setMotivacao(String motivacao) { this.motivacao = motivacao; }
 
     public String getLinkGithub() { return linkGithub; }
     public void setLinkGithub(String linkGithub) { this.linkGithub = linkGithub; }

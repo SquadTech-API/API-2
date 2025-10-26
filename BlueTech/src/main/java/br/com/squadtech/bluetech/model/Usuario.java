@@ -4,51 +4,49 @@ import java.time.LocalDateTime;
 
 public class Usuario {
 
-    private Long id;
-    private String email;
+    private String email;            // PK
     private String nome;
-    private String senha;
-    private String tipo; // "ADMIN", "COORDENADOR", "ORIENTADOR", "ALUNO"
+    private String senhaHash;        // Senha armazenada como hash
+    private String tipo;             // "ALUNO", "ORIENTADOR", "PROFESSOR_TG"
     private boolean ativo;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Construtores
+    // Construtor vazio
     public Usuario() {}
 
-    public Usuario(Long id, String email, String nome, String senha, String tipo, boolean ativo,
-                   LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    // Construtor completo
+    public Usuario(String email, String nome, String senhaHash, String tipo,
+                   boolean ativo, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.nome = nome;
-        this.senha = senha;
+        this.senhaHash = senhaHash;
         this.tipo = tipo;
         this.ativo = ativo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    // Construtor simplificado (para cadastro rápido)
-    public Usuario(String email, String nome, String senha, String tipo) {
+    // Construtor simplificado para novo usuário (ativo por padrão)
+    public Usuario(String email, String nome, String senhaHash, String tipo) {
         this.email = email;
         this.nome = nome;
-        this.senha = senha;
+        this.senhaHash = senhaHash;
         this.tipo = tipo;
         this.ativo = true;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     // Getters e Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
+    public String getSenhaHash() { return senhaHash; }
+    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
 
     public String getTipo() { return tipo; }
     public void setTipo(String tipo) { this.tipo = tipo; }
@@ -62,17 +60,18 @@ public class Usuario {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    // Para debug e logs
     @Override
     public String toString() {
         return "Usuario{" +
-                "id=" + id +
+                "email='" + email + '\'' +
                 ", nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
                 ", tipo='" + tipo + '\'' +
                 ", ativo=" + ativo +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+
+
 }
