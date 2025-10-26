@@ -31,4 +31,9 @@ public class ControllerTelaAlunoEspecificos {
             e.printStackTrace();
         }
     }
+
+    public void receberAluno(Integer idAluno, String nomeAluno) {
+        // Aqui você pode guardar esses dados para usar na tela
+        System.out.println("Aluno: " + nomeAluno + " | ID: " + idAluno);
+    }
 }

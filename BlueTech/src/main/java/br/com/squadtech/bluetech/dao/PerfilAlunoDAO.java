@@ -151,10 +151,10 @@ public class PerfilAlunoDAO {
     public List<PerfilAluno> listarAlunosComNome() {
         List<PerfilAluno> alunos = new ArrayList<>();
         String sql = """
-            SELECT pa.*, u.nome AS nome_aluno
-            FROM aluno pa
-            JOIN usuarios u ON pa.usuario_id = u.id
-        """;
+    SELECT pa.*, u.nome AS nome_aluno, u.email
+    FROM perfil_aluno pa
+    JOIN usuario u ON pa.usuario_id = u.id
+""";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -163,15 +163,25 @@ public class PerfilAlunoDAO {
             while (rs.next()) {
                 PerfilAluno aluno = new PerfilAluno();
 
+                // ID do perfil_aluno
                 aluno.setIdPerfilAluno(rs.getInt("id"));
-                aluno.setEmailUsuario(rs.getString("email")); // se você quiser salvar o email
-                aluno.setIdade(rs.getInt("idade"));
+
+                // Email do usuário (vindo da tabela usuario via join)
+                aluno.setEmailUsuario(rs.getString("email"));
+
+                // Idade, histórico acadêmico, motivação, histórico profissional do perfil_aluno
+                int idadeVal = rs.getInt("idade");
+                aluno.setIdade(rs.wasNull() ? null : idadeVal);
                 aluno.setHistoricoAcademico(rs.getString("historico_academico"));
                 aluno.setMotivacao(rs.getString("motivacao"));
                 aluno.setHistoricoProfissional(rs.getString("historico_profissional"));
+
+                // Links
                 aluno.setLinkGithub(rs.getString("link_github"));
                 aluno.setLinkLinkedin(rs.getString("link_linkedin"));
-                aluno.setNomeAluno(rs.getString("nome_aluno")); // <--- nome vindo da tabela usuarios
+
+                // Nome do aluno (vindo da tabela usuario via join)
+                aluno.setNomeAluno(rs.getString("nome_aluno"));
 
                 alunos.add(aluno);
             }

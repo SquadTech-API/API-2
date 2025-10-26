@@ -7,7 +7,10 @@ import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
@@ -22,6 +25,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MenuAlunoController {
 
@@ -106,8 +111,22 @@ public class MenuAlunoController {
     }
 
     @FXML
-    void AbreTelaOrientador(ActionEvent event) { // Novo método adicionado
-        loadContentIntoMain("/fxml/orientador/TelaOrientador.fxml");
+    void AbreTelaOrientador(ActionEvent event) {
+        try {
+            // Carregar o FXML da tela do orientador
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/TelaAlunos.fxml"));
+            Parent root = loader.load();
+
+            // Criar nova Stage
+            Stage stage = new Stage();
+            stage.setTitle("Tela do Orientador");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Bloqueia interação com outras janelas se desejar
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //Atualizar a foto no menu

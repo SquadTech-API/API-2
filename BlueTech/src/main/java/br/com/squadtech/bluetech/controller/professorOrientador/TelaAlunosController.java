@@ -124,7 +124,25 @@ public class TelaAlunosController {
         // Monta o HBox
         hbox.getChildren().addAll(lblNome, espaco, lblTempo, img);
 
+        // Evento de clique para abrir próxima tela
+        hbox.setOnMouseClicked(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/telaAlunoEspecifico.fxml"));
+                Parent root = loader.load();
 
+                // Pega o controller da próxima tela
+                ControllerTelaAlunoEspecificos controller = loader.getController();
+                controller.receberAluno(aluno.getIdPerfilAluno(), aluno.getNomeAluno());
+
+                // Fecha a janela atual
+                Stage stageAtual = (Stage) hbox.getScene().getWindow();
+                stageAtual.setScene(new Scene(root));
+                stageAtual.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         return hbox;
     }
