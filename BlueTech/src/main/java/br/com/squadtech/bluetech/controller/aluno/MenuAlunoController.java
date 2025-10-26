@@ -44,6 +44,9 @@ public class MenuAlunoController {
     private JFXButton btnAlunoPortifolio;
 
     @FXML
+    private JFXButton btnTelaOrientador; // Novo botão adicionado
+
+    @FXML
     private ImageView imgViewFotoAluno;
 
     @FXML
@@ -92,7 +95,6 @@ public class MenuAlunoController {
         }
     }
 
-
     @FXML
     void AbrirEntregasSeccoes(ActionEvent event) {
         loadContentIntoMain("/fxml/aluno/TelaEntregasAluno.fxml");
@@ -101,6 +103,11 @@ public class MenuAlunoController {
     @FXML
     void AbreTelaPerfilAluno(ActionEvent event) {
         loadContentIntoMain("/fxml/aluno/TelaPerfilAluno.fxml");
+    }
+
+    @FXML
+    void AbreTelaOrientador(ActionEvent event) { // Novo método adicionado
+        loadContentIntoMain("/fxml/orientador/TelaOrientador.fxml");
     }
 
     //Atualizar a foto no menu
@@ -119,6 +126,7 @@ public class MenuAlunoController {
         assert btnAlunoEntregas != null : "fx:id=\"btnAlunoEntregas\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPerfil != null : "fx:id=\"btnAlunoPerfil\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPortifolio != null : "fx:id=\"btnAlunoPortifolio\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnTelaOrientador != null : "fx:id=\"btnTelaOrientador\" was not injected: check your FXML file 'MenuAluno.fxml'."; // Novo assert
         assert imgViewFotoAluno != null : "fx:id=\"imgViewFotoAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert painelAluno != null : "fx:id=\"painelAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert paneSuperiorMenuAluno != null : "fx:id=\"paneSuperiorMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
@@ -182,10 +190,8 @@ public class MenuAlunoController {
             return; // Nada a processar se não houver imagem válida
         }
 
-        // Defina o tamanho desejado para a imagem interna (subtraindo a largura da borda: 120 - 2*4 = 112px)
         double fitSize = 112.0;
 
-        // Calcule o viewport para cropar a imagem ao centro em formato quadrado
         double imageWidth = image.getWidth();
         double imageHeight = image.getHeight();
         double side = Math.min(imageWidth, imageHeight);
@@ -193,13 +199,11 @@ public class MenuAlunoController {
         double y = (imageHeight - side) / 2.0;
         imgViewFotoAluno.setViewport(new Rectangle2D(x, y, side, side));
 
-        // Configure o ImageView para escalar o conteúdo cropado para o tamanho interno
-        imgViewFotoAluno.setPreserveRatio(false); // Desative preserveRatio após crop para quadrado
-        imgViewFotoAluno.setSmooth(true); // Melhora a qualidade do escalonamento
+        imgViewFotoAluno.setPreserveRatio(false);
+        imgViewFotoAluno.setSmooth(true);
         imgViewFotoAluno.setFitWidth(fitSize);
         imgViewFotoAluno.setFitHeight(fitSize);
 
-        // Aplique o clip circular centralizado, ajustado para o tamanho interno
         double radius = fitSize / 2.0;
         Circle clip = new Circle(radius, radius, radius);
         imgViewFotoAluno.setClip(clip);
@@ -212,7 +216,6 @@ public class MenuAlunoController {
     private double computeDesiredDividerPosition() {
         double total = Math.max(1.0, splitPanelMenuAluno.getHeight());
         double desired = paneSuperiorMenuAluno.getPrefHeight() / total;
-        //Limita para evitar posições extremas em alturas pequenas/grandes
         return Math.max(0.1, Math.min(0.9, desired));
     }
 

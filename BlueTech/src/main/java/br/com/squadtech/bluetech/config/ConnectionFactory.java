@@ -42,11 +42,11 @@ public class ConnectionFactory {
 
     // Cria database (usa conexão sem pool)
     public static void createDatabaseIfNotExists() {
-        String sql = "CREATE DATABASE IF NOT EXISTS bluetech";
+        String sql = "CREATE DATABASE IF NOT EXISTS blue_tech";
         try (Connection conn = getConnection(SERVER_URL);
              java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
-            System.out.println("Database 'bluetech' criado ou já existente.");
+            System.out.println("Database 'blue_tech' criado ou já existente.");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao criar database: " + e.getMessage());
         }
