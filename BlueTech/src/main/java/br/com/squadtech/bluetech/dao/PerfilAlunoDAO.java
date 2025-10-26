@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PerfilAlunoDAO {
 
@@ -142,5 +144,42 @@ public class PerfilAlunoDAO {
             System.err.println("Erro ao atualizar PerfilAluno: " + e.getMessage());
             return false;
         }
+    }
+    /**
+     * Lista todos os perfis de aluno junto com o nome do usuário (JOIN com tabela usuarios).
+     */
+    public List<PerfilAluno> listarAlunosComNome() {
+        List<PerfilAluno> alunos = new ArrayList<>();
+        String sql = """
+            SELECT pa.*, u.nome AS nome_aluno
+            FROM aluno pa
+            JOIN usuarios u ON pa.usuario_id = u.id
+        """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                PerfilAluno aluno = new PerfilAluno();
+
+                aluno.setIdPerfilAluno(rs.getInt("id"));
+                aluno.setEmailUsuario(rs.getString("email")); // se você quiser salvar o email
+                aluno.setIdade(rs.getInt("idade"));
+                aluno.setHistoricoAcademico(rs.getString("historico_academico"));
+                aluno.setMotivacao(rs.getString("motivacao"));
+                aluno.setHistoricoProfissional(rs.getString("historico_profissional"));
+                aluno.setLinkGithub(rs.getString("link_github"));
+                aluno.setLinkLinkedin(rs.getString("link_linkedin"));
+                aluno.setNomeAluno(rs.getString("nome_aluno")); // <--- nome vindo da tabela usuarios
+
+                alunos.add(aluno);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return alunos;
     }
 }

@@ -11,6 +11,7 @@ public class PerfilAluno {
     private String linkGithub;
     private String linkLinkedin;
     private String conhecimentosTecnicos;
+    private String nomeAluno;
 
     //Construtores, getters e setters
     public PerfilAluno() {}
@@ -60,4 +61,7 @@ public class PerfilAluno {
 
     public String getConhecimentosTecnicos() { return conhecimentosTecnicos; }
     public void setConhecimentosTecnicos(String conhecimentosTecnicos) { this.conhecimentosTecnicos = conhecimentosTecnicos; }
+
+    public String getNomeAluno() { return nomeAluno; }
+    public void setNomeAluno(String nomeAluno) { this.nomeAluno = nomeAluno; }
 }
