@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PerfilAlunoDAO {
 
@@ -142,5 +144,52 @@ public class PerfilAlunoDAO {
             System.err.println("Erro ao atualizar PerfilAluno: " + e.getMessage());
             return false;
         }
+    }
+    /**
+     * Lista todos os perfis de aluno junto com o nome do usuário (JOIN com tabela usuarios).
+     */
+    public List<PerfilAluno> listarAlunosComNome() {
+        List<PerfilAluno> alunos = new ArrayList<>();
+        String sql = """
+    SELECT pa.*, u.nome AS nome_aluno, u.email
+    FROM perfil_aluno pa
+    JOIN usuario u ON pa.usuario_id = u.id
+""";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                PerfilAluno aluno = new PerfilAluno();
+
+                // ID do perfil_aluno
+                aluno.setIdPerfilAluno(rs.getInt("id"));
+
+                // Email do usuário (vindo da tabela usuario via join)
+                aluno.setEmailUsuario(rs.getString("email"));
+
+                // Idade, histórico acadêmico, motivação, histórico profissional do perfil_aluno
+                int idadeVal = rs.getInt("idade");
+                aluno.setIdade(rs.wasNull() ? null : idadeVal);
+                aluno.setHistoricoAcademico(rs.getString("historico_academico"));
+                aluno.setMotivacao(rs.getString("motivacao"));
+                aluno.setHistoricoProfissional(rs.getString("historico_profissional"));
+
+                // Links
+                aluno.setLinkGithub(rs.getString("link_github"));
+                aluno.setLinkLinkedin(rs.getString("link_linkedin"));
+
+                // Nome do aluno (vindo da tabela usuario via join)
+                aluno.setNomeAluno(rs.getString("nome_aluno"));
+
+                alunos.add(aluno);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return alunos;
     }
 }

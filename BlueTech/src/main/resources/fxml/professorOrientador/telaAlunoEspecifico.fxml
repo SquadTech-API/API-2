@@ -29,7 +29,7 @@
                                     <Font name="System Bold" size="47.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="6.0" prefWidth="511.0" text="Guilherme Valim da Silva">
+                              <Label prefHeight="6.0" prefWidth="511.0" text="nome aluno">
                                  <font>
                                     <Font name="System Bold" size="32.0" />
                                  </font>
@@ -102,9 +102,9 @@
       </HBox>
       <ScrollPane fitToWidth="true" layoutX="3.2" layoutY="159.2" prefHeight="606.0" prefWidth="1350.0" style="-fx-background-color: #E0E0E0;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="159.0">
          <content>
-            <VBox prefHeight="649.0" prefWidth="1334.0" style="-fx-background-color: #E0E0E0;">
+            <VBox fx:id="VBoxListaVersoes" prefHeight="649.0" prefWidth="1334.0" style="-fx-background-color: #E0E0E0;">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
+                  <HBox fx:id="HboxVersao" alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
                      <children>
                         <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
                            <font>
@@ -127,186 +127,6 @@
                            </HBox.margin>
                            <image>
                               <Image url="@../../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="22/08/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="73.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="02/08/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="136.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="15/06/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="05/06/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="04/04/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="326.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="31/03/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
                            </image>
                         </ImageView>
                      </children>
