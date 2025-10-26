@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 
-public class ControllerTelaAlunoEspecificos {
+public class TelaAlunoEspecificoController {
 
     @FXML private ToggleButton ButtonProximaTela2;
     @FXML private Label lblNomeAluno; // <- precisa existir no FXML
@@ -22,12 +22,13 @@ public class ControllerTelaAlunoEspecificos {
         if (lblNomeAluno != null) {
             lblNomeAluno.setText(nomeAluno != null ? nomeAluno : "");
         } else {
-            nomePendente = nomeAluno;
+            nomePendente = nomeAluno; // salva para usar no initialize()
         }
     }
 
     @FXML
     public void initialize() {
+        // Se o nome já foi definido antes do initialize(), aplica agora
         if (nomePendente != null && lblNomeAluno != null) {
             lblNomeAluno.setText(nomePendente);
             nomePendente = null;

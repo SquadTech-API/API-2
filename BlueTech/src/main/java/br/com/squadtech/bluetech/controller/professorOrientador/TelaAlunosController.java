@@ -3,9 +3,12 @@ package br.com.squadtech.bluetech.controller.professorOrientador;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -15,7 +18,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +83,7 @@ public class TelaAlunosController {
 
     // -------- Carrega alunos do banco --------
     private void carregarAlunosDoBanco() {
-        todosAlunos = perfilAlunoDAO.listarAlunosParaCard(null);
+        todosAlunos = perfilAlunoDAO.listarAlunosComNome(); // <-- use listarAlunosComNome para pegar o nome
     }
 
     // -------- Filtro + render --------
@@ -88,8 +94,8 @@ public class TelaAlunosController {
         for (PerfilAluno a : todosAlunos) {
             boolean matchesNome = termo.isEmpty() || (a.getNomeAluno() != null && a.getNomeAluno().toLowerCase(Locale.ROOT).contains(termo));
             boolean matchesStatus = ToggleButonTodosAlunos.isSelected() ||
-                    (ToggleButtonCorrigidos.isSelected() && a.getIdade() != null && a.getIdade() == 0) || // Exemplo: corrigido = idade 0
-                    (ToggleButtonNaoCorrigidos.isSelected() && (a.getIdade() == null || a.getIdade() > 0)); // Exemplo: não corrigido
+                    (ToggleButtonCorrigidos.isSelected() && a.getIdade() != null && a.getIdade() == 0) ||
+                    (ToggleButtonNaoCorrigidos.isSelected() && (a.getIdade() == null || a.getIdade() > 0));
             if (matchesNome && matchesStatus) {
                 filtrados.add(a);
             }
@@ -123,7 +129,7 @@ public class TelaAlunosController {
         spacer.setPrefWidth(20);
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        // “há X dias” (não temos diasSemEnvio do banco, então apenas deixei vazio)
+        // “há X dias”
         Label lblDias = new Label("");
         lblDias.setStyle("-fx-font-size: 18px;");
         lblDias.setPrefWidth(150);
@@ -146,11 +152,7 @@ public class TelaAlunosController {
         card.setOnMouseExited(e -> card.setStyle(""));
 
         // Clique: abre tela do aluno específico
-        card.setOnMouseClicked(e -> {
-            if (painelPrincipalController != null) {
-                painelPrincipalController.mostrarTelaAlunoEspecifico(a.getNomeAluno());
-            }
-        });
+        card.setOnMouseClicked(e -> abrirTelaAlunoEspecifico(a));
 
         return card;
     }
@@ -162,5 +164,28 @@ public class TelaAlunosController {
         } catch (Exception ignored) {}
         return new Image("data:image/png;base64,"
                 + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9b2Yw5sAAAAASUVORK5CYII=");
+    }
+
+    // -------- Abre tela aluno específico --------
+    private void abrirTelaAlunoEspecifico(PerfilAluno aluno) {
+        try {
+            // Ajuste do caminho para refletir a pasta professorOrientador
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/telaAlunoEspecifico.fxml"));
+            Parent root = loader.load();
+
+            // Recupera o controller da nova tela
+            TelaAlunoEspecificoController controller = loader.getController();
+            controller.definirAluno(aluno.getNomeAluno());
+
+            // Cria a nova janela
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle(aluno.getNomeAluno());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
