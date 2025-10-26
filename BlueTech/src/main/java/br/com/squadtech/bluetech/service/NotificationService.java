@@ -1,6 +1,6 @@
 package br.com.squadtech.bluetech.service;
 
-import br.com.squadtech.bluetech.EmailService;
+import br.com.squadtech.bluetech.service.EmailService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

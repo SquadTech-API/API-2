@@ -10,6 +10,8 @@ module br.com.squadtech.bluetech {
     requires de.jensd.fx.glyphs.fontawesome;
     requires jbcrypt;
     requires com.zaxxer.hikari;
+    requires mysql.connector.j;
+    requires jakarta.mail;
 
     opens br.com.squadtech.bluetech to javafx.fxml;
     exports br.com.squadtech.bluetech;

@@ -2,7 +2,7 @@ package br.com.squadtech.bluetech.notify;
 
 import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.config.SmtpProps;
-import br.com.squadtech.bluetech.EmailService;
+import br.com.squadtech.bluetech.service.EmailService;
 import br.com.squadtech.bluetech.service.NotificationService;
 
 import java.sql.Connection;
