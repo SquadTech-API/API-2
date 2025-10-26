@@ -11,13 +11,23 @@ import java.sql.SQLException;
 
 public class UsuarioDAO {
 
+    /**
+     * Cria a tabela usuario caso não exista, com todos os campos atualizados.
+     */
     public void createTableIfNotExists() {
-        String sql = "CREATE TABLE IF NOT EXISTS usuario (" +
-                "email VARCHAR(255) PRIMARY KEY," +
-                "nome VARCHAR(100) NOT NULL," +
-                "senha VARCHAR(255) NOT NULL," +
-                "tipo VARCHAR(50) NOT NULL" +
-                ")";
+        String sql = """
+            CREATE TABLE IF NOT EXISTS usuario (
+                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                nome VARCHAR(150) NOT NULL,
+                email VARCHAR(190) NOT NULL UNIQUE,
+                senha VARCHAR(255) NOT NULL,
+                tipo ENUM('ALUNO','ORIENTADOR','COORDENADOR','ADMIN') NOT NULL,
+                ativo BOOLEAN NOT NULL DEFAULT TRUE,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_tipo (tipo)
+            ) ENGINE=InnoDB;
+        """;
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
@@ -26,6 +36,9 @@ public class UsuarioDAO {
         }
     }
 
+    /**
+     * Conta o total de usuários cadastrados.
+     */
     public long countUsuarios() {
         String sql = "SELECT COUNT(*) FROM usuario";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -40,6 +53,9 @@ public class UsuarioDAO {
         return 0;
     }
 
+    /**
+     * Insere um novo usuário no banco, com a senha criptografada.
+     */
     public void insert(Usuario usuario) {
         String sql = "INSERT INTO usuario (email, nome, senha, tipo) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -54,6 +70,9 @@ public class UsuarioDAO {
         }
     }
 
+    /**
+     * Busca um usuário pelo e-mail.
+     */
     public Usuario findByEmail(String email) {
         String sql = "SELECT * FROM usuario WHERE email = ?";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -62,10 +81,14 @@ public class UsuarioDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
+                    usuario.setId(rs.getLong("id"));
                     usuario.setEmail(rs.getString("email"));
                     usuario.setNome(rs.getString("nome"));
                     usuario.setSenha(rs.getString("senha")); // Senha hasheada
                     usuario.setTipo(rs.getString("tipo"));
+                    usuario.setAtivo(rs.getBoolean("ativo"));
+                    usuario.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    usuario.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
                     return usuario;
                 }
             }
@@ -75,15 +98,20 @@ public class UsuarioDAO {
         return null;
     }
 
+    /**
+     * Busca um usuário pelo e-mail e senha digitada (verifica o hash).
+     */
     public Usuario findByEmailAndSenha(String email, String senhaDigitada) {
-    Usuario usuario = findByEmail(email);
-        if (usuario != null && org.mindrot.jbcrypt.BCrypt.checkpw(senhaDigitada, usuario.getSenha())) {
+        Usuario usuario = findByEmail(email);
+        if (usuario != null && BCrypt.checkpw(senhaDigitada, usuario.getSenha())) {
             return usuario;
         }
         return null;
     }
 
-
+    /**
+     * Valida o login de um usuário (true se email e senha corretos).
+     */
     public boolean validateLogin(String email, String senha) {
         Usuario usuario = findByEmail(email);
         return usuario != null && BCrypt.checkpw(senha, usuario.getSenha());
