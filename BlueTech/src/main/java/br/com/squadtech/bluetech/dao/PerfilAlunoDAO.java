@@ -159,8 +159,38 @@ public class PerfilAlunoDAO {
         return alunos;
     }
 
-    // ---------- MÉTODOS AUXILIARES ----------
+    // ---------- NOVO MÉTODO PARA CARDS ----------
+    public List<PerfilAluno> listarAlunosParaCard(String filtroNome) {
+        List<PerfilAluno> alunos = new ArrayList<>();
+        String sql = """
+            SELECT pa.*, u.nome AS nome_aluno
+            FROM perfil_aluno pa
+            JOIN usuario u ON pa.usuario_email = u.email
+            WHERE ? IS NULL OR u.nome LIKE ?
+        """;
 
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, filtroNome);
+            stmt.setString(2, filtroNome != null ? "%" + filtroNome + "%" : null);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    PerfilAluno aluno = mapResultSetToPerfilAluno(rs);
+                    aluno.setNomeAluno(rs.getString("nome_aluno"));
+                    alunos.add(aluno);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return alunos;
+    }
+
+    // ---------- MÉTODOS AUXILIARES ----------
     private PerfilAluno mapResultSetToPerfilAluno(ResultSet rs) throws SQLException {
         PerfilAluno perfil = new PerfilAluno();
         perfil.setIdPerfilAluno(rs.getInt("id"));
