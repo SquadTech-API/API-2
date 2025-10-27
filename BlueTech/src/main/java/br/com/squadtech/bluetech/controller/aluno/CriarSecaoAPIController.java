@@ -26,7 +26,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.layout.AnchorPane;
 
 public class CriarSecaoAPIController implements SupportsMainController {
 
@@ -123,6 +122,7 @@ public class CriarSecaoAPIController implements SupportsMainController {
     void voltarEntregasAluno(ActionEvent event) {
         if (painelPrincipalController != null) {
             try {
+                // Mantido loadContent, pois é um carregamento simples sem passagem de dados
                 painelPrincipalController.loadContent("/fxml/aluno/TelaEntregasAluno.fxml");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -200,17 +200,49 @@ public class CriarSecaoAPIController implements SupportsMainController {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aluno/EditarSecaoAPI.fxml"));
-            Parent root = loader.load();
+            Parent root = loader.load(); // 1. Carrega o FXML e cria o Controller
 
             EditarSecaoAPIController controller = loader.getController();
+
+            // 2. Configura a instância do Controller com o ID correto
             controller.setVersaoId(idUltimaVersao);
 
-            // Usa o método loadContent do PainelPrincipalController para exibir
-            painelPrincipalController.loadContent("/fxml/aluno/EditarSecaoAPI.fxml");
+            // 3. Passa o 'root' já configurado para o painel principal
+            painelPrincipalController.loadRoot(root);
 
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erro", "Falha ao abrir EditarSecaoAPI.fxml");
+        }
+    }
+
+    /**
+     * Supondo que você tenha um método que é chamado ao clicar no card:
+     */
+    public void abrirEditarSecaoDoCard(long versaoId) {
+
+        System.out.println(">>> PASSO 1: Método abrirEditarSecaoDoCard foi INVOCADO.");
+
+        if (painelPrincipalController == null) return;
+
+        try {
+            // Carrega o FXML da tela de edição
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aluno/EditarSecaoAPI.fxml"));
+            Parent root = loader.load(); // 1. Carrega o FXML e cria o Controller
+
+            // Pega o controller da tela de edição
+            EditarSecaoAPIController controller = loader.getController();
+
+            // 🚨 CORREÇÃO FINAL: Usa o versaoId passado por parâmetro (que agora sabemos que é o problema)
+            controller.setVersaoId(versaoId);
+
+            System.out.println(">>> DEBUG CRITICO [Criar]: Enviando ID real: " + versaoId);
+
+            // Mostra o conteúdo no PainelPrincipal
+            painelPrincipalController.loadRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

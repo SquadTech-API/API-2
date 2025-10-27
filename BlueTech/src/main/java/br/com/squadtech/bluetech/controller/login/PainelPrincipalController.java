@@ -55,6 +55,7 @@ public class PainelPrincipalController {
 
     /**
      * Carrega um FXML no painel de exibição (lado direito) e injeta controller se suportar SupportsMainController.
+     * Este é usado para carregamentos simples onde a configuração do controller é automática.
      */
     public void loadContent(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
@@ -65,8 +66,20 @@ public class PainelPrincipalController {
             supportsMain.setPainelPrincipalController(this);
         }
 
-        painelPrincipalExibicao.getChildren().setAll(pane);
-        setAnchorPaneFullSize(pane);
+        // Delega a exibição ao novo método loadRoot
+        loadRoot(pane);
+    }
+
+    /**
+     * 🔑 NOVO MÉTODO DE CORREÇÃO: Carrega um Parent (Root Node) já configurado no painel de exibição.
+     *
+     * Permite que controllers externos carreguem o FXML, configurem seu controller
+     * (ex: chamando setVersaoId) e passem o resultado final para exibição,
+     * evitando a recriação da instância.
+     */
+    public void loadRoot(Parent content) {
+        painelPrincipalExibicao.getChildren().setAll(content);
+        setAnchorPaneFullSize(content);
     }
 
     /**
