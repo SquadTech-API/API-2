@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<SplitPane fx:id="splitPanelMenuProfessorTG" dividerPositions="0.4" orientation="VERTICAL"
+           styleClass="menu-lateral"
+           stylesheets="@../../css/MenuStyles.css"
+           xmlns="http://javafx.com/javafx/24.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="br.com.squadtech.bluetech.controller.professorTG.MenuProfessorTGController">
+
+    <items>
+        <!-- Topo do menu -->
+        <AnchorPane fx:id="paneSuperiorMenuProfessorTG" minHeight="200.0" prefHeight="260.0">
+            <children>
+                <VBox alignment="TOP_CENTER" spacing="12.0" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <children>
+                        <Label fx:id="lblTituloProfessorTG" text="Painel do Professor TG" textFill="#ffd400">
+                            <font>
+                                <Font name="CaskaydiaMono NFM SemiBold" size="20"/>
+                            </font>
+                        </Label>
+                        <ImageView fx:id="imgViewFotoProfessorTG" fitWidth="100" preserveRatio="true" pickOnBounds="true">
+                            <image>
+                                <Image url="@../../images/Usuario.png"/>
+                            </image>
+                        </ImageView>
+
+                        <VBox alignment="CENTER_LEFT" spacing="6.0" maxWidth="Infinity">
+                            <children>
+                                <Label fx:id="lblProfessorTG" text="PROFESSOR TG: " textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                                <Label fx:id="lblSemestreTG" text="SEMESTRE RESPONSÁVEL: " textFill="WHITE" style="-fx-font-size: 14px;"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+
+        <!-- Menu lateral com Accordion e botões -->
+        <VBox fx:id="vboxMenuProfessorTG" spacing="16.0" alignment="TOP_CENTER" prefWidth="200.0" fillWidth="true">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <children>
+                <VBox spacing="16.0" fillWidth="true">
+                    <children>
+                        <!-- Accordion principal -->
+                        <Accordion fx:id="accordionProfessorTG" prefWidth="Infinity" styleClass="menu-accordion">
+                            <panes>
+                                <TitledPane text="Portfólios Concluídos" expanded="false" textFill="WHITE">
+                                    <content>
+                                        <Accordion styleClass="menu-accordion">
+                                            <panes>
+                                                <!-- 5º Semestre -->
+                                                <TitledPane text="5º Semestre" expanded="false" textFill="WHITE">
+                                                    <content>
+                                                        <VBox spacing="6.0" styleClass="submenu" prefWidth="180">
+                                                            <children>
+                                                                <JFXButton text="Banco de Dados" maxWidth="Infinity" styleClass="submenu-btn" onAction="#selecionarBancoDados5"/>
+                                                                <JFXButton text="Análise de Sistemas" maxWidth="Infinity" styleClass="submenu-btn" onAction="#selecionarAnaliseSistemas5"/>
+                                                            </children>
+                                                        </VBox>
+                                                    </content>
+                                                    <padding>
+                                                        <Insets top="10"/>
+                                                    </padding>
+                                                </TitledPane>
+
+                                                <!-- 6º Semestre -->
+                                                <TitledPane text="6º Semestre" expanded="false" textFill="WHITE">
+                                                    <content>
+                                                        <VBox spacing="6.0" styleClass="submenu" prefWidth="180">
+                                                            <children>
+                                                                <JFXButton text="Banco de Dados" maxWidth="Infinity" styleClass="submenu-btn" onAction="#selecionarBancoDados6"/>
+                                                                <JFXButton text="Análise de Sistemas" maxWidth="Infinity" styleClass="submenu-btn" onAction="#selecionarAnaliseSistemas6"/>
+                                                            </children>
+                                                        </VBox>
+                                                    </content>
+                                                    <padding>
+                                                        <Insets top="10"/>
+                                                    </padding>
+                                                </TitledPane>
+                                            </panes>
+                                        </Accordion>
+                                    </content>
+                                </TitledPane>
+                            </panes>
+                        </Accordion>
+
+                        <!-- Botões extras -->
+                        <JFXButton fx:id="btnAgendamentosTG" text="Agendamentos de TG" maxWidth="Infinity" onAction="#abrirAgendamentosTG"/>
+                        <JFXButton fx:id="btnCadastrarOrientadores" text="Cadastrar Orientadores" maxWidth="Infinity" onAction="#abrirCadastrarOrientadores"/>
+                        <JFXButton fx:id="btnListaAlunos" text="Lista de Alunos" maxWidth="Infinity" onAction="#abrirListaAlunos"/>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </items>
+</SplitPane>

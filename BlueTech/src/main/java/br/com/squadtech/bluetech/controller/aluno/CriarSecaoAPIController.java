@@ -19,11 +19,14 @@ import br.com.squadtech.bluetech.model.TGVersao;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.layout.AnchorPane;
 
 public class CriarSecaoAPIController implements SupportsMainController {
 
@@ -40,7 +43,6 @@ public class CriarSecaoAPIController implements SupportsMainController {
 
     @FXML
     void salvarNovaSecaoAPI(ActionEvent event) {
-        // 1️⃣ Validação do ano
         Integer ano = null;
         String anoStr = txtAno.getText();
         if (anoStr != null && !anoStr.isBlank()) {
@@ -53,18 +55,15 @@ public class CriarSecaoAPIController implements SupportsMainController {
         }
 
         try {
-            // 2️⃣ Garantir que o portfólio exista
             TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
             portifolioDAO.createTableIfNotExists();
 
-            Long alunoId = getAlunoIdAtual(); // ID do aluno logado
+            Long alunoId = getAlunoIdAtual();
             Long portifolioId = portifolioDAO.getOrCreatePortifolioForAluno(alunoId);
 
-            // 3️⃣ Criar nova seção sempre com api_numero único
             TGSecaoDAO secaoDAO = new TGSecaoDAO();
             secaoDAO.createTableIfNotExists();
 
-            // Encontrar o próximo api_numero disponível (1 a 6)
             int apiNumero = 1;
             while (secaoDAO.findByApiNumeroAndPortifolio(apiNumero, portifolioId) != null) {
                 apiNumero++;
@@ -83,7 +82,6 @@ public class CriarSecaoAPIController implements SupportsMainController {
                 return;
             }
 
-            // 4️⃣ Criar o objeto TGVersao vinculado à nova seção
             TGVersao versao = new TGVersao(
                     safeText(txtSemestre),
                     ano,
@@ -100,7 +98,6 @@ public class CriarSecaoAPIController implements SupportsMainController {
             );
             versao.setSecaoId(secaoId);
 
-            // 5️⃣ Salvar a versão no banco
             TGVersaoDAO versaoDAO = new TGVersaoDAO();
             versaoDAO.createTableIfNotExists();
 
@@ -122,7 +119,6 @@ public class CriarSecaoAPIController implements SupportsMainController {
         }
     }
 
-    // ----------------- Métodos auxiliares -----------------
     @FXML
     void voltarEntregasAluno(ActionEvent event) {
         if (painelPrincipalController != null) {
@@ -192,9 +188,29 @@ public class CriarSecaoAPIController implements SupportsMainController {
         this.painelPrincipalController = controller;
     }
 
-    // ----------------- Método fictício para o ID do aluno -----------------
     private Long getAlunoIdAtual() {
-        // Retornar o ID do aluno logado no sistema
-        return 1L; // substituir pelo valor real
+        return 1L; // Substituir pelo ID real do aluno logado
+    }
+
+    /**
+     * Abre a tela de edição de seção passando o ID da última versão.
+     */
+    public void abrirEditarSecaoComFeedback(Long idUltimaVersao) {
+        if (painelPrincipalController == null) return;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aluno/EditarSecaoAPI.fxml"));
+            Parent root = loader.load();
+
+            EditarSecaoAPIController controller = loader.getController();
+            controller.setVersaoId(idUltimaVersao);
+
+            // Usa o método loadContent do PainelPrincipalController para exibir
+            painelPrincipalController.loadContent("/fxml/aluno/EditarSecaoAPI.fxml");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erro", "Falha ao abrir EditarSecaoAPI.fxml");
+        }
     }
 }

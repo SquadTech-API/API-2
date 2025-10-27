@@ -44,7 +44,10 @@ public class OrientaDAO {
      * Insere uma nova orientação.
      */
     public void insert(Orienta orienta) {
-        String sql = "INSERT INTO orienta (professor_id, aluno_id, ativo, data_inicio) VALUES (?, ?, ?, ?)";
+        String sql = """
+            INSERT INTO orienta (professor_id, aluno_id, ativo, data_inicio)
+            VALUES (?, ?, ?, ?)
+        """;
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -61,9 +64,82 @@ public class OrientaDAO {
                     orienta.setId(rs.getLong(1));
                 }
             }
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir orientação: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Atualiza uma orientação existente.
+     */
+    public void update(Orienta orienta) {
+        String sql = """
+            UPDATE orienta
+            SET ativo = ?, data_fim = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBoolean(1, orienta.isAtivo());
+
+            if (orienta.getDataFim() != null) {
+                stmt.setTimestamp(2, Timestamp.valueOf(orienta.getDataFim()));
+            } else {
+                stmt.setNull(2, Types.TIMESTAMP);
+            }
+
+            stmt.setLong(3, orienta.getId());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar orientação: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Desativa (delete lógico) uma orientação.
+     */
+    public void delete(Long id) {
+        String sql = """
+            UPDATE orienta
+            SET ativo = FALSE, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao desativar orientação: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Busca todas as orientações.
+     */
+    public List<Orienta> findAll() {
+        List<Orienta> lista = new ArrayList<>();
+        String sql = "SELECT * FROM orienta";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapResultSet(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar todas orientações: " + e.getMessage(), e);
+        }
+
+        return lista;
     }
 
     /**
@@ -77,11 +153,13 @@ public class OrientaDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, professorId);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     lista.add(mapResultSet(rs));
                 }
             }
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar orientações por professor: " + e.getMessage(), e);
         }
@@ -100,77 +178,18 @@ public class OrientaDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, alunoId);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     lista.add(mapResultSet(rs));
                 }
             }
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar orientações por aluno: " + e.getMessage(), e);
         }
 
         return lista;
-    }
-
-    /**
-     * Retorna todas as orientações.
-     */
-    public List<Orienta> findAll() {
-        List<Orienta> lista = new ArrayList<>();
-        String sql = "SELECT * FROM orienta";
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(mapResultSet(rs));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar todas orientações: " + e.getMessage(), e);
-        }
-
-        return lista;
-    }
-
-    /**
-     * Atualiza uma orientação (ex: data_fim ou status).
-     */
-    public void update(Orienta orienta) {
-        String sql = "UPDATE orienta SET ativo = ?, data_fim = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setBoolean(1, orienta.isAtivo());
-            if (orienta.getDataFim() != null) {
-                stmt.setTimestamp(2, Timestamp.valueOf(orienta.getDataFim()));
-            } else {
-                stmt.setNull(2, Types.TIMESTAMP);
-            }
-            stmt.setLong(3, orienta.getId());
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar orientação: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Desativa uma orientação (delete lógico).
-     */
-    public void delete(Long id) {
-        String sql = "UPDATE orienta SET ativo = FALSE, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, id);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao desativar orientação: " + e.getMessage(), e);
-        }
     }
 
     /**
@@ -182,15 +201,19 @@ public class OrientaDAO {
         o.setProfessorId(rs.getLong("professor_id"));
         o.setAlunoId(rs.getLong("aluno_id"));
         o.setAtivo(rs.getBoolean("ativo"));
-        o.setDataInicio(rs.getTimestamp("data_inicio").toLocalDateTime());
 
-        Timestamp dataFimTS = rs.getTimestamp("data_fim");
-        if (dataFimTS != null) {
-            o.setDataFim(dataFimTS.toLocalDateTime());
-        }
+        Timestamp tsInicio = rs.getTimestamp("data_inicio");
+        if (tsInicio != null) o.setDataInicio(tsInicio.toLocalDateTime());
 
-        o.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        o.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+        Timestamp tsFim = rs.getTimestamp("data_fim");
+        if (tsFim != null) o.setDataFim(tsFim.toLocalDateTime());
+
+        Timestamp tsCreated = rs.getTimestamp("created_at");
+        if (tsCreated != null) o.setCreatedAt(tsCreated.toLocalDateTime());
+
+        Timestamp tsUpdated = rs.getTimestamp("updated_at");
+        if (tsUpdated != null) o.setUpdatedAt(tsUpdated.toLocalDateTime());
+
         return o;
     }
 }

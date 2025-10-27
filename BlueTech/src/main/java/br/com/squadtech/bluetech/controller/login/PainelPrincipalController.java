@@ -17,51 +17,44 @@ import javafx.scene.shape.Rectangle;
 
 public class PainelPrincipalController {
 
-    @FXML
-    private ResourceBundle resources;
+    @FXML private ResourceBundle resources;
+    @FXML private URL location;
 
-    @FXML
-    private URL location;
+    @FXML private SplitPane painelPrincipal;
+    @FXML private AnchorPane painelPrincipalExibicao;
+    @FXML private AnchorPane painelPrincipalMenu;
 
-    @FXML
-    private SplitPane painelPrincipal;
-
-    @FXML
-    private AnchorPane painelPrincipalExibicao;
-
-    @FXML
-    private AnchorPane painelPrincipalMenu;
-
-    // Mantém referência ao controller do menu atual (para atualizar avatar, etc.)
+    // Controller atual do menu, para atualizações como avatar
     private MenuAlunoController menuAlunoController;
 
+    // ------------------ MÉTODOS PÚBLICOS ------------------
+
     /**
-     * Carrega um FXML dentro do painel lateral de menu (painelPrincipalMenu).
+     * Retorna o painel de exibição (lado direito) para manipulação direta.
+     */
+    public AnchorPane getPainelPrincipalExibicao() {
+        return painelPrincipalExibicao;
+    }
+
+    /**
+     * Carrega um FXML no painel lateral (menu) e injeta controller se suportar.
      */
     public void loadMenu(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
         Parent pane = loader.load();
 
-        // Injeta este controller no menu se ele suportar tal referência
         Object controller = loader.getController();
-        if (controller instanceof MenuAlunoController menuAlunoController) {
-            this.menuAlunoController = menuAlunoController;
-            menuAlunoController.setPainelPrincipalController(this);
+        if (controller instanceof MenuAlunoController menuCtrl) {
+            this.menuAlunoController = menuCtrl;
+            menuCtrl.setPainelPrincipalController(this);
         }
 
-        painelPrincipalMenu.getChildren().clear();
-        painelPrincipalMenu.getChildren().add(pane);
-
-        //Faz o novo painel preencher todo o espaço
-        AnchorPane.setTopAnchor(pane, 0.0);
-        AnchorPane.setRightAnchor(pane, 0.0);
-        AnchorPane.setBottomAnchor(pane, 0.0);
-        AnchorPane.setLeftAnchor(pane, 0.0);
+        painelPrincipalMenu.getChildren().setAll(pane);
+        setAnchorPaneFullSize(pane);
     }
 
     /**
-     * Carrega um FXML dentro do painel de exibição (direita) do SplitPane.
-     * Se o controller carregado implementar SupportsMainController, injeta este controller principal nele.
+     * Carrega um FXML no painel de exibição (lado direito) e injeta controller se suportar SupportsMainController.
      */
     public void loadContent(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
@@ -72,17 +65,12 @@ public class PainelPrincipalController {
             supportsMain.setPainelPrincipalController(this);
         }
 
-        painelPrincipalExibicao.getChildren().clear();
-        painelPrincipalExibicao.getChildren().add(pane);
-
-        AnchorPane.setTopAnchor(pane, 0.0);
-        AnchorPane.setRightAnchor(pane, 0.0);
-        AnchorPane.setBottomAnchor(pane, 0.0);
-        AnchorPane.setLeftAnchor(pane, 0.0);
+        painelPrincipalExibicao.getChildren().setAll(pane);
+        setAnchorPaneFullSize(pane);
     }
 
     /**
-     * Atualiza a imagem de perfil exibida no menu do aluno, caso esteja carregado.
+     * Atualiza a imagem do aluno no menu.
      */
     public void updateFotoMenuAluno(String imagePath) {
         if (menuAlunoController != null) {
@@ -90,35 +78,28 @@ public class PainelPrincipalController {
         }
     }
 
+    // ------------------ MÉTODOS PRIVADOS ------------------
+
     @FXML
     void initialize() {
-        assert painelPrincipal != null : "fx:id=\"painelPrincipal\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
-        assert painelPrincipalExibicao != null : "fx:id=\"painelPrincipalExibicao\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
-        assert painelPrincipalMenu != null : "fx:id=\"painelPrincipalMenu\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
+        assert painelPrincipal != null : "fx:id=\"painelPrincipal\" não injetado.";
+        assert painelPrincipalExibicao != null : "fx:id=\"painelPrincipalExibicao\" não injetado.";
+        assert painelPrincipalMenu != null : "fx:id=\"painelPrincipalMenu\" não injetado.";
 
-        //Responsividade do SplitPane: mantém largura fixa do menu (esquerda)
+        // Define largura fixa do menu
         painelPrincipalMenu.setMinWidth(260.0);
         painelPrincipalMenu.setPrefWidth(300.0);
         SplitPane.setResizableWithParent(painelPrincipalMenu, Boolean.FALSE);
 
-        //Evita que conteúdos desenhem fora dos limites dos painéis (invadindo o outro lado)
-        Rectangle clipMenu = new Rectangle();
-        clipMenu.widthProperty().bind(painelPrincipalMenu.widthProperty());
-        clipMenu.heightProperty().bind(painelPrincipalMenu.heightProperty());
-        painelPrincipalMenu.setClip(clipMenu);
+        // Ajusta clips para evitar overflow
+        setClip(painelPrincipalMenu);
+        setClip(painelPrincipalExibicao);
 
-        Rectangle clipExibicao = new Rectangle();
-        clipExibicao.widthProperty().bind(painelPrincipalExibicao.widthProperty());
-        clipExibicao.heightProperty().bind(painelPrincipalExibicao.heightProperty());
-        painelPrincipalExibicao.setClip(clipExibicao);
-
-        //Ajusta a posição do divisor para refletir a largura preferida do menu (aprox. 300px)
+        // Ajusta divisor do SplitPane
         Platform.runLater(this::fixDividerPosition);
-
-        //Mantém a largura do menu estável em redimensionamentos de largura do SplitPane
         painelPrincipal.widthProperty().addListener((obs, oldW, newW) -> fixDividerPosition());
 
-        //Impede o usuário de alterar a posição do divisor (trava o menu em ~300px)
+        // Trava o divisor para manter o menu fixo
         if (!painelPrincipal.getDividers().isEmpty()) {
             painelPrincipal.getDividers().get(0).positionProperty().addListener((obs, oldPos, newPos) -> {
                 double desired = computeDesiredDividerPosition();
@@ -129,17 +110,39 @@ public class PainelPrincipalController {
         }
     }
 
-    private void fixDividerPosition() {
-        double pos = computeDesiredDividerPosition();
-        painelPrincipal.setDividerPositions(pos);
-    }
-
+    /**
+     * Calcula a posição ideal do divisor (~300px menu)
+     */
     private double computeDesiredDividerPosition() {
         double total = Math.max(1.0, painelPrincipal.getWidth());
         double desired = painelPrincipalMenu.getPrefWidth() / total;
-        // Evita valores extremos caso o total varie durante o layout
-        desired = Math.max(0.1, Math.min(0.9, desired));
-        return desired;
+        return Math.max(0.1, Math.min(0.9, desired));
     }
 
+    /**
+     * Ajusta a posição do divisor do SplitPane
+     */
+    private void fixDividerPosition() {
+        painelPrincipal.setDividerPositions(computeDesiredDividerPosition());
+    }
+
+    /**
+     * Define clip em AnchorPane para evitar overflow
+     */
+    private void setClip(AnchorPane pane) {
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(pane.widthProperty());
+        clip.heightProperty().bind(pane.heightProperty());
+        pane.setClip(clip);
+    }
+
+    /**
+     * Faz o Parent ocupar todo o espaço do AnchorPane
+     */
+    private void setAnchorPaneFullSize(Parent pane) {
+        AnchorPane.setTopAnchor(pane, 0.0);
+        AnchorPane.setRightAnchor(pane, 0.0);
+        AnchorPane.setBottomAnchor(pane, 0.0);
+        AnchorPane.setLeftAnchor(pane, 0.0);
+    }
 }
