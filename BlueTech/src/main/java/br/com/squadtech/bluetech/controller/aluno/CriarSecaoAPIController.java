@@ -193,10 +193,17 @@ public class CriarSecaoAPIController implements SupportsMainController {
     }
 
     /**
-     * Abre a tela de edição de seção passando o ID da última versão.
+     * Abre a tela de edição de seção, passando o ID da Seção.
+     * 🚨 CORRIGIDO: Assume que o parâmetro passado é o ID da SEÇÃO, ou precisa ser ajustado
+     * na chamada para buscar o ID da Seção, e chama o novo método setSecaoId().
      */
-    public void abrirEditarSecaoComFeedback(Long idUltimaVersao) {
+    public void abrirEditarSecaoComFeedback(Long idSecao) { // Renomeado o parâmetro
         if (painelPrincipalController == null) return;
+
+        if (idSecao == null || idSecao <= 0) {
+            System.err.println("ERRO: ID da Seção inválido para edição (abrirEditarSecaoComFeedback).");
+            return;
+        }
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aluno/EditarSecaoAPI.fxml"));
@@ -204,8 +211,8 @@ public class CriarSecaoAPIController implements SupportsMainController {
 
             EditarSecaoAPIController controller = loader.getController();
 
-            // 2. Configura a instância do Controller com o ID correto
-            controller.setVersaoId(idUltimaVersao);
+            // 2. CORREÇÃO CRÍTICA: Chama setSecaoId, não setVersaoId
+            controller.setSecaoId(idSecao.intValue());
 
             // 3. Passa o 'root' já configurado para o painel principal
             painelPrincipalController.loadRoot(root);
@@ -217,9 +224,10 @@ public class CriarSecaoAPIController implements SupportsMainController {
     }
 
     /**
-     * Supondo que você tenha um método que é chamado ao clicar no card:
+     * Supondo que este método é chamado ao clicar no card e recebe o ID da SEÇÃO.
+     * 🚨 CORRIGIDO: O parâmetro é tratado como secaoId para chamar o método correto.
      */
-    public void abrirEditarSecaoDoCard(long versaoId) {
+    public void abrirEditarSecaoDoCard(long secaoId) { // Renomeado o parâmetro para clareza
 
         System.out.println(">>> PASSO 1: Método abrirEditarSecaoDoCard foi INVOCADO.");
 
@@ -233,10 +241,10 @@ public class CriarSecaoAPIController implements SupportsMainController {
             // Pega o controller da tela de edição
             EditarSecaoAPIController controller = loader.getController();
 
-            // 🚨 CORREÇÃO FINAL: Usa o versaoId passado por parâmetro (que agora sabemos que é o problema)
-            controller.setVersaoId(versaoId);
+            // CORREÇÃO CRÍTICA: Chama setSecaoId, não setVersaoId
+            controller.setSecaoId((int) secaoId);
 
-            System.out.println(">>> DEBUG CRITICO [Criar]: Enviando ID real: " + versaoId);
+            System.out.println(">>> DEBUG CRITICO [Criar]: Enviando ID real da SEÇÃO: " + secaoId);
 
             // Mostra o conteúdo no PainelPrincipal
             painelPrincipalController.loadRoot(root);

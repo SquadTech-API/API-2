@@ -7,13 +7,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
-import br.com.squadtech.bluetech.config.ConnectionFactory; // Importe sua classe de conexão
+import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
-import br.com.squadtech.bluetech.model.SecaoContext; // Assumindo que este é o seu SecaoContext
+import br.com.squadtech.bluetech.model.SecaoContext;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -39,27 +42,30 @@ public class TelaSecaoAPIController implements SupportsMainController {
 
     @FXML
     void abrirEdicaoSecao(ActionEvent event) {
-        if (painelPrincipalController != null) {
-            try {
-                // Recupera a seção atual do contexto
-                Integer idSecao = SecaoContext.getIdSecaoSelecionada();
-                if (idSecao == null) {
-                    System.err.println("ERRO: Nenhuma seção selecionada para edição.");
-                    return;
-                }
+        if (painelPrincipalController == null) return;
 
-                // ⚠️ AQUI ESTÁ O DETALHE: Se for para abrir a edição, você deve
-                // carregar o controller manualmente para injetar o ID da VERSÃO,
-                // não o ID da SEÇÃO. (Como fizemos no CriarSecaoAPIController).
-                // Por simplicidade, vamos usar loadContent por agora, mas precisaria de ajuste futuro.
+        Integer idSecao = SecaoContext.getIdSecaoSelecionada();
+        if (idSecao == null) {
+            System.err.println("ERRO: Nenhuma seção selecionada para edição.");
+            return;
+        }
 
-                String fxmlPath = "/fxml/aluno/EditarSecaoAPI.fxml";
-                painelPrincipalController.loadContent(fxmlPath);
+        try {
+            // 1. Carrega o FXML e obtém o Controller
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aluno/EditarSecaoAPI.fxml"));
+            Parent root = loader.load();
 
-            } catch (IOException e) {
-                System.err.println("Falha ao carregar EditarSecaoAPI.fxml");
-                e.printStackTrace();
-            }
+            EditarSecaoAPIController controller = loader.getController();
+
+            // 2. INJETA o ID da Seção ANTES de mostrar a tela
+            controller.setSecaoId(idSecao);
+
+            // 3. Carrega o conteúdo JÁ CONFIGURADO
+            painelPrincipalController.loadRoot(root);
+
+        } catch (IOException e) {
+            System.err.println("Falha ao carregar EditarSecaoAPI.fxml");
+            e.printStackTrace();
         }
     }
 
@@ -74,7 +80,7 @@ public class TelaSecaoAPIController implements SupportsMainController {
         carregarDadosDaSecao();
     }
 
-    // --- Lógica de Carregamento de Dados ---
+    // --- Lógica de Carregamento de Dados (Já estava correta) ---
 
     private void carregarDadosDaSecao() {
         Integer idSecao = SecaoContext.getIdSecaoSelecionada();
@@ -84,8 +90,6 @@ public class TelaSecaoAPIController implements SupportsMainController {
             return;
         }
 
-        // 1. Busca a ID da última versão e seu conteúdo (markdown/solucao)
-        // 2. Com o ID da versão, busca o feedback mais recente
         String sql = """
             SELECT 
                 v.id AS versao_id, 
@@ -110,13 +114,12 @@ public class TelaSecaoAPIController implements SupportsMainController {
                 String solucao = rs.getString("solucao");
                 String feedback = rs.getString("feedback");
 
-                // Garante que a atualização da UI ocorra na thread correta
                 Platform.runLater(() -> {
                     txtMarkdown.setText(solucao != null ? solucao : "Nenhum conteúdo na versão.");
                     txtFeedbacks.setText(feedback != null && !feedback.isBlank()
                             ? feedback
                             : "Sem feedback do orientador ainda.");
-                    txtFeedbacks.setEditable(false); // Feedbacks são apenas para leitura
+                    txtFeedbacks.setEditable(false);
                 });
 
                 System.out.println("DEBUG: Dados da última versão carregados com sucesso.");
@@ -135,7 +138,6 @@ public class TelaSecaoAPIController implements SupportsMainController {
             });
         }
     }
-
 
     // --- Controller Support ---
 
