@@ -92,6 +92,7 @@ public class TelaAlunoEspecificoController {
         }
     }
 
+
     /**
      * Abre a tela de feedback para a seção
      */
@@ -102,7 +103,8 @@ public class TelaAlunoEspecificoController {
             Parent root = loader.load();
 
             TelaFeedbackController controller = loader.getController();
-            controller.setSecaoId(secaoId);
+            // Passa o secaoId e o nome do aluno
+            controller.setAlunoSecao(secaoId, lblNomeAluno.getText());
 
             Stage stage = new Stage();
             stage.setTitle("Feedback da Seção");

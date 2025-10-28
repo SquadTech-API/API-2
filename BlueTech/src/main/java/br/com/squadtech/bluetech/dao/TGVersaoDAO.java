@@ -243,5 +243,39 @@ public class TGVersaoDAO {
         return Optional.empty();
     }
 
+    public TGVersao buscarPorSecaoId(long secaoId) {
+        String sql = "SELECT * FROM tg_versao WHERE secao_id = ?";
+        TGVersao versao = null;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, secaoId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    versao = new TGVersao();
+                    versao.setSecaoId(rs.getLong("secao_id"));
+                    versao.setNumeroVersao(rs.getInt("numero_versao"));
+                    versao.setSemestre(rs.getString("semestre"));
+                    versao.setAno(rs.getInt("ano"));
+                    versao.setSemestreAno(rs.getString("semestre_ano"));
+                    versao.setEmpresa(rs.getString("empresa"));
+                    versao.setProblema(rs.getString("problema"));
+                    versao.setSolucao(rs.getString("solucao"));
+                    versao.setRepositorio(rs.getString("repositorio"));
+                    versao.setLinkedin(rs.getString("linkedin"));
+                    versao.setTecnologias(rs.getString("tecnologias"));
+                    versao.setContribuicoes(rs.getString("contribuicoes"));
+                    versao.setHardSkills(rs.getString("hard_skills"));
+                    versao.setSoftSkills(rs.getString("soft_skills"));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar versão: " + e.getMessage(), e);
+        }
+
+        return versao;
+    }
 
 }
