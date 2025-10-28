@@ -1,0 +1,266 @@
+/* ===========================
+   ESTILO GLOBAL
+   =========================== */
+
+.root {
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(255, 255, 255, 0.05) 100%
+        );
+    -fx-background-insets: 2; /* Afasta o fundo para a borda interna não cobri-lo */
+    -fx-background-radius: 20 0 0 20;
+
+    /* Efeito de sombra escura e sutil para dar profundidade ao painel */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0, 0, 2);
+
+    /* Técnica de borda em camadas para criar o brilho */
+    -fx-border-color:
+        /* 1. Borda externa (o brilho) */
+        rgba(255, 215, 0, 0.35),
+        /* 2. Borda interna (o metal sólido) */
+        #FFD700;
+    -fx-border-width: 4, 2; /* 4px para o brilho, 2px para o metal */
+    -fx-border-radius: 20 0 0 20; /* Raio para ambas as bordas */
+
+}
+
+/* Labels principais e títulos */
+.label-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* ===========================
+   CABEÇALHO / HEADER
+   =========================== */
+.hbox-header {
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);
+}
+
+/* ===========================
+   Estilo dos Botões
+   =========================== */
+
+/* Botão padrão (primário) */
+.button {
+    -fx-background-color:
+        linear-gradient(to bottom, #2563eb, #1e3a8a);
+    -fx-text-fill: white;
+    -fx-padding: 8 20 8 20;
+    -fx-background-radius: 8;
+    -fx-border-color: #FFD700; /* Dourado */
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 0, 2);
+    -fx-transition: 0.3s;
+}
+
+/* Alias para botão primário explícito */
+.button-primary {
+    /* herda de .button; ajustes leves */
+    -fx-font-weight: 600;
+}
+
+/* Hover (quando o mouse passa por cima) */
+.button:hover {
+    -fx-background-color:
+        linear-gradient(to bottom, #1e40af, #1e3a8a);
+    -fx-border-color: #facc15; /* Dourado mais vivo */
+    -fx-effect: dropshadow(gaussian, rgba(255, 215, 0, 0.5), 10, 0.3, 0, 2);
+}
+
+/* Pressionado */
+.button:pressed {
+    -fx-background-color:
+        linear-gradient(to bottom, #1e3a8a, #0f172a);
+    -fx-translate-y: 1px;
+}
+
+/* ===========================
+   Botão Secundário (Azul Suave Premium)
+   =========================== */
+.button-secondary {
+    -fx-background-color:
+        linear-gradient(to bottom, #e0ecff, #c7d2fe); /* Azul claro perolado */
+    -fx-text-fill: #1e3a8a; /* Azul escuro do tema */
+    -fx-padding: 8 20 8 20;
+    -fx-background-radius: 8;
+    -fx-border-color: #FFD700;
+    -fx-border-width: 1.8;
+    -fx-border-radius: 8;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 4, 0.3, 0, 2);
+    -fx-transition: 0.3s;
+}
+
+/* Hover */
+.button-secondary:hover {
+    -fx-background-color:
+        linear-gradient(to bottom, #dbeafe, #bfdbfe); /* Leve realce */
+    -fx-border-color: #FFD700; /* Mesmo dourado do primário */
+    -fx-text-fill: #0f172a;
+}
+
+/* Pressionado */
+.button-secondary:pressed {
+    -fx-background-color:
+        linear-gradient(to bottom, #c7d2fe, #a5b4fc);
+    -fx-translate-y: 1px;
+}
+
+/* ===========================
+   CAMPOS DE TEXTO E ÁREAS
+   =========================== */
+.text-field, .text-area {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #d0d0d0;
+    -fx-padding: 6;
+    -fx-font-size: 13px;
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-border-color: #1976d2;
+    -fx-effect: dropshadow(gaussian, rgba(25,118,210,0.25), 8, 0, 0, 1);
+}
+
+/* ===========================
+   SCROLLPANE / ÁREA DE CONTEÚDO
+   =========================== */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ===========================
+   CARDS DE ENTREGA
+   =========================== */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);
+    -fx-pref-width: 260;
+    -fx-pref-height: 120;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+}
+
+.card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);
+    -fx-translate-y: -3;
+}
+
+/* Status das entregas */
+.status-em-andamento {
+    -fx-text-fill: #f39c12;
+    -fx-font-weight: bold;
+}
+
+.status-entregue {
+    -fx-text-fill: #27ae60;
+    -fx-font-weight: bold;
+}
+
+.status-atrasado {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+/* ===========================
+   SPLITPANE E LISTAS
+   =========================== */
+.split-pane {
+    -fx-background-color: transparent;
+}
+
+.list-view {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #d0d0d0;
+}
+
+/* ===========================
+   FEEDBACK / CHAT
+   =========================== */
+.text-area {
+    -fx-background-color: white;
+}
+
+.chat-field {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 8 14 8 14;
+    -fx-border-color: #d0d0d0;
+}
+
+.chat-field:focused {
+    -fx-border-color: #1976d2;
+}
+
+/* ===========================
+   ROLAGEM / BARRAS
+   =========================== */
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(0,0,0,0.25);
+    -fx-background-radius: 4;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(0,0,0,0.35);
+}
+
+/* ===========================
+   UTILITÁRIOS
+   =========================== */
+.shadow-light {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+.rounded {
+    -fx-background-radius: 10;
+}
+
+/* Moldura de exibição da foto do usuário */
+.profile-frame {
+    /* Fundo levemente reflexivo */
+    -fx-background-color: linear-gradient(to bottom, #f7f9fb, #d9e2f1, #f0f4fa);
+
+    /* Borda metálica azulada com reflexo */
+    -fx-border-color: linear-gradient(to bottom, #1e3a8a, #2563eb, #5a8dee, #1e3a8a);
+    -fx-border-width: 4px;
+    -fx-border-style: solid;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+
+    /* Efeitos de relevo e brilho metálico */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.45), 10, 0.3, 0, 4),
+                innershadow(gaussian, rgba(255, 255, 255, 0.6), 3, 0.5, -1, -1),
+                innershadow(gaussian, rgba(0, 0, 0, 0.35), 4, 0.4, 1, 1),
+                innershadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, -2);
+
+}
+
+/* Imagem dentro da moldura */
+.profile-Image {
+    -fx-background-color: transparent;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.2, 0, 1);
+}

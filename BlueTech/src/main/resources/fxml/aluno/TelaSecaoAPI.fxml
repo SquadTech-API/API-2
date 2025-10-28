@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../../css/Style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21.0.8" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaSecaoAPIController">
+
+    <!-- Cabeçalho -->
+    <top>
+        <HBox alignment="CENTER_LEFT">
+            <padding>
+                <Insets bottom="15" left="20" right="20" top="15" />
+            </padding>
+
+            <Label styleClass="label-title" text="Visualização da Seção API" HBox.hgrow="ALWAYS" />
+
+            <!-- Espaço elástico para empurrar o botão à direita -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="btnEditarSecao" onAction="#abrirEdicaoSecao" styleClass="button-primary" text="Editar Seção" />
+        </HBox>
+    </top>
+
+    <!-- Conteúdo central -->
+    <center>
+        <SplitPane dividerPositions="0.7">
+            <items>
+
+                <!-- Painel Esquerdo: Markdown + Chat -->
+                <VBox spacing="15">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+
+                    <Label style="-fx-font-weight: bold;" text="Visualização Markdown:" />
+                    <TextArea fx:id="txtMarkdown" editable="false" prefRowCount="10" style="-fx-font-family: Consolas; -fx-font-size: 12px;" wrapText="true" />
+
+                    <Label style="-fx-font-weight: bold;" text="Chat com o Orientador:" />
+                    <TextArea fx:id="txtChatVisualizacao" editable="false" prefRowCount="8" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" wrapText="true" />
+                </VBox>
+
+                <!-- Painel Direito: Versões e Feedbacks -->
+                <VBox spacing="15">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+
+                    <Label style="-fx-font-weight: bold;" text="Versões Anteriores:" />
+                    <ListView fx:id="listVersoes" prefHeight="150" />
+
+                    <Label style="-fx-font-weight: bold;" text="Status Atual:" />
+                    <Label fx:id="lblStatus" styleClass="status-em-andamento" text="Em revisão" />
+
+                    <Label style="-fx-font-weight: bold;" text="Feedbacks do Orientador:" />
+                    <TextArea fx:id="txtFeedbacks" editable="false" prefRowCount="6" wrapText="true" />
+                </VBox>
+
+            </items>
+        </SplitPane>
+    </center>
+
+    <!-- Campo de envio de mensagem -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+
+            <TextField fx:id="txtMensagem" promptText="Digite uma mensagem..." styleClass="chat-field" HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="btnEnviar" onAction="#enviarMensagemOrientador" styleClass="button-primary" text="Enviar" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

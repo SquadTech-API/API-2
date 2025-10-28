@@ -1,322 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.ControllerTelaAlunoEspecificos">
-   <children>
-      <HBox layoutX="8.0" layoutY="42.0" prefHeight="140.0" prefWidth="1356.0" style="-fx-border-color: transparent transparent #999999 transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
-         <children>
+<AnchorPane prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;"
+            stylesheets="@../../css/telaAlunoEspecifico.css"
+            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaAlunoEspecificoController">
+
+    <!-- HEADER -->
+    <HBox prefHeight="140.0" prefWidth="1356.0" style="-fx-border-color: transparent transparent #999999 transparent;"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
+        <children>
             <HBox prefHeight="181.0" prefWidth="805.0">
-               <children>
-                  <VBox prefHeight="163.0" prefWidth="670.0">
-                     <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label prefHeight="70.0" prefWidth="166.0" text="Aluno:">
-                                 <font>
-                                    <Font name="System Bold" size="47.0" />
-                                 </font>
-                              </Label>
-                              <Label prefHeight="6.0" prefWidth="511.0" text="Guilherme Valim da Silva">
-                                 <font>
-                                    <Font name="System Bold" size="32.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="707.0" spacing="20.0">
-                           <children>
-                              <ToggleButton layoutX="138.0" layoutY="33.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #0A3D62;" text="Todos" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </ToggleButton>
-                              <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" text="Semestre">
-                                <items>
-                                  <MenuItem mnemonicParsing="false" text="Action 1" />
-                                  <MenuItem mnemonicParsing="false" text="Action 2" />
-                                </items>
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </MenuButton>
-                              <ToggleButton fx:id="ButtonProximaTela2" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#passarTelaIndefinida" prefHeight="46.0" prefWidth="153.0" text="Próxima tela">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </ToggleButton>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-               <HBox.margin>
-                  <Insets bottom="20.0" />
-               </HBox.margin>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
+                <VBox prefHeight="163.0" prefWidth="670.0">
+                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10">
+                        <children>
+                            <Label text="Aluno:">
+                                <font>
+                                    <Font name="System Bold" size="20"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="lblNomeAluno" text="">
+                                <font>
+                                    <Font name="System Bold" size="15"/>
+                                </font>
+                            </Label>
+                        </children>
+                        <padding>
+                            <Insets top="10" right="0" bottom="10" left="10"/>
+                        </padding>
+                    </HBox>
+                </VBox>
             </HBox>
+
             <HBox alignment="TOP_RIGHT" prefHeight="163.0" prefWidth="727.0">
-               <children>
-                  <VBox prefHeight="163.0" prefWidth="623.0">
-                     <children>
-                        <HBox alignment="TOP_RIGHT" prefHeight="164.0" prefWidth="610.0">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <padding>
-                              <Insets top="15.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets right="20.0" />
-                           </VBox.margin>
-                           <children>
-                              <Label prefHeight="42.0" prefWidth="158.0" text="6ºSEM">
-                                 <font>
-                                    <Font name="System Bold" size="44.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
+                <VBox prefHeight="163.0" prefWidth="623.0">
+                    <HBox alignment="TOP_RIGHT" prefHeight="164.0" prefWidth="610.0">
+                        <padding>
+                            <Insets top="15" right="20" bottom="0" left="0"/>
+                        </padding>
+                        <children>
+                            <Label text="6ºSEM">
+                                <font>
+                                    <Font name="System Bold" size="20"/>
+                                </font>
+                            </Label>
+                        </children>
+                    </HBox>
+                </VBox>
             </HBox>
-         </children>
-      </HBox>
-      <ScrollPane fitToWidth="true" layoutX="3.2" layoutY="159.2" prefHeight="606.0" prefWidth="1350.0" style="-fx-background-color: #E0E0E0;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="159.0">
-         <content>
-            <VBox prefHeight="649.0" prefWidth="1334.0" style="-fx-background-color: #E0E0E0;">
-               <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="há 14 dias">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/excla.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="22/08/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="73.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="02/08/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="136.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="15/06/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="05/06/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="04/04/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="326.0" prefHeight="31.0" prefWidth="1348.0" style="-fx-border-color: transparent transparent #999999 transparent;">
-                     <children>
-                        <Label prefHeight="51.0" prefWidth="438.0" text="EntregaTg.md">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Region prefHeight="100.0" prefWidth="373.0" HBox.hgrow="ALWAYS">
-                           <padding>
-                              <Insets left="20.0" />
-                           </padding>
-                        </Region>
-                        <Label alignment="CENTER" prefHeight="48.0" prefWidth="130.0" text="31/03/25">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="61.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../../images/check.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </VBox>
-         </content>
-      </ScrollPane>
-   </children>
+        </children>
+    </HBox>
+
+    <!-- CORPO -->
+    <HBox spacing="16" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0"
+          AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="159.0">
+
+        <!-- SIDEBAR -->
+        <VBox prefWidth="220" styleClass="sidebar" spacing="10">
+            <padding>
+                <Insets top="20" right="12" bottom="20" left="12"/>
+            </padding>
+            <children>
+                <Label styleClass="sidebar-title" text="Sessões"/>
+
+                <ToggleButton fx:id="tgS1" prefHeight="37.0" prefWidth="200.0" selected="true" styleClass="sidebar-tab" text="Sessão 1"/>
+                <ToggleButton fx:id="tgS2" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 2"/>
+                <ToggleButton fx:id="tgS3" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 3"/>
+                <ToggleButton fx:id="tgS4" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 4"/>
+                <ToggleButton fx:id="tgS5" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 5"/>
+                <ToggleButton fx:id="tgS6" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 6"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+                <ImageView fitHeight="81.0" fitWidth="56.0" preserveRatio="true">
+                    <image><Image url="@../../images/check.png"/></image>
+                </ImageView>
+            </children>
+        </VBox>
+
+        <!-- CONTEÚDO -->
+        <StackPane HBox.hgrow="ALWAYS">
+            <ScrollPane fx:id="spSessao1" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="true">
+                <content>
+                    <VBox fx:id="VBoxSessao1" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao2" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao2" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao3" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao3" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao4" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao4" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao5" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao5" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao6" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao6" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </StackPane>
+    </HBox>
 </AnchorPane>

@@ -1,35 +1,51 @@
 package br.com.squadtech.bluetech.controller.aluno;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
-
-import java.io.IOException;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Alert.AlertType;
 
 public class TelaAlunoController {
 
     @FXML
-    private Button btn_estudante_enviarArquivo;
+    private ResourceBundle resources;
 
     @FXML
-    void enviarArquivo(ActionEvent event) {
+    private URL location;
+
+    @FXML
+    private Hyperlink linkGithubSquadTech;
+
+    @FXML
+    void abrirRepoSquadTech(ActionEvent event) {
+        final String url = "https://github.com/SquadTech-API/API-2";
         try {
-            // Carrega o FXML da próxima tela
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/TelaAlunos.fxml"));
-            Parent root = fxmlLoader.load();
-
-            // Pega o Stage atual a partir do botão clicado
-            Stage stage = (Stage) btn_estudante_enviarArquivo.getScene().getWindow();
-
-            // Define a nova cena
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(new URI(url));
+            } else {
+                throw new UnsupportedOperationException("Desktop API não suportada");
+            }
+        } catch (IOException | URISyntaxException | UnsupportedOperationException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erro ao abrir link");
+            alert.setHeaderText(null);
+            alert.setContentText("Não foi possível abrir o navegador. Você pode acessar: \n" + url);
+            alert.showAndWait();
         }
     }
+
+    @FXML
+    void initialize() {
+        assert linkGithubSquadTech != null : "fx:id=\"linkGithubSquadTech\" was not injected: check your FXML file 'TelaAluno.fxml'.";
+
+    }
+
 }

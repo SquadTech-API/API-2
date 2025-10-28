@@ -1,0 +1,40 @@
+/* ===== SCROLLPANE (sem fundo, sem barra horizontal) ===== */
+.scroll-naked {
+    -fx-background-color: transparent;
+}
+.scroll-naked > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ===== CARDS DO CENTRO ===== */
+.card-item {
+    -fx-background-color: #2F3A40;
+    -fx-background-radius: 12;
+    -fx-padding: 14;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 8, 0.15, 0, 2);
+}
+.title {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: 800;
+    -fx-font-size: 15px;
+    -fx-letter-spacing: 0.2px;
+}
+.subtitle {
+    -fx-text-fill: #D5DFE6;
+    -fx-font-size: 12.5px;
+}
+
+/* Botão “olho” */
+.eye-btn {
+    -fx-background-color: #284F6A;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 8 10;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 6, 0.2, 0, 1);
+}
+.eye-btn:hover {
+    -fx-background-color: #2F5F7F;
+}

@@ -1,49 +1,62 @@
 package br.com.squadtech.bluetech.controller.professorTG;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.stage.Stage;
-
-import java.io.IOException;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 public class VisualizadorTGController {
 
     @FXML
-    private Button btn_professorTG_finalizar;
-
-    @FXML
     private CheckBox cbx_professorTG_VisuAluno;
 
-    // Método chamado ao clicar no botão "Finalizar"
     @FXML
-    void finalizar(ActionEvent event) {
-        try {
-            // Carrega o FXML da tela de login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login/telaLogin.fxml"));
-            Parent root = loader.load();
+    private Label lblNomeAluno; // Aluno
+    @FXML
+    private Label lblSemestre; // Se quiser exibir semestre (adicione no FXML depois)
+    @FXML
+    private Label lblCurso; // Se quiser exibir curso (adicione no FXML depois)
 
-            // Pega o Stage atual a partir do botão clicado
-            Stage stage = (Stage) btn_professorTG_finalizar.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+    private String nomeAluno;
+    private String semestre;
+    private String curso;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @FXML
+    public void initialize() {
+        // Inicialização segura
     }
 
-    // Método chamado quando o checkbox é clicado
+    /**
+     * Esse método é chamado pelo PainelPrincipalTGController
+     * para preencher as informações do aluno ao abrir esta tela.
+     */
+    public void receberDadosAluno(String nomeAluno, String semestre, String curso) {
+        this.nomeAluno = nomeAluno;
+        this.semestre = semestre;
+        this.curso = curso;
+
+        // Atualiza a label com segurança (se existir)
+        if (lblNomeAluno != null) lblNomeAluno.setText("Aluno: " + nomeAluno);
+        if (lblSemestre != null) lblSemestre.setText("Semestre: " + semestre);
+        if (lblCurso != null) lblCurso.setText("Curso: " + curso);
+    }
+
     @FXML
-    void handleCheckboxAction(ActionEvent event) {
-        if (cbx_professorTG_VisuAluno.isSelected()) {
-            System.out.println("O CheckBox está selecionado.");
-        } else {
-            System.out.println("O CheckBox foi desmarcado.");
-        }
+    private void handleCheckboxAction() {
+        System.out.println("Checkbox clicado: " + cbx_professorTG_VisuAluno.isSelected());
+    }
+
+    @FXML
+    private void finalizar() {
+        System.out.println("Finalizar clicado pelo professor.");
+    }
+
+    /**
+     * Caso você queira que clicar no card também faça algo,
+     * esse método pode ser ligado no FXML com onMouseClicked="#abrirTG"
+     */
+    @FXML
+    private void abrirTG(MouseEvent event) {
+        System.out.println("Abrir TG clicado por: " + nomeAluno);
     }
 }
