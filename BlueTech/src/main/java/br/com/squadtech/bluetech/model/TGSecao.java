@@ -1,6 +1,14 @@
 package br.com.squadtech.bluetech.model;
 
+import br.com.squadtech.bluetech.config.ConnectionFactory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TGSecao {
 
@@ -61,4 +69,7 @@ public class TGSecao {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+
+
 }

@@ -3,9 +3,12 @@ package br.com.squadtech.bluetech.controller.professorOrientador;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -15,7 +18,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +51,7 @@ public class TelaAlunosController {
         ToggleButonTodosAlunos.setSelected(true);
 
         ToggleButonTodosAlunos.setOnAction(e -> {
-            ToggleButton tb = ToggleButonTodosAlunos;
-            if (!tb.isSelected()) tb.setSelected(true); // sempre um ativo
+            if (!ToggleButonTodosAlunos.isSelected()) ToggleButonTodosAlunos.setSelected(true);
             ToggleButtonCorrigidos.setSelected(false);
             ToggleButtonNaoCorrigidos.setSelected(false);
             aplicarFiltroERender();
@@ -73,12 +77,10 @@ public class TelaAlunosController {
         aplicarFiltroERender();
     }
 
-    // -------- Carrega alunos do banco --------
     private void carregarAlunosDoBanco() {
         todosAlunos = perfilAlunoDAO.listarAlunosParaCard(null);
     }
 
-    // -------- Filtro + render --------
     private void aplicarFiltroERender() {
         String termo = TextFieldNomePesquisa.getText() == null ? "" : TextFieldNomePesquisa.getText().trim().toLowerCase(Locale.ROOT);
         List<PerfilAluno> filtrados = new ArrayList<>();
@@ -86,7 +88,7 @@ public class TelaAlunosController {
         for (PerfilAluno a : todosAlunos) {
             boolean matchesNome = termo.isEmpty() || (a.getNomeAluno() != null && a.getNomeAluno().toLowerCase(Locale.ROOT).contains(termo));
             boolean matchesStatus = ToggleButonTodosAlunos.isSelected() ||
-                    (ToggleButtonCorrigidos.isSelected() && a.getIdade() != null && a.getIdade() == 0) || // exemplo: corrigido = idade 0
+                    (ToggleButtonCorrigidos.isSelected() && a.getIdade() != null && a.getIdade() == 0) ||
                     (ToggleButtonNaoCorrigidos.isSelected() && (a.getIdade() == null || a.getIdade() > 0));
             if (matchesNome && matchesStatus) filtrados.add(a);
         }
@@ -101,7 +103,6 @@ public class TelaAlunosController {
         }
     }
 
-    // -------- UI do card --------
     private Node criarCard(PerfilAluno a) {
         HBox card = new HBox(8);
         card.getStyleClass().addAll("card", "student-row");
@@ -109,54 +110,61 @@ public class TelaAlunosController {
         card.setCursor(Cursor.HAND);
         card.setPrefHeight(65);
 
-        // Nome
         Label lblNome = new Label(a.getNomeAluno());
         lblNome.setStyle("-fx-font-size: 18px;");
         lblNome.setPrefWidth(438);
 
-        // Spacer
         Region spacer = new Region();
         spacer.setPrefWidth(20);
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        // “há X dias” (não temos diasSemEnvio no banco, então vazio)
         Label lblDias = new Label("");
         lblDias.setStyle("-fx-font-size: 18px;");
         lblDias.setPrefWidth(150);
         lblDias.setAlignment(Pos.CENTER_RIGHT);
 
-        // Ícone de status
         String iconPath = (a.getIdade() != null && a.getIdade() == 0) ? "/images/check.png" : "/images/excla.png";
-
         ImageView iv = new ImageView(loadImageSafe(iconPath));
         iv.setFitWidth(28);
         iv.setFitHeight(28);
         iv.setPreserveRatio(true);
 
-        // Monta o card
         card.getChildren().addAll(lblNome, spacer, lblDias, iv);
 
-        // Hover/efeito opcional
         card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: rgba(0,0,0,0.04); -fx-background-radius: 8;"));
         card.setOnMouseExited(e -> card.setStyle(""));
 
-        // Clique: abre tela do aluno específico (passando o nome)
+        // Clique: abre TelaAlunoEspecifico.fxml
         card.setOnMouseClicked(e -> {
-            if (painelPrincipalController != null) {
-                painelPrincipalController.mostrarTelaAlunoEspecifico(a.getNomeAluno());
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/TelaAlunoEspecifico.fxml"));
+                Parent root = loader.load();
+
+                TelaAlunoEspecificoController controller = loader.getController();
+                controller.setAlunoId(
+                        a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : 0L,
+                        a.getNomeAluno()
+                );
+
+                Stage stage = new Stage();
+                stage.setTitle("Aluno: " + a.getNomeAluno());
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         });
 
         return card;
     }
 
-    /** Carrega imagem do classpath com fallback */
     private Image loadImageSafe(String classpathAbsolutePath) {
         try {
             URL url = getClass().getResource(classpathAbsolutePath);
             if (url != null) return new Image(url.toExternalForm());
         } catch (Exception ignored) {}
-        return new Image("data:image/png;base64,"
-                + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9b2Yw5sAAAAASUVORK5CYII=");
+        // fallback 1x1 px
+        return new Image("data:image/png;base64," +
+                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9b2Yw5sAAAAASUVORK5CYII=");
     }
 }

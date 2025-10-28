@@ -32,6 +32,7 @@ public class PerfilAluno {
         this.conhecimentosTecnicos = conhecimentosTecnicos;
     }
 
+
     // Getters e Setters
     public Integer getIdPerfilAluno() { return idPerfilAluno; }
     public void setIdPerfilAluno(Integer idPerfilAluno) { this.idPerfilAluno = idPerfilAluno; }

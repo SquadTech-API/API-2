@@ -4,9 +4,9 @@ import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.model.TGVersao;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TGVersaoDAO {
 
@@ -162,4 +162,86 @@ public class TGVersaoDAO {
 
         return versao;
     }
+
+    /**
+     * Lista todas as versões cadastradas (para geração de cards na tela)
+     */
+    public List<TGVersao> listarTodas() {
+        String sql = "SELECT * FROM tg_versao ORDER BY created_at DESC";
+        List<TGVersao> lista = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapResultSetToTGVersao(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar todas as versões: " + e.getMessage(), e);
+        }
+
+        return lista;
+    }
+
+    public List<TGVersao> listarPorSecao(Long secaoId) {
+        List<TGVersao> versoes = new ArrayList<>();
+        String sql = "SELECT * FROM tg_versao WHERE secao_id = ? ORDER BY numero_versao ASC";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, secaoId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                TGVersao v = new TGVersao();
+                v.setId(rs.getLong("id"));
+                v.setSecaoId(rs.getLong("secao_id"));
+                v.setNumeroVersao(rs.getInt("numero_versao"));
+                v.setEmpresa(rs.getString("empresa"));
+                v.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                versoes.add(v);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return versoes;
+    }
+
+    public Optional<TGVersao> buscarUltimaVersaoPorSecao(long secaoId) {
+        String sql = """
+            SELECT * FROM tg_versao
+            WHERE secao_id = ?
+            ORDER BY numero_versao DESC
+            LIMIT 1
+        """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, secaoId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                TGVersao v = new TGVersao();
+                v.setId(rs.getLong("id"));
+                v.setSecaoId(rs.getLong("secao_id"));
+                v.setNumeroVersao(rs.getInt("numero_versao"));
+                v.setSemestre(rs.getString("semestre"));
+                v.setAno(rs.getInt("ano"));
+                v.setSemestreAno(rs.getString("semestre_ano"));
+                return Optional.of(v);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
+
 }

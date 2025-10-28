@@ -7,6 +7,7 @@ public class TGVersao {
     // Identificador da versão
     private Long id;                  // corresponde a id AUTO_INCREMENT
     private Long secaoId;             // FK para tg_secao
+    private Integer numeroVersao;     // Número da versão (novo campo)
 
     // Campos do formulário
     private String semestre;
@@ -78,6 +79,9 @@ public class TGVersao {
 
     public Long getSecaoId() { return secaoId; }
     public void setSecaoId(Long secaoId) { this.secaoId = secaoId; }
+
+    public Integer getNumeroVersao() { return numeroVersao; }
+    public void setNumeroVersao(Integer numeroVersao) { this.numeroVersao = numeroVersao; }
 
     public String getSemestre() { return semestre; }
     public void setSemestre(String semestre) { this.semestre = semestre; }

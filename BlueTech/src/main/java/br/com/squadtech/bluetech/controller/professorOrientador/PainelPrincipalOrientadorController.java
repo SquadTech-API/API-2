@@ -66,19 +66,26 @@ public class PainelPrincipalOrientadorController {
 
     /** Versão antiga sem parâmetro (mantida por compatibilidade) */
     public void mostrarTelaAlunoEspecifico() {
-        mostrarTelaAlunoEspecifico(null);
+        mostrarTelaAlunoEspecifico(0L, null);
     }
 
-    /** Abre a tela do aluno específico, opcionalmente recebendo o nome do aluno */
-    public void mostrarTelaAlunoEspecifico(String nomeAluno) {
+    /**
+     * ✅ Abre a tela do aluno específico (corrigido para usar o controller certo)
+     * @param alunoId id do perfil_aluno
+     * @param nomeAluno nome do aluno a ser exibido
+     */
+    public void mostrarTelaAlunoEspecifico(Long alunoId, String nomeAluno) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/telaAlunoEspecifico.fxml"));
             Parent tela = loader.load();
 
-            ControllerTelaAlunoEspecificos controller = loader.getController();
+            // 🔧 Controller corrigido aqui:
+            TelaAlunoEspecificoController controller = loader.getController();
             if (controller != null) {
                 controller.setPainelPrincipalController(this);
-                controller.definirAluno(nomeAluno); // passa o nome para a tela
+                if (alunoId != null) {
+                    controller.setAlunoId(alunoId, nomeAluno);
+                }
             }
 
             painelPrincipalExibicao.getChildren().setAll(tela);
@@ -125,6 +132,7 @@ public class PainelPrincipalOrientadorController {
         }
 
     }
+
     private void showInfo(String msg) {
         var alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setHeaderText("Notificação");

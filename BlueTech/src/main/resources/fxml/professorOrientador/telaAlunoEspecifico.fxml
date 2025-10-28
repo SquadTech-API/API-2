@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="768.0" prefWidth="1356.0" style="-fx-background-color: #E0E0E0;"
             stylesheets="@../../css/telaAlunoEspecifico.css"
             xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.ControllerTelaAlunoEspecificos">
+            fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaAlunoEspecificoController">
 
     <!-- HEADER -->
     <HBox prefHeight="140.0" prefWidth="1356.0" style="-fx-border-color: transparent transparent #999999 transparent;"
@@ -75,16 +67,14 @@
             </padding>
             <children>
                 <Label styleClass="sidebar-title" text="Sessões"/>
-                <ToggleButton prefHeight="37.0" prefWidth="200.0" selected="true" styleClass="sidebar-tab" text="Sessão 1">
-                    <toggleGroup>
-                        <ToggleGroup fx:id="tgSessoes"/>
-                    </toggleGroup>
-                </ToggleButton>
-                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 2" toggleGroup="$tgSessoes"/>
-                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 3" toggleGroup="$tgSessoes"/>
-                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 4" toggleGroup="$tgSessoes"/>
-                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 5" toggleGroup="$tgSessoes"/>
-                <ToggleButton prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 6" toggleGroup="$tgSessoes"/>
+
+                <ToggleButton fx:id="tgS1" prefHeight="37.0" prefWidth="200.0" selected="true" styleClass="sidebar-tab" text="Sessão 1"/>
+                <ToggleButton fx:id="tgS2" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 2"/>
+                <ToggleButton fx:id="tgS3" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 3"/>
+                <ToggleButton fx:id="tgS4" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 4"/>
+                <ToggleButton fx:id="tgS5" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 5"/>
+                <ToggleButton fx:id="tgS6" prefHeight="41.0" prefWidth="200.0" styleClass="sidebar-tab" text="Sessão 6"/>
+
                 <Region VBox.vgrow="ALWAYS"/>
                 <ImageView fitHeight="81.0" fitWidth="56.0" preserveRatio="true">
                     <image><Image url="@../../images/check.png"/></image>
@@ -94,10 +84,9 @@
 
         <!-- CONTEÚDO -->
         <StackPane HBox.hgrow="ALWAYS">
-            <!-- Cada ScrollPane com VBox separado -->
             <ScrollPane fx:id="spSessao1" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="true">
                 <content>
-                    <VBox fx:id="VBoxSessao1" spacing="14" style="-fx-background-color: transparent;">
+                    <VBox fx:id="VBoxSessao1" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
                         <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     </VBox>
                 </content>
@@ -105,7 +94,7 @@
 
             <ScrollPane fx:id="spSessao2" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
                 <content>
-                    <VBox fx:id="VBoxSessao2" spacing="14" style="-fx-background-color: transparent;">
+                    <VBox fx:id="VBoxSessao2" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
                         <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     </VBox>
                 </content>
@@ -113,7 +102,7 @@
 
             <ScrollPane fx:id="spSessao3" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
                 <content>
-                    <VBox fx:id="VBoxSessao3" spacing="14" style="-fx-background-color: transparent;">
+                    <VBox fx:id="VBoxSessao3" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
                         <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     </VBox>
                 </content>
@@ -121,7 +110,7 @@
 
             <ScrollPane fx:id="spSessao4" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
                 <content>
-                    <VBox fx:id="VBoxSessao4" spacing="14" style="-fx-background-color: transparent;">
+                    <VBox fx:id="VBoxSessao4" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
                         <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     </VBox>
                 </content>
@@ -129,7 +118,7 @@
 
             <ScrollPane fx:id="spSessao5" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
                 <content>
-                    <VBox fx:id="VBoxSessao5" spacing="14" style="-fx-background-color: transparent;">
+                    <VBox fx:id="VBoxSessao5" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
                         <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     </VBox>
                 </content>
@@ -137,7 +126,7 @@
 
             <ScrollPane fx:id="spSessao6" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" visible="false">
                 <content>
-                    <VBox fx:id="VBoxSessao6" spacing="14" style="-fx-background-color: transparent;">
+                    <VBox fx:id="VBoxSessao6" spacing="14" fillWidth="true" style="-fx-background-color: transparent;">
                         <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     </VBox>
                 </content>

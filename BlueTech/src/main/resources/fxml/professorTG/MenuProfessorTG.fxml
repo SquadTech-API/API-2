@@ -56,7 +56,7 @@
                         <!-- Accordion principal -->
                         <Accordion fx:id="accordionProfessorTG" prefWidth="Infinity" styleClass="menu-accordion">
                             <panes>
-                                <TitledPane text="Portfólios Concluídos" expanded="false" textFill="WHITE">
+                                <TitledPane text="Lista de ALunos" expanded="false" textFill="WHITE">
                                     <content>
                                         <Accordion styleClass="menu-accordion">
                                             <panes>
@@ -99,7 +99,7 @@
                         <!-- Botões extras -->
                         <JFXButton fx:id="btnAgendamentosTG" text="Agendamentos de TG" maxWidth="Infinity" onAction="#abrirAgendamentosTG"/>
                         <JFXButton fx:id="btnCadastrarOrientadores" text="Cadastrar Orientadores" maxWidth="Infinity" onAction="#abrirCadastrarOrientadores"/>
-                        <JFXButton fx:id="btnListaAlunos" text="Lista de Alunos" maxWidth="Infinity" onAction="#abrirListaAlunos"/>
+                        <JFXButton fx:id="btnListaAlunos" text="Portfólios" maxWidth="Infinity" onAction="#abrirListaAlunos"/>
                     </children>
                 </VBox>
             </children>

@@ -134,4 +134,25 @@ public class FeedbackDAO {
 
         return f;
     }
+
+    public boolean salvar(Feedback feedback) {
+        String sql = """
+            INSERT INTO feedback (versao_id, professor_id, status, comentario)
+            VALUES (?, ?, ?, ?)
+        """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, feedback.getVersaoId());
+            stmt.setLong(2, feedback.getProfessorId());
+            stmt.setString(3, feedback.getStatus());
+            stmt.setString(4, feedback.getComentario());
+            stmt.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

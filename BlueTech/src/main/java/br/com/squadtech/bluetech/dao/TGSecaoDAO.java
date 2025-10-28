@@ -289,4 +289,40 @@ public class TGSecaoDAO {
 
         return secao;
     }
+
+    public List<TGSecao> findByAlunoId(Long alunoId) {
+        String sql = """
+        SELECT s.* 
+        FROM tg_secao s
+        JOIN tg_portifolio p ON s.portifolio_id = p.id
+        WHERE p.aluno_id = ?
+        ORDER BY s.api_numero
+    """;
+
+        List<TGSecao> secoes = new ArrayList<>();
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, alunoId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                TGSecao s = new TGSecao();
+                s.setId(rs.getLong("id"));
+                s.setPortifolioId(rs.getLong("portifolio_id"));
+                s.setApiNumero(rs.getInt("api_numero"));
+                s.setStatus(rs.getString("status"));
+                s.setVersaoValidada(rs.getBoolean("versao_validada"));
+                s.setDataValidacao(rs.getTimestamp("data_validacao") != null
+                        ? rs.getTimestamp("data_validacao").toLocalDateTime()
+                        : null);
+                s.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                s.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+                secoes.add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return secoes;
+    }
 }
