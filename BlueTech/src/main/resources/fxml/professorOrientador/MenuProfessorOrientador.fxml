@@ -1,51 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.SplitPane?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<SplitPane fx:id="splitPanelMenuProfessorOri"
-           dividerPositions="0.6"
-           orientation="VERTICAL"
-           styleClass="menu-lateral"
-           stylesheets="@../../css/MenuOri.css"
-           xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.MenuProfessorOrientadorController">
+<SplitPane fx:id="splitPanelMenuProfessorOri" dividerPositions="0.6" orientation="VERTICAL" styleClass="menu-lateral" stylesheets="@../../css/MenuStyles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.MenuProfessorOrientadorController">
 
     <items>
         <!-- Topo do menu -->
         <AnchorPane fx:id="paneSuperiorMenuProfessorOri" prefHeight="260.0">
             <children>
-                <VBox alignment="TOP_CENTER" spacing="12.0"
-                      AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                <VBox alignment="TOP_CENTER" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <padding>
-                        <Insets top="10" right="10" bottom="10" left="10"/>
+                        <Insets bottom="10" left="10" right="10" top="10" />
                     </padding>
                     <children>
                         <Label fx:id="lblTituloProfessorOri" text="Painel do Professor Orientador" textFill="#ffd400">
                             <font>
-                                <Font name="CaskaydiaMono NFM SemiBold" size="20"/>
+                                <Font name="CaskaydiaMono NFM SemiBold" size="20" />
                             </font>
                         </Label>
 
-                        <ImageView fx:id="imgViewFotoProfessorOri" fitWidth="100" preserveRatio="true" pickOnBounds="true">
+                        <ImageView fx:id="imgViewFotoProfessorOri" fitWidth="100" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../images/Usuario.png"/>
+                                <Image url="@../../images/Usuario.png" />
                             </image>
                         </ImageView>
 
-                        <VBox alignment="CENTER_LEFT" spacing="6.0" maxWidth="Infinity">
+                        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="6.0">
                             <children>
-                                <Label fx:id="lblProfessorOri" text="PROFESSOR ORIENTADOR: Fulano" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-                                <Label fx:id="lblSemestreOri" text="SEMESTRE RESPONSÁVEL: 6º Semestre" textFill="WHITE" style="-fx-font-size: 14px;"/>
+                                <Label fx:id="lblProfessorOri" style="-fx-font-weight: bold; -fx-font-size: 16px;" text="PROFESSOR ORIENTADOR: Fulano" textFill="WHITE" />
+                                <Label fx:id="lblSemestreOri" style="-fx-font-size: 14px;" text="SEMESTRE RESPONSÁVEL: 6º Semestre" textFill="WHITE" />
                             </children>
                         </VBox>
                     </children>
@@ -54,22 +42,18 @@
         </AnchorPane>
 
         <!-- Menu inferior com botão único -->
-        <VBox fx:id="vboxMenuProfessorOri" spacing="20.0" alignment="TOP_CENTER" prefWidth="200.0" fillWidth="true">
+        <VBox fx:id="vboxMenuProfessorOri" alignment="TOP_CENTER" fillWidth="true" prefWidth="200.0" spacing="20.0">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <children>
-                <JFXButton fx:id="btnListaAlunos" text="Listar Alunos" maxWidth="Infinity"
-                           onAction="#abrirListaAlunos"
-                           styleClass="submenu-btn"/>
+                <JFXButton fx:id="btnListaAlunos" maxWidth="Infinity" onAction="#abrirListaAlunos" styleClass="submenu-btn" text="Listar Alunos" />
             </children>
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <children>
-                <JFXButton fx:id="btnenviarEmail" text="Enviar Email" maxWidth="Infinity"
-                           onAction="#enviarEmail"
-                           styleClass="submenu-btn"/>
+                <JFXButton fx:id="btnenviarEmail" maxWidth="Infinity" onAction="#enviarEmail" styleClass="submenu-btn" text="Enviar Email" />
             </children>
         </VBox>
     </items>

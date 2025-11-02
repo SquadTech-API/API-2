@@ -13,6 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -25,6 +27,8 @@ public class DashboardController {
 
     @FXML
     private Label alertLabel;
+
+    private static final Logger log = LoggerFactory.getLogger(DashboardController.class);
 
     public void initialize() {
         List<AlunoPostagem> postagens = List.of(
@@ -93,7 +97,7 @@ public class DashboardController {
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Erro ao abrir VisualizadorTG", e);
         }
     }
 }

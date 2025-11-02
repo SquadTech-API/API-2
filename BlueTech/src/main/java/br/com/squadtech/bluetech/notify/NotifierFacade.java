@@ -35,15 +35,15 @@ public final class NotifierFacade {
         return INSTANCE;
     }
 
-    public void notifySubmission(long versaoId) throws Exception {
+    public String notifySubmission(long versaoId) throws Exception {
         try (Connection conn = ConnectionFactory.getConnection()) {
-            new NotificationService(conn, email).notifyProfessorOnStudentSubmission(versaoId);
+            return new NotificationService(conn, email).notifyProfessorOnStudentSubmission(versaoId);
         }
     }
 
-    public void notifyFeedback(long feedbackId) throws Exception {
+    public String notifyFeedback(long feedbackId) throws Exception {
         try (Connection conn = ConnectionFactory.getConnection()) {
-            new NotificationService(conn, email).notifyStudentOnProfessorFeedback(feedbackId);
+            return new NotificationService(conn, email).notifyStudentOnProfessorFeedback(feedbackId);
         }
     }
 }

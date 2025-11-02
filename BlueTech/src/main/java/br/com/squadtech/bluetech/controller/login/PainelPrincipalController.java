@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import br.com.squadtech.bluetech.controller.MenuAware;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.aluno.MenuAlunoController;
 import javafx.application.Platform;
@@ -17,45 +18,59 @@ import javafx.scene.shape.Rectangle;
 
 public class PainelPrincipalController {
 
-    @FXML private ResourceBundle resources;
-    @FXML private URL location;
+    @FXML
+    private ResourceBundle resources;
 
-    @FXML private SplitPane painelPrincipal;
-    @FXML private AnchorPane painelPrincipalExibicao;
-    @FXML private AnchorPane painelPrincipalMenu;
+    @FXML
+    private URL location;
 
-    // Controller atual do menu, para atualizações como avatar
+    @FXML
+    private SplitPane painelPrincipal;
+
+    @FXML
+    private AnchorPane painelPrincipalExibicao;
+
+    @FXML
+    private AnchorPane painelPrincipalMenu;
+
+    // Mantém referência ao controller do menu atual (para atualizar avatar, etc.)
     private MenuAlunoController menuAlunoController;
 
-    // ------------------ MÉTODOS PÚBLICOS ------------------
+    // Mantém referência a menus que desejam reagir à troca de conteúdo
+    private MenuAware menuAware;
 
     /**
-     * Retorna o painel de exibição (lado direito) para manipulação direta.
-     */
-    public AnchorPane getPainelPrincipalExibicao() {
-        return painelPrincipalExibicao;
-    }
-
-    /**
-     * Carrega um FXML no painel lateral (menu) e injeta controller se suportar.
+     * Carrega um FXML dentro do painel lateral de menu (painelPrincipalMenu).
      */
     public void loadMenu(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
         Parent pane = loader.load();
 
+        // Injeta este controller no menu se ele suportar tal referência
         Object controller = loader.getController();
-        if (controller instanceof MenuAlunoController menuCtrl) {
-            this.menuAlunoController = menuCtrl;
-            menuCtrl.setPainelPrincipalController(this);
+        if (controller instanceof SupportsMainController supportsMain) {
+            supportsMain.setPainelPrincipalController(this);
         }
+        if (controller instanceof MenuAlunoController menuAlunoController) {
+            this.menuAlunoController = menuAlunoController;
+            // Garantir injeção explícita também para compatibilidade
+            menuAlunoController.setPainelPrincipalController(this);
+        }
+        this.menuAware = (controller instanceof MenuAware) ? (MenuAware) controller : null;
 
-        painelPrincipalMenu.getChildren().setAll(pane);
-        setAnchorPaneFullSize(pane);
+        painelPrincipalMenu.getChildren().clear();
+        painelPrincipalMenu.getChildren().add(pane);
+
+        //Faz o novo painel preencher todo o espaço
+        AnchorPane.setTopAnchor(pane, 0.0);
+        AnchorPane.setRightAnchor(pane, 0.0);
+        AnchorPane.setBottomAnchor(pane, 0.0);
+        AnchorPane.setLeftAnchor(pane, 0.0);
     }
 
     /**
-     * Carrega um FXML no painel de exibição (lado direito) e injeta controller se suportar SupportsMainController.
-     * Este é usado para carregamentos simples onde a configuração do controller é automática.
+     * Carrega um FXML dentro do painel de exibição (direita) do SplitPane.
+     * Se o controller carregado implementar SupportsMainController, injeta este controller principal nele.
      */
     public void loadContent(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
@@ -66,24 +81,62 @@ public class PainelPrincipalController {
             supportsMain.setPainelPrincipalController(this);
         }
 
-        // Delega a exibição ao novo método loadRoot
-        loadRoot(pane);
+        // Aplica automaticamente a moldura dourada nas telas de conteúdo (painel direito), com possibilidade de opt-out
+        if (!pane.getStyleClass().contains("no-panel-frame") && !pane.getStyleClass().contains("panel-golden-rounded")) {
+            pane.getStyleClass().add("panel-golden-rounded");
+        }
+
+        painelPrincipalExibicao.getChildren().clear();
+        painelPrincipalExibicao.getChildren().add(pane);
+
+        AnchorPane.setTopAnchor(pane, 0.0);
+        AnchorPane.setRightAnchor(pane, 0.0);
+        AnchorPane.setBottomAnchor(pane, 0.0);
+        AnchorPane.setLeftAnchor(pane, 0.0);
+
+        // Notifica menu se aplicável
+        if (menuAware != null) {
+            menuAware.onContentChanged(fxmlPath, controller);
+        }
     }
 
     /**
-     * 🔑 NOVO MÉTODO DE CORREÇÃO: Carrega um Parent (Root Node) já configurado no painel de exibição.
-     *
-     * Permite que controllers externos carreguem o FXML, configurem seu controller
-     * (ex: chamando setVersaoId) e passem o resultado final para exibição,
-     * evitando a recriação da instância.
+     * Variante de loadContent que retorna o controller carregado, para que o chamador possa configurar parâmetros.
      */
-    public void loadRoot(Parent content) {
-        painelPrincipalExibicao.getChildren().setAll(content);
-        setAnchorPaneFullSize(content);
+    public <T> T loadContentReturnController(String fxmlPath, Class<T> controllerType) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+        Parent pane = loader.load();
+
+        Object controller = loader.getController();
+        if (controller instanceof SupportsMainController supportsMain) {
+            supportsMain.setPainelPrincipalController(this);
+        }
+
+        if (!pane.getStyleClass().contains("no-panel-frame") && !pane.getStyleClass().contains("panel-golden-rounded")) {
+            pane.getStyleClass().add("panel-golden-rounded");
+        }
+
+        painelPrincipalExibicao.getChildren().clear();
+        painelPrincipalExibicao.getChildren().add(pane);
+
+        AnchorPane.setTopAnchor(pane, 0.0);
+        AnchorPane.setRightAnchor(pane, 0.0);
+        AnchorPane.setBottomAnchor(pane, 0.0);
+        AnchorPane.setLeftAnchor(pane, 0.0);
+
+        // Notifica menu se aplicável
+        if (menuAware != null) {
+            menuAware.onContentChanged(fxmlPath, controller);
+        }
+
+        if (controllerType.isInstance(controller)) {
+            return controllerType.cast(controller);
+        }
+        return null;
     }
 
     /**
-     * Atualiza a imagem do aluno no menu.
+     * Atualiza a imagem de perfil exibida no menu do aluno, caso esteja carregado.
      */
     public void updateFotoMenuAluno(String imagePath) {
         if (menuAlunoController != null) {
@@ -91,71 +144,12 @@ public class PainelPrincipalController {
         }
     }
 
-    // ------------------ MÉTODOS PRIVADOS ------------------
-
     @FXML
     void initialize() {
-        assert painelPrincipal != null : "fx:id=\"painelPrincipal\" não injetado.";
-        assert painelPrincipalExibicao != null : "fx:id=\"painelPrincipalExibicao\" não injetado.";
-        assert painelPrincipalMenu != null : "fx:id=\"painelPrincipalMenu\" não injetado.";
-
-        // Define largura fixa do menu
-        painelPrincipalMenu.setMinWidth(260.0);
-        painelPrincipalMenu.setPrefWidth(300.0);
-        SplitPane.setResizableWithParent(painelPrincipalMenu, Boolean.FALSE);
-
-        // Ajusta clips para evitar overflow
-        setClip(painelPrincipalMenu);
-        setClip(painelPrincipalExibicao);
-
-        // Ajusta divisor do SplitPane
-        Platform.runLater(this::fixDividerPosition);
-        painelPrincipal.widthProperty().addListener((obs, oldW, newW) -> fixDividerPosition());
-
-        // Trava o divisor para manter o menu fixo
-        if (!painelPrincipal.getDividers().isEmpty()) {
-            painelPrincipal.getDividers().get(0).positionProperty().addListener((obs, oldPos, newPos) -> {
-                double desired = computeDesiredDividerPosition();
-                if (Math.abs(newPos.doubleValue() - desired) > 0.0005) {
-                    painelPrincipal.setDividerPositions(desired);
-                }
-            });
-        }
+        assert painelPrincipal != null : "fx:id=\"painelPrincipal\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
+        assert painelPrincipalExibicao != null : "fx:id=\"painelPrincipalExibicao\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
+        assert painelPrincipalMenu != null : "fx:id=\"painelPrincipalMenu\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
     }
 
-    /**
-     * Calcula a posição ideal do divisor (~300px menu)
-     */
-    private double computeDesiredDividerPosition() {
-        double total = Math.max(1.0, painelPrincipal.getWidth());
-        double desired = painelPrincipalMenu.getPrefWidth() / total;
-        return Math.max(0.1, Math.min(0.9, desired));
-    }
-
-    /**
-     * Ajusta a posição do divisor do SplitPane
-     */
-    private void fixDividerPosition() {
-        painelPrincipal.setDividerPositions(computeDesiredDividerPosition());
-    }
-
-    /**
-     * Define clip em AnchorPane para evitar overflow
-     */
-    private void setClip(AnchorPane pane) {
-        Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(pane.widthProperty());
-        clip.heightProperty().bind(pane.heightProperty());
-        pane.setClip(clip);
-    }
-
-    /**
-     * Faz o Parent ocupar todo o espaço do AnchorPane
-     */
-    private void setAnchorPaneFullSize(Parent pane) {
-        AnchorPane.setTopAnchor(pane, 0.0);
-        AnchorPane.setRightAnchor(pane, 0.0);
-        AnchorPane.setBottomAnchor(pane, 0.0);
-        AnchorPane.setLeftAnchor(pane, 0.0);
-    }
 }
+

@@ -1,186 +1,91 @@
 package br.com.squadtech.bluetech.dao;
 
-import br.com.squadtech.bluetech.model.Usuario;
 import br.com.squadtech.bluetech.config.ConnectionFactory;
+import br.com.squadtech.bluetech.model.Usuario;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UsuarioDAO {
 
-    // =====================================================
-    // CREATE TABLE IF NOT EXISTS
-    // =====================================================
     public void createTableIfNotExists() {
-        String sql = """
-            CREATE TABLE IF NOT EXISTS usuario (
-                email VARCHAR(190) PRIMARY KEY,
-                nome VARCHAR(150) NOT NULL,
-                senha_hash VARCHAR(255) NOT NULL,
-                tipo ENUM('ALUNO', 'ORIENTADOR', 'PROFESSOR_TG', 'ADMIN') NOT NULL,
-                ativo BOOLEAN NOT NULL DEFAULT TRUE,
-                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                INDEX idx_tipo (tipo)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-        """;
-
+        String sql = "CREATE TABLE IF NOT EXISTS usuario (" +
+                "email VARCHAR(255) PRIMARY KEY," +
+                "nome VARCHAR(100) NOT NULL," +
+                "senha VARCHAR(255) NOT NULL," +
+                "tipo VARCHAR(50) NOT NULL" +
+                ")";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao criar tabela usuario: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao criar tabela usuario: " + e.getMessage());
         }
     }
 
-    // =====================================================
-    // COUNT USUARIOS
-    // =====================================================
     public long countUsuarios() {
-        String sql = "SELECT COUNT(*) AS total FROM usuario";
+        String sql = "SELECT COUNT(*) FROM usuario";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             if (rs.next()) {
-                return rs.getLong("total");
+                return rs.getLong(1);
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao contar usuarios: " + e.getMessage());
         }
         return 0;
     }
 
-    // =====================================================
-    // INSERT
-    // =====================================================
     public void insert(Usuario usuario) {
-        String sql = "INSERT INTO usuario (email, nome, senha_hash, tipo) VALUES (?, ?, ?, ?)";
-
+        String sql = "INSERT INTO usuario (email, nome, senha, tipo) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, usuario.getEmail());
             stmt.setString(2, usuario.getNome());
-            stmt.setString(3, BCrypt.hashpw(usuario.getSenhaHash(), BCrypt.gensalt()));
+            stmt.setString(3, BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt())); // Hash da senha
             stmt.setString(4, usuario.getTipo());
-
             stmt.executeUpdate();
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao inserir usuario: " + e.getMessage());
         }
     }
 
-    // =====================================================
-    // UPDATE
-    // =====================================================
-    public void update(Usuario usuario) {
-        String sql = "UPDATE usuario SET nome = ?, senha_hash = ?, tipo = ? WHERE email = ?";
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, usuario.getNome());
-            stmt.setString(2, BCrypt.hashpw(usuario.getSenhaHash(), BCrypt.gensalt()));
-            stmt.setString(3, usuario.getTipo());
-            stmt.setString(4, usuario.getEmail());
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // =====================================================
-    // DELETE
-    // =====================================================
-    public void delete(String email) {
-        String sql = "DELETE FROM usuario WHERE email = ?";
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, email);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // =====================================================
-    // FIND BY EMAIL (PK)
-    // =====================================================
     public Usuario findByEmail(String email) {
         String sql = "SELECT * FROM usuario WHERE email = ?";
-        Usuario usuario = null;
-
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                usuario = new Usuario();
-                usuario.setEmail(rs.getString("email"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setSenhaHash(rs.getString("senha_hash"));
-                usuario.setTipo(rs.getString("tipo"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setEmail(rs.getString("email"));
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setSenha(rs.getString("senha")); // Senha hasheada
+                    usuario.setTipo(rs.getString("tipo"));
+                    return usuario;
+                }
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar usuario: " + e.getMessage());
         }
-
-        return usuario;
-    }
-
-    // =====================================================
-    // FIND BY EMAIL AND SENHA
-    // =====================================================
-    public Usuario findByEmailAndSenha(String email, String senhaDigitada) {
-        Usuario usuario = findByEmail(email);
-
-        if (usuario != null && usuario.getSenhaHash() != null) {
-            if (BCrypt.checkpw(senhaDigitada, usuario.getSenhaHash())) {
-                return usuario;
-            }
-        }
-
         return null;
     }
 
-    // =====================================================
-    // LISTAR TODOS
-    // =====================================================
-    public List<Usuario> findAll() {
-        List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT * FROM usuario";
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setEmail(rs.getString("email"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setSenhaHash(rs.getString("senha_hash"));
-                usuario.setTipo(rs.getString("tipo"));
-
-                usuarios.add(usuario);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public Usuario findByEmailAndSenha(String email, String senhaDigitada) {
+    Usuario usuario = findByEmail(email);
+        if (usuario != null && org.mindrot.jbcrypt.BCrypt.checkpw(senhaDigitada, usuario.getSenha())) {
+            return usuario;
         }
+        return null;
+    }
 
-        return usuarios;
+
+    public boolean validateLogin(String email, String senha) {
+        Usuario usuario = findByEmail(email);
+        return usuario != null && BCrypt.checkpw(senha, usuario.getSenha());
     }
 }

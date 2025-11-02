@@ -1,7 +1,5 @@
 package br.com.squadtech.bluetech.service;
 
-import br.com.squadtech.bluetech.service.EmailService;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +20,7 @@ public class NotificationService {
 
     /**
      * Quando o aluno envia uma versão do TG, avisa o professor orientador.
-     * @param versaoId id da versão (tg_versao.id)
+     * @param versaoId id da versão (TG_Versao.Id_Versao)
      * @return e-mail do professor destinatário (ou null, se não achou registro)
      */
     public String notifyProfessorOnStudentSubmission(long versaoId) throws Exception {
@@ -34,14 +32,16 @@ public class NotificationService {
                 pu.email AS prof_email,
                 tp.titulo AS tg_titulo,
                 tp.tema   AS tg_tema
-            FROM tg_versao v
-            JOIN tg_secao s        ON v.secao_id = s.id
-            JOIN tg_portifolio tp  ON s.portifolio_id = tp.id
-            JOIN aluno a           ON tp.aluno_id = a.id
-            JOIN usuarios au       ON a.usuario_id = au.id
-            JOIN professor p       ON tp.professor_id = p.id
-            JOIN usuarios pu       ON p.usuario_id = pu.id
-            WHERE v.id = ?
+            FROM TG_Versao v
+            JOIN TG_Secao s 
+                 ON (s.Id_Secao = v.Id_Secao) OR (s.Id_Versao = v.Id_Versao)
+            JOIN Perfil_Aluno pa  ON pa.email_usuario = s.email_usuario
+            LEFT JOIN tg_portifolio tp ON tp.aluno_id = pa.id_perfil_aluno
+            JOIN orienta o        ON o.aluno_id = pa.id_perfil_aluno AND o.ativo = TRUE
+            JOIN professor p      ON p.id = o.professor_id
+            JOIN usuario au       ON au.email = pa.email_usuario
+            JOIN usuario pu       ON pu.email = p.usuario_email
+            WHERE v.Id_Versao = ?
         """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -55,7 +55,7 @@ public class NotificationService {
                 String titulo    = rs.getString("tg_titulo");
                 String tema      = rs.getString("tg_tema");
 
-                String assunto = "Novo envio de TG - " + alunoNome;
+                String assunto = "Novo envio de TG - " + nullSafe(alunoNome);
                 String corpo = """
                         Olá, %s!
 
@@ -67,7 +67,7 @@ public class NotificationService {
                         Acesse o sistema BlueTech para avaliar.
 
                         — BlueTech
-                        """.formatted(profNome, alunoNome, nullSafe(titulo), nullSafe(tema));
+                        """.formatted(nullSafe(profNome), nullSafe(alunoNome), nullSafe(titulo), nullSafe(tema));
 
                 email.send(profEmail, assunto, corpo);
                 return profEmail; // <- devolve p/ a UI mostrar
@@ -89,13 +89,12 @@ public class NotificationService {
                 f.status AS status,
                 f.comentario AS comentario
             FROM feedback f
-            JOIN tg_versao v       ON f.versao_id = v.id
-            JOIN tg_secao s        ON v.secao_id = s.id
-            JOIN tg_portifolio tp  ON s.portifolio_id = tp.id
-            JOIN aluno a           ON tp.aluno_id = a.id
-            JOIN usuarios au       ON a.usuario_id = au.id
-            JOIN professor p       ON tp.professor_id = p.id
-            JOIN usuarios pu       ON p.usuario_id = pu.id
+            JOIN TG_Versao v  ON v.Id_Versao = f.versao_id
+            JOIN TG_Secao s   ON (s.Id_Secao = v.Id_Secao) OR (s.Id_Versao = v.Id_Versao)
+            JOIN Perfil_Aluno pa ON pa.email_usuario = s.email_usuario
+            JOIN usuario au  ON au.email = pa.email_usuario
+            JOIN professor p ON p.id = f.professor_id
+            JOIN usuario pu  ON pu.email = p.usuario_email
             WHERE f.id = ?
         """;
 
@@ -105,12 +104,12 @@ public class NotificationService {
                 if (!rs.next()) return null;
 
                 String alunoNome  = rs.getString("aluno_nome");
-                String alunoEmail = rs.getString("aluno_email"); // <- corrigido (era resultadoDoBanco)
+                String alunoEmail = rs.getString("aluno_email");
                 String profNome   = rs.getString("prof_nome");
                 String status     = rs.getString("status");
                 String comentario = rs.getString("comentario");
 
-                String assunto = "Feedback do professor - " + profNome;
+                String assunto = "Feedback do professor - " + nullSafe(profNome);
                 String corpo = """
                         Olá, %s!
 
@@ -122,7 +121,7 @@ public class NotificationService {
                         Acesse o sistema para ver os detalhes.
 
                         — BlueTech
-                        """.formatted(alunoNome, profNome, nullSafe(status), nullSafe(comentario));
+                        """.formatted(nullSafe(alunoNome), nullSafe(profNome), nullSafe(status), nullSafe(comentario));
 
                 email.send(alunoEmail, assunto, corpo);
                 return alunoEmail; // <- devolve p/ a UI mostrar

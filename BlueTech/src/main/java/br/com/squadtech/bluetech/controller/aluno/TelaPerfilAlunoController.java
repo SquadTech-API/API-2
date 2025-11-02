@@ -6,6 +6,7 @@ import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -92,8 +93,13 @@ public class TelaPerfilAlunoController implements SupportsMainController {
 
     @FXML
     void handleSalvar(ActionEvent event) {
+        Usuario usuario = SessaoUsuario.getUsuarioLogado();
+        if (usuario == null || usuario.getEmail() == null) {
+            showAlert("Erro", "Sessão expirada. Faça login novamente.");
+            return;
+        }
         PerfilAluno perfil = new PerfilAluno();
-        perfil.setEmailUsuario(txtEmail.getText());
+        perfil.setEmailUsuario(usuario.getEmail()); // força vínculo com usuário logado
         try {
             perfil.setIdade(txtIdade.getText().isEmpty() ? null : Integer.parseInt(txtIdade.getText()));
         } catch (NumberFormatException e) {
@@ -233,6 +239,10 @@ public class TelaPerfilAlunoController implements SupportsMainController {
         assert txtLinkedin != null : "fx:id=\"txtLinkedin\" was not injected: check your FXML file 'TelaPerfilAluno.fxml'.";
         assert txtMotivacao != null : "fx:id=\"txtMotivacao\" was not injected: check your FXML file 'TelaPerfilAluno.fxml'.";
         assert txtNome != null : "fx:id=\"txtNome\" was not injected: check your FXML file 'TelaPerfilAluno.fxml'.";
+
+        // Campos de identificação não devem ser editáveis pelo usuário
+        txtEmail.setEditable(false);
+        txtNome.setEditable(false);
 
         //Carrega os dados do usuário logado e o perfil salvo (se houver)
         carregarPerfilUsuario();

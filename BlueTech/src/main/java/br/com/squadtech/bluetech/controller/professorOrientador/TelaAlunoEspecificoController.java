@@ -1,7 +1,14 @@
 package br.com.squadtech.bluetech.controller.professorOrientador;
 
+import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
-import br.com.squadtech.bluetech.model.TGSecao;
+import br.com.squadtech.bluetech.dao.TGSecaoDAO.CardDados;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
+import br.com.squadtech.bluetech.model.Usuario;
+import br.com.squadtech.bluetech.model.Professor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -24,13 +31,10 @@ public class TelaAlunoEspecificoController {
     @FXML private ScrollPane spSessao1, spSessao2, spSessao3, spSessao4, spSessao5, spSessao6;
     @FXML private VBox VBoxSessao1, VBoxSessao2, VBoxSessao3, VBoxSessao4, VBoxSessao5, VBoxSessao6;
 
-    private long alunoId;
+    private long alunoId; // id_perfil_aluno
     private final TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
-    private PainelPrincipalOrientadorController painelPrincipalController;
-
-    public void setPainelPrincipalController(PainelPrincipalOrientadorController painelPrincipalController) {
-        this.painelPrincipalController = painelPrincipalController;
-    }
+    private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
+    private static final Logger log = LoggerFactory.getLogger(TelaAlunoEspecificoController.class);
 
     public void setAlunoId(long alunoId, String nomeAluno) {
         this.alunoId = alunoId;
@@ -43,29 +47,41 @@ public class TelaAlunoEspecificoController {
      * Carrega todas as seções do aluno direto em código (sem FXML de card)
      */
     private void carregarSecoesDoAluno() {
-        List<TGSecao> secoes = tgSecaoDAO.findByAlunoId(alunoId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // Obter email do aluno a partir do id_perfil_aluno
+        String email = perfilAlunoDAO.getEmailByPerfilId((int) alunoId);
+        if (email == null || email.isBlank()) {
+            limparVBoxes();
+            return;
+        }
+        List<CardDados> secoes = tgSecaoDAO.listarCards(email);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        VBox[] vboxes = {VBoxSessao1, VBoxSessao2, VBoxSessao3, VBoxSessao4, VBoxSessao5, VBoxSessao6};
-        for (VBox vbox : vboxes) vbox.getChildren().clear();
+        limparVBoxes();
 
-        for (TGSecao secao : secoes) {
+        for (CardDados secao : secoes) {
             HBox card = new HBox(10);
             card.setStyle("-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #f9f9f9;");
 
-            Label lblTitulo = new Label("API " + secao.getApiNumero());
-            Label lblStatus = new Label(secao.getStatus().equalsIgnoreCase("CONCLUIDA") ? "Concluída" : "Pendente");
-            lblStatus.setStyle(secao.getStatus().equalsIgnoreCase("CONCLUIDA") ? "-fx-text-fill: green;" : "-fx-text-fill: red;");
+            Label lblTitulo = new Label("API " + secao.apiNumero);
+            Label lblStatus = new Label(secao.status != null ? secao.status : "Em andamento");
 
-            Label lblData = new Label(secao.getDataValidacao() != null
-                    ? "Última validação: " + secao.getDataValidacao().format(formatter)
-                    : "Sem validação ainda");
+            Label lblData = new Label(secao.dataEnvio != null
+                    ? "Enviado em: " + secao.dataEnvio.format(formatter)
+                    : "Sem envio ainda");
 
             card.getChildren().addAll(lblTitulo, lblStatus, lblData);
-            card.setOnMouseClicked(e -> abrirTelaFeedback(secao.getId()));
+            int idSecao = secao.idSecao;
+            card.setOnMouseClicked(e -> abrirTelaFeedback(idSecao));
 
-            vboxes[secao.getApiNumero() - 1].getChildren().add(card);
+            int idx = Math.max(1, Math.min(6, secao.apiNumero)) - 1;
+            VBox[] vboxes = {VBoxSessao1, VBoxSessao2, VBoxSessao3, VBoxSessao4, VBoxSessao5, VBoxSessao6};
+            vboxes[idx].getChildren().add(card);
         }
+    }
+
+    private void limparVBoxes() {
+        VBox[] vboxes = {VBoxSessao1, VBoxSessao2, VBoxSessao3, VBoxSessao4, VBoxSessao5, VBoxSessao6};
+        for (VBox vbox : vboxes) vbox.getChildren().clear();
     }
 
     /**
@@ -103,8 +119,19 @@ public class TelaAlunoEspecificoController {
             Parent root = loader.load();
 
             TelaFeedbackController controller = loader.getController();
-            // Passa o secaoId e o nome do aluno
             controller.setAlunoSecao(secaoId, lblNomeAluno.getText());
+
+            // Resolve professorId pelo usuário logado
+            Usuario u = SessaoUsuario.getUsuarioLogado();
+            if (u != null && u.getEmail() != null) {
+                ProfessorDAO profDAO = new ProfessorDAO();
+                Professor p = profDAO.findByUsuarioEmail(u.getEmail());
+                if (p != null && p.getId() != null) {
+                    controller.setProfessorId(p.getId());
+                } else {
+                    log.warn("Professor não encontrado para o email do usuário logado: {}", u.getEmail());
+                }
+            }
 
             Stage stage = new Stage();
             stage.setTitle("Feedback da Seção");
@@ -112,7 +139,7 @@ public class TelaAlunoEspecificoController {
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Erro ao abrir tela de feedback", e);
         }
     }
 }

@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
 
 <BorderPane stylesheets="@../../css/Style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21.0.8" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaSecaoAPIController">
 
@@ -34,7 +35,8 @@
                     </padding>
 
                     <Label style="-fx-font-weight: bold;" text="Visualização Markdown:" />
-                    <TextArea fx:id="txtMarkdown" editable="false" prefRowCount="10" style="-fx-font-family: Consolas; -fx-font-size: 12px;" wrapText="true" />
+                    <!-- Substitui TextArea por WebView para renderizar o Markdown em HTML -->
+                    <WebView fx:id="webViewMarkdown" prefHeight="400.0" />
 
                     <Label style="-fx-font-weight: bold;" text="Chat com o Orientador:" />
                     <TextArea fx:id="txtChatVisualizacao" editable="false" prefRowCount="8" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" wrapText="true" />

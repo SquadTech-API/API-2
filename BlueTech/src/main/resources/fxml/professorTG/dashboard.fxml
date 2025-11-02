@@ -2,11 +2,11 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Circle?>
-<BorderPane prefHeight="768.0" prefWidth="1366.0" styleClass="root-bg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorTG.DashboardController">
+<?import javafx.scene.shape.*?>
+
+<BorderPane prefHeight="768.0" prefWidth="1366.0" styleClass="root-bg" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorTG.DashboardController">
 
     <!-- COLUNA ESQUERDA -->
     <left>
@@ -92,7 +92,7 @@
                                             <children>
                                                 <ImageView fitHeight="36.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
                                                     <image>
-                                                        <Image url="@img/profile.png" />
+                                                        <Image url="@../../../../../../../../Users/dasmi/Downloads/API-2-main/API-2-main/BlueTech/src/main/resources/fxml/professorTG/img/profile.png" />
                                                     </image>
                                                 </ImageView>
                                                 <Circle radius="24.0" styleClass="avatar-ring" />

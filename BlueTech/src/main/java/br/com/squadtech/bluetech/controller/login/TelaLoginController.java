@@ -22,8 +22,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TelaLoginController {
+
+    private static final Logger log = LoggerFactory.getLogger(TelaLoginController.class);
 
     @FXML
     private ResourceBundle resources;
@@ -76,36 +80,58 @@ public class TelaLoginController {
             return;
         }
 
-    Usuario usuario = usuarioDAO.findByEmailAndSenha(email, senha);
-    if (usuario != null) {
-        // Armazena o usuário na sessão
-        SessaoUsuario.setUsuarioLogado(usuario);
+        Usuario usuario = usuarioDAO.findByEmailAndSenha(email, senha);
+        if (usuario != null) {
+            // Armazena o usuário na sessão
+            SessaoUsuario.setUsuarioLogado(usuario);
 
-        try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/login/PainelPrincipal.fxml")));
-            Parent root = loader.load();
+            try {
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/login/PainelPrincipal.fxml")));
+                Parent root = loader.load();
 
-            PainelPrincipalController controller = loader.getController();
-            controller.loadMenu("/fxml/aluno/MenuAluno.fxml");
-            controller.loadContent("/fxml/aluno/TelaAluno.fxml");
+                PainelPrincipalController controller = loader.getController();
 
-            Stage newStage = new Stage();
-            newStage.setTitle("BlueTech - Plataforma de Gestão de TG do Tipo Portfólio");
-            newStage.setScene(new Scene(root));
-            newStage.setMinWidth(960);
-            newStage.setMinHeight(600);
-            newStage.show();
+                // Seleciona telas iniciais conforme o tipo de usuário
+                String tipo = usuario.getTipo() == null ? "" : usuario.getTipo().trim().toUpperCase();
+                switch (tipo) {
+                    case "ALUNO" -> {
+                        controller.loadMenu("/fxml/aluno/MenuAluno.fxml");
+                        controller.loadContent("/fxml/aluno/TelaAluno.fxml");
+                    }
+                    case "ORIENTADOR" -> {
+                        controller.loadMenu("/fxml/professorOrientador/MenuProfessorOrientador.fxml");
+                        controller.loadContent("/fxml/professorOrientador/TelaOrientador.fxml");
+                    }
+                    case "PROF_TG" -> {
+                        controller.loadMenu("/fxml/professorTG/MenuProfessorTG.fxml");
+                        controller.loadContent("/fxml/professorTG/TelaProfessorTG.fxml");
+                    }
+                    default -> {
+                        // fallback para ALUNO caso tipo seja desconhecido
+                        log.warn("Tipo de usuário desconhecido: '{}'. Aplicando layout de ALUNO por padrão.", tipo);
+                        controller.loadMenu("/fxml/aluno/MenuAluno.fxml");
+                        controller.loadContent("/fxml/aluno/TelaAluno.fxml");
+                    }
+                }
 
-            // Fecha a janela atual após abrir a nova
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+                Stage newStage = new Stage();
+                newStage.setTitle("BlueTech - Plataforma de Gestão de TG do Tipo Portfólio");
+                newStage.setScene(new Scene(root));
+                newStage.setMinWidth(960);
+                newStage.setMinHeight(600);
+                newStage.show();
+
+                // Fecha a janela atual após abrir a nova
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                currentStage.close();
+            } catch (IOException e) {
+                log.error("Erro ao carregar a tela principal", e);
+                showAlert("Erro ao carregar a tela principal: " + e.getMessage());
+            }
+        } else {
+            showAlert("Credenciais inválidas!");
         }
-    } else {
-        showAlert("Credenciais inválidas!");
     }
-}
 
 
     private void showAlert(String message) {

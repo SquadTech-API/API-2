@@ -4,7 +4,6 @@ import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.model.Orienta;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class OrientaDAO {
             CREATE TABLE IF NOT EXISTS orienta (
                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
                 professor_id BIGINT NOT NULL,
-                aluno_id BIGINT NOT NULL,
+                aluno_id INT NOT NULL,
                 ativo BOOLEAN NOT NULL DEFAULT TRUE,
                 data_inicio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 data_fim DATETIME NULL,
@@ -28,7 +27,7 @@ public class OrientaDAO {
                 CONSTRAINT fk_orienta_professor FOREIGN KEY (professor_id)
                     REFERENCES professor(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                 CONSTRAINT fk_orienta_aluno FOREIGN KEY (aluno_id)
-                    REFERENCES perfil_aluno(id) ON DELETE RESTRICT ON UPDATE CASCADE
+                    REFERENCES Perfil_Aluno(id_perfil_aluno) ON DELETE RESTRICT ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """;
 

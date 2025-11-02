@@ -121,4 +121,28 @@ public class ProfessorDAO {
         }
         return professores;
     }
+
+    /** Busca professor por id (PK) */
+    public Professor findById(Long id) {
+        String sql = "SELECT * FROM professor WHERE id = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Professor professor = new Professor();
+                    professor.setId(rs.getLong("id"));
+                    professor.setUsuarioEmail(rs.getString("usuario_email"));
+                    professor.setCargo(rs.getString("cargo"));
+                    professor.setTipoTG(rs.getString("tipo_tg"));
+                    professor.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    professor.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+                    return professor;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar professor por id: " + e.getMessage(), e);
+        }
+        return null;
+    }
 }

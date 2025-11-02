@@ -2,6 +2,8 @@ package br.com.squadtech.bluetech.controller.professorOrientador;
 
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
+import br.com.squadtech.bluetech.controller.SupportsMainController;
+import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -19,6 +21,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TelaAlunosController {
+public class TelaAlunosController implements SupportsMainController {
 
     @FXML private Button ButtonPesquisar;
     @FXML private ToggleButton ToggleButonTodosAlunos;
@@ -35,12 +39,15 @@ public class TelaAlunosController {
     @FXML private TextField TextFieldNomePesquisa;
     @FXML private VBox VBoxListaAlunos;
 
-    private PainelPrincipalOrientadorController painelPrincipalController;
+    private PainelPrincipalController painelPrincipalController;
 
     private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
     private List<PerfilAluno> todosAlunos = new ArrayList<>();
 
-    public void setPainelPrincipalController(PainelPrincipalOrientadorController painelPrincipalController) {
+    private static final Logger log = LoggerFactory.getLogger(TelaAlunosController.class);
+
+    @Override
+    public void setPainelPrincipalController(PainelPrincipalController painelPrincipalController) {
         this.painelPrincipalController = painelPrincipalController;
     }
 
@@ -87,9 +94,11 @@ public class TelaAlunosController {
 
         for (PerfilAluno a : todosAlunos) {
             boolean matchesNome = termo.isEmpty() || (a.getNomeAluno() != null && a.getNomeAluno().toLowerCase(Locale.ROOT).contains(termo));
+            // Sem regra de corrigido real, usamos idade null como indicador de faltante (apenas placeholder)
+            boolean corrigido = a.getIdade() != null && a.getIdade() >= 0; // qualquer idade cadastrada conta como preenchido
             boolean matchesStatus = ToggleButonTodosAlunos.isSelected() ||
-                    (ToggleButtonCorrigidos.isSelected() && a.getIdade() != null && a.getIdade() == 0) ||
-                    (ToggleButtonNaoCorrigidos.isSelected() && (a.getIdade() == null || a.getIdade() > 0));
+                    (ToggleButtonCorrigidos.isSelected() && corrigido) ||
+                    (ToggleButtonNaoCorrigidos.isSelected() && !corrigido);
             if (matchesNome && matchesStatus) filtrados.add(a);
         }
 
@@ -123,7 +132,7 @@ public class TelaAlunosController {
         lblDias.setPrefWidth(150);
         lblDias.setAlignment(Pos.CENTER_RIGHT);
 
-        String iconPath = (a.getIdade() != null && a.getIdade() == 0) ? "/images/check.png" : "/images/excla.png";
+        String iconPath = (a.getIdade() != null) ? "/images/check.png" : "/images/excla.png";
         ImageView iv = new ImageView(loadImageSafe(iconPath));
         iv.setFitWidth(28);
         iv.setFitHeight(28);
@@ -134,10 +143,10 @@ public class TelaAlunosController {
         card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: rgba(0,0,0,0.04); -fx-background-radius: 8;"));
         card.setOnMouseExited(e -> card.setStyle(""));
 
-        // Clique: abre TelaAlunoEspecifico.fxml
+        // Clique: abre TelaAlunoEspecifico.fxml em nova janela
         card.setOnMouseClicked(e -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/TelaAlunoEspecifico.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/telaAlunoEspecifico.fxml"));
                 Parent root = loader.load();
 
                 TelaAlunoEspecificoController controller = loader.getController();
@@ -151,7 +160,7 @@ public class TelaAlunosController {
                 stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                log.error("Erro ao abrir tela do aluno específico", ex);
             }
         });
 
@@ -164,7 +173,7 @@ public class TelaAlunosController {
             if (url != null) return new Image(url.toExternalForm());
         } catch (Exception ignored) {}
         // fallback 1x1 px
-        return new Image("data:image/png;base64," +
-                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9b2Yw5sAAAAASUVORK5CYII=");
+        return new Image("data:image/png;base64,"
+                + "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9b2Yw5sAAAAASUVORK5CYII=");
     }
 }

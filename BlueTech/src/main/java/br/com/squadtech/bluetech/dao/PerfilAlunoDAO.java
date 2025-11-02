@@ -2,113 +2,130 @@ package br.com.squadtech.bluetech.dao;
 
 import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.model.PerfilAluno;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PerfilAlunoDAO {
 
-    public PerfilAlunoDAO() {}
+    private static final Logger log = LoggerFactory.getLogger(PerfilAlunoDAO.class);
 
-    // Criação da tabela
+    //Construtor vazio (seguindo padrão do UsuarioDAO que abre conexão dentro de cada método)
+    public PerfilAlunoDAO() {
+    }
+
     public void createTableIfNotExists() {
-        String sql = """
-            CREATE TABLE IF NOT EXISTS perfil_aluno (
-                id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                usuario_email VARCHAR(190) NOT NULL,
-                idade INT NULL,
-                foto VARCHAR(255) NULL,
-                historico_academico TEXT NULL,
-                historico_profissional TEXT NULL,
-                motivacao TEXT NULL,
-                link_github VARCHAR(255) NULL,
-                link_linkedin VARCHAR(255) NULL,
-                conhecimentos_tecnicos TEXT NULL,
-                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                CONSTRAINT uk_perfil_aluno_usuario UNIQUE (usuario_email),
-                CONSTRAINT fk_perfil_aluno_usuario FOREIGN KEY (usuario_email)
-                    REFERENCES usuario(email)
-                    ON DELETE RESTRICT
-                    ON UPDATE CASCADE
-            ) ENGINE=InnoDB;
-        """;
-
+        String sql = "CREATE TABLE IF NOT EXISTS Perfil_Aluno (" +
+                "id_perfil_aluno INT AUTO_INCREMENT PRIMARY KEY," +
+                "email_usuario VARCHAR(255) NOT NULL," +
+                "idade INTEGER," +
+                "foto VARCHAR(255)," +
+                "historico_academico TEXT," +
+                "motivacao TEXT," +
+                "historico_profissional TEXT," +
+                "link_github VARCHAR(255)," +
+                "link_linkedin VARCHAR(255)," +
+                "conhecimentos_tecnicos TEXT," +
+                "FOREIGN KEY (email_usuario) REFERENCES usuario(email)" +
+                ")";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao criar tabela perfil_aluno: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao criar tabela Perfil_Aluno: " + e.getMessage());
         }
     }
 
-    // Verifica se existe perfil
+    /**
+     * Verifica se existe perfil para o email informado.
+     */
     public boolean existePerfil(String emailUsuario) {
-        String sql = "SELECT 1 FROM perfil_aluno WHERE usuario_email = ?";
+        String sql = "SELECT 1 FROM Perfil_Aluno WHERE email_usuario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, emailUsuario);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
-
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao verificar existência de perfil: " + e.getMessage(), e);
         }
     }
 
-    // Busca perfil pelo email
+    /**
+     * Busca o perfil pelo email_usuario.
+     */
     public PerfilAluno getPerfilByEmail(String emailUsuario) {
-        String sql = "SELECT * FROM perfil_aluno WHERE usuario_email = ?";
+        String sql = "SELECT * FROM Perfil_Aluno WHERE email_usuario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, emailUsuario);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToPerfilAluno(rs);
+                    PerfilAluno perfil = new PerfilAluno();
+                    perfil.setIdPerfilAluno(rs.getInt("id_perfil_aluno"));
+                    perfil.setEmailUsuario(rs.getString("email_usuario"));
+
+                    int idadeVal = rs.getInt("idade");
+                    perfil.setIdade(rs.wasNull() ? null : idadeVal);
+
+                    perfil.setFoto(rs.getString("foto"));
+                    perfil.setHistoricoAcademico(rs.getString("historico_academico"));
+                    perfil.setMotivacao(rs.getString("motivacao"));
+                    perfil.setHistoricoProfissional(rs.getString("historico_profissional"));
+                    perfil.setLinkGithub(rs.getString("link_github"));
+                    perfil.setLinkLinkedin(rs.getString("link_linkedin"));
+                    perfil.setConhecimentosTecnicos(rs.getString("conhecimentos_tecnicos"));
+                    return perfil;
                 }
             }
-
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar perfil: " + e.getMessage(), e);
         }
         return null;
     }
 
-    // Insere novo perfil
+    /**
+     * Insere um novo perfil.
+     */
     public boolean inserirPerfil(PerfilAluno perfil) {
-        String sql = """
-            INSERT INTO perfil_aluno
-            (usuario_email, idade, foto, historico_academico, motivacao, historico_profissional,
-             link_github, link_linkedin, conhecimentos_tecnicos)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
-
+        String sql = "INSERT INTO Perfil_Aluno (email_usuario, idade, foto, historico_academico, motivacao, historico_profissional, link_github, link_linkedin, conhecimentos_tecnicos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            setPreparedStatementFromPerfil(stmt, perfil);
+            stmt.setString(1, perfil.getEmailUsuario());
+
+            if (perfil.getIdade() != null) stmt.setInt(2, perfil.getIdade());
+            else stmt.setNull(2, Types.INTEGER);
+
+            stmt.setString(3, perfil.getFoto());
+            stmt.setString(4, perfil.getHistoricoAcademico());
+            stmt.setString(5, perfil.getMotivacao());
+            stmt.setString(6, perfil.getHistoricoProfissional());
+            stmt.setString(7, perfil.getLinkGithub());
+            stmt.setString(8, perfil.getLinkLinkedin());
+            stmt.setString(9, perfil.getConhecimentosTecnicos());
+
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
-            System.err.println("Erro ao inserir PerfilAluno: " + e.getMessage());
+            log.error("Erro ao inserir PerfilAluno", e);
             return false;
         }
     }
 
-    // Atualiza perfil existente
+    /**
+     * Atualiza perfil existente identificado por email_usuario.
+     */
     public boolean atualizarPerfil(PerfilAluno perfil) {
-        String sql = """
-            UPDATE perfil_aluno SET
-                idade = ?, foto = ?, historico_academico = ?, motivacao = ?, 
-                historico_profissional = ?, link_github = ?, link_linkedin = ?, conhecimentos_tecnicos = ?
-            WHERE usuario_email = ?
-        """;
-
+        String sql = "UPDATE Perfil_Aluno SET idade = ?, foto = ?, historico_academico = ?, motivacao = ?, historico_profissional = ?, link_github = ?, link_linkedin = ?, conhecimentos_tecnicos = ? WHERE email_usuario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -122,107 +139,58 @@ public class PerfilAlunoDAO {
             stmt.setString(6, perfil.getLinkGithub());
             stmt.setString(7, perfil.getLinkLinkedin());
             stmt.setString(8, perfil.getConhecimentosTecnicos());
+
             stmt.setString(9, perfil.getEmailUsuario());
 
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
-            System.err.println("Erro ao atualizar PerfilAluno: " + e.getMessage());
+            log.error("Erro ao atualizar PerfilAluno", e);
             return false;
         }
     }
 
-    // Lista todos os perfis de alunos com o nome do usuário (JOIN)
-    public List<PerfilAluno> listarAlunosComNome() {
-        List<PerfilAluno> alunos = new ArrayList<>();
-        String sql = """
-            SELECT pa.*, u.nome AS nome_aluno
-            FROM perfil_aluno pa
-            JOIN usuario u ON pa.usuario_email = u.email
-        """;
-
+    // Lista alunos para cards (join com usuario p/ obter nome)
+    public List<PerfilAluno> listarAlunosParaCard(String termoNomeOpcional) {
+        String base = "SELECT p.id_perfil_aluno, p.email_usuario, p.idade, p.foto, u.nome AS nome_aluno " +
+                "FROM Perfil_Aluno p JOIN usuario u ON u.email = p.email_usuario";
+        String where = (termoNomeOpcional != null && !termoNomeOpcional.isBlank()) ? " WHERE u.nome LIKE ?" : "";
+        String sql = base + where + " ORDER BY u.nome";
+        List<PerfilAluno> list = new ArrayList<>();
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                PerfilAluno aluno = mapResultSetToPerfilAluno(rs);
-                aluno.setNomeAluno(rs.getString("nome_aluno"));
-                alunos.add(aluno);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            if (!where.isEmpty()) {
+                ps.setString(1, "%" + termoNomeOpcional + "%");
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return alunos;
-    }
-
-    // ---------- NOVO MÉTODO PARA CARDS ----------
-    public List<PerfilAluno> listarAlunosParaCard(String filtroNome) {
-        List<PerfilAluno> alunos = new ArrayList<>();
-        String sql = """
-            SELECT pa.*, u.nome AS nome_aluno
-            FROM perfil_aluno pa
-            JOIN usuario u ON pa.usuario_email = u.email
-            WHERE ? IS NULL OR u.nome LIKE ?
-        """;
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, filtroNome);
-            stmt.setString(2, filtroNome != null ? "%" + filtroNome + "%" : null);
-
-            try (ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    PerfilAluno aluno = mapResultSetToPerfilAluno(rs);
-                    aluno.setNomeAluno(rs.getString("nome_aluno"));
-                    alunos.add(aluno);
+                    PerfilAluno a = new PerfilAluno();
+                    a.setIdPerfilAluno(rs.getInt("id_perfil_aluno"));
+                    a.setEmailUsuario(rs.getString("email_usuario"));
+                    int idade = rs.getInt("idade");
+                    a.setIdade(rs.wasNull() ? null : idade);
+                    a.setFoto(rs.getString("foto"));
+                    a.setNomeAluno(rs.getString("nome_aluno"));
+                    list.add(a);
                 }
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao listar alunos: " + e.getMessage(), e);
         }
-
-        return alunos;
+        return list;
     }
 
-    // ---------- MÉTODOS AUXILIARES ----------
-    private PerfilAluno mapResultSetToPerfilAluno(ResultSet rs) throws SQLException {
-        PerfilAluno perfil = new PerfilAluno();
-        perfil.setIdPerfilAluno(rs.getInt("id"));
-
-        perfil.setEmailUsuario(rs.getString("usuario_email"));
-
-        int idadeVal = rs.getInt("idade");
-        perfil.setIdade(rs.wasNull() ? null : idadeVal);
-
-        perfil.setFoto(rs.getString("foto"));
-        perfil.setHistoricoAcademico(rs.getString("historico_academico"));
-        perfil.setMotivacao(rs.getString("motivacao"));
-        perfil.setHistoricoProfissional(rs.getString("historico_profissional"));
-        perfil.setLinkGithub(rs.getString("link_github"));
-        perfil.setLinkLinkedin(rs.getString("link_linkedin"));
-        perfil.setConhecimentosTecnicos(rs.getString("conhecimentos_tecnicos"));
-
-        return perfil;
-    }
-
-    private void setPreparedStatementFromPerfil(PreparedStatement stmt, PerfilAluno perfil) throws SQLException {
-        stmt.setString(1, perfil.getEmailUsuario());
-
-        if (perfil.getIdade() != null) stmt.setInt(2, perfil.getIdade());
-        else stmt.setNull(2, Types.INTEGER);
-
-        stmt.setString(3, perfil.getFoto());
-        stmt.setString(4, perfil.getHistoricoAcademico());
-        stmt.setString(5, perfil.getMotivacao());
-        stmt.setString(6, perfil.getHistoricoProfissional());
-        stmt.setString(7, perfil.getLinkGithub());
-        stmt.setString(8, perfil.getLinkLinkedin());
-        stmt.setString(9, perfil.getConhecimentosTecnicos());
+    public String getEmailByPerfilId(int idPerfilAluno) {
+        String sql = "SELECT email_usuario FROM Perfil_Aluno WHERE id_perfil_aluno = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idPerfilAluno);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar email por id_perfil_aluno: " + e.getMessage(), e);
+        }
+        return null;
     }
 }

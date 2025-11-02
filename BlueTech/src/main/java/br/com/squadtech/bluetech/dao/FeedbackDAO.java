@@ -13,15 +13,15 @@ public class FeedbackDAO {
     public void createTableIfNotExists() {
         String sql = """
             CREATE TABLE IF NOT EXISTS feedback (
-                id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                versao_id BIGINT NOT NULL,
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                versao_id INT NOT NULL,
                 professor_id BIGINT NOT NULL,
                 status ENUM('ACEITO','AJUSTES','REJEITADO') NOT NULL,
                 comentario TEXT NULL,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 CONSTRAINT fk_feedback_versao FOREIGN KEY (versao_id)
-                    REFERENCES tg_versao(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    REFERENCES TG_Versao(Id_Versao) ON DELETE CASCADE ON UPDATE CASCADE,
                 CONSTRAINT fk_feedback_professor FOREIGN KEY (professor_id)
                     REFERENCES professor(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                 INDEX idx_feedback_versao (versao_id),
@@ -70,14 +70,18 @@ public class FeedbackDAO {
         return feedback;
     }
 
+    // Alias com nome mais preciso
+    public Feedback buscarPorVersaoId(long versaoId) {
+        return buscarPorSecaoId(versaoId);
+    }
+
     /**
-     * Insere ou atualiza feedback
+     * Insere ou atualiza feedback e retorna o ID do registro afetado
      */
-    public boolean salvarFeedback(long versaoId, long professorId, String comentario, String status) {
+    public Long salvarFeedbackReturnId(long versaoId, long professorId, String comentario, String status) {
         Feedback existente = buscarPorSecaoId(versaoId);
 
         if (existente == null) {
-            // Inserir novo feedback
             String sql = "INSERT INTO feedback (versao_id, professor_id, comentario, status) VALUES (?, ?, ?, ?)";
             try (Connection conn = ConnectionFactory.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -90,18 +94,17 @@ public class FeedbackDAO {
                 int linhas = ps.executeUpdate();
                 if (linhas > 0) {
                     try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (rs.next()) existente = new Feedback();
-                        existente.setId(rs.getInt(1));
+                        if (rs.next()) {
+                            return rs.getLong(1);
+                        }
                     }
                 }
-                return linhas > 0;
-
+                return null;
             } catch (SQLException e) {
                 e.printStackTrace();
-                return false;
+                return null;
             }
         } else {
-            // Atualizar feedback existente
             String sql = "UPDATE feedback SET comentario = ?, status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
             try (Connection conn = ConnectionFactory.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -111,12 +114,22 @@ public class FeedbackDAO {
                 ps.setInt(3, existente.getId());
 
                 int linhas = ps.executeUpdate();
-                return linhas > 0;
-
+                return linhas > 0 ? Long.valueOf(existente.getId()) : null;
             } catch (SQLException e) {
                 e.printStackTrace();
-                return false;
+                return null;
             }
         }
+    }
+
+    /**
+     * Variante que também enfileira notificação ao aluno após salvar/atualizar o feedback.
+     */
+    public Long salvarFeedbackReturnIdAndNotify(long versaoId, long professorId, String comentario, String status) {
+        Long id = salvarFeedbackReturnId(versaoId, professorId, comentario, status);
+        if (id != null && id > 0) {
+            NotifierEvents.onFeedbackSaved(id);
+        }
+        return id;
     }
 }

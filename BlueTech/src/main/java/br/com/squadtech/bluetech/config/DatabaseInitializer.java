@@ -1,48 +1,76 @@
 package br.com.squadtech.bluetech.config;
 
-import br.com.squadtech.bluetech.dao.*;
+import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
+import br.com.squadtech.bluetech.dao.UsuarioDAO;
+import br.com.squadtech.bluetech.dao.TGVersaoDAO;
+import br.com.squadtech.bluetech.dao.TGSecaoDAO;
+import br.com.squadtech.bluetech.dao.FeedbackDAO;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.dao.OrientaDAO;
+import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
 import br.com.squadtech.bluetech.model.Usuario;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.Statement;
 
 public class DatabaseInitializer {
 
+    private static final Logger log = LoggerFactory.getLogger(DatabaseInitializer.class);
+
     public static void init() {
-        // Parte 0: Cria o database se não existir
+        //Parte 0: Cria o database se não existir
         ConnectionFactory.createDatabaseIfNotExists();
 
-        // Parte 1: Instancia todos os DAOs
+        //Agora que o DB existe, podemos criar DAOs com segurança
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
+        TGVersaoDAO TGVersaoDAO = new TGVersaoDAO();
+        TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
+        FeedbackDAO feedbackDAO = new FeedbackDAO();
         ProfessorDAO professorDAO = new ProfessorDAO();
         OrientaDAO orientaDAO = new OrientaDAO();
-        TGPortifolioDAO tgPortifolioDAO = new TGPortifolioDAO();
-        TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
-        TGVersaoDAO tgVersaoDAO = new TGVersaoDAO();
-        FeedbackDAO feedbackDAO = new FeedbackDAO();
+        TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
 
-        // Parte 2: Criação das tabelas na ordem correta
-        // Tabelas independentes primeiro
+        //Parte 1: Cria tabelas se não existirem
         usuarioDAO.createTableIfNotExists();
-        professorDAO.createTableIfNotExists();
         perfilAlunoDAO.createTableIfNotExists();
-        tgPortifolioDAO.createTableIfNotExists();
+        TGVersaoDAO.createTableIfNotExists();
+        tgSecaoDAO.createTableIfNotExists();
+        professorDAO.createTableIfNotExists();
+        orientaDAO.createTableIfNotExists();
+        portifolioDAO.createTableIfNotExists();
+        feedbackDAO.createTableIfNotExists();
 
-        // Agora tabelas que dependem de outras
-        tgSecaoDAO.createTableIfNotExists();   // depende de TGPortifolio
-        tgVersaoDAO.createTableIfNotExists();  // depende de TGSecao
-        orientaDAO.createTableIfNotExists();   // depende de Usuario (professor/aluno)
-        feedbackDAO.createTableIfNotExists();  // depende de TGVersao e Usuario
+        // Migrações/índices auxiliares
+        TGVersaoDAO.ensureSchemaUpToDate();
+        tgSecaoDAO.ensureSchemaUpToDate();
+        ensurePerfilAlunoUniqueEmail();
 
-        // Parte 3: Seed admin caso não existam usuários
+        //Parte 2: Verifica se há dados e seed admin se vazio
         if (usuarioDAO.countUsuarios() == 0) {
             seedAdminInicial(usuarioDAO);
         }
 
-        System.out.println("Banco inicializado com sucesso!");
+        log.info("Banco inicializado com sucesso!");
+    }
+
+    private static void ensurePerfilAlunoUniqueEmail() {
+        try (Connection c = ConnectionFactory.getConnection(); Statement st = c.createStatement()) {
+            try {
+                st.executeUpdate("CREATE UNIQUE INDEX uk_perfil_aluno_email ON Perfil_Aluno(email_usuario)");
+            } catch (Exception ignored) {
+                // pode já existir
+            }
+        } catch (Exception e) {
+            log.warn("Falha ao garantir índice único em Perfil_Aluno(email_usuario): {}", e.getMessage());
+        }
     }
 
     private static void seedAdminInicial(UsuarioDAO usuarioDAO) {
         Usuario admin = new Usuario("admin@example.com", "Administrador Inicial", "senha123", "ADMIN");
         usuarioDAO.insert(admin);
-        System.out.println("Admin inicial criado! Email: admin@example.com | Senha: senha123 | Mude imediatamente após login!");
+        log.info("Admin inicial criado! Email: {} | Senha: {} | Mude imediatamente após login!", "admin@example.com", "senha123");
     }
 }

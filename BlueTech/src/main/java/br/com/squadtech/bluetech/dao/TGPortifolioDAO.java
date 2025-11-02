@@ -15,7 +15,7 @@ public class TGPortifolioDAO {
         String sql = """
             CREATE TABLE IF NOT EXISTS tg_portifolio (
                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                aluno_id BIGINT NOT NULL,
+                aluno_id INT NOT NULL,
                 titulo VARCHAR(200) NULL,
                 tema VARCHAR(200) NULL,
                 status ENUM('EM_ANDAMENTO','CONCLUIDO') NOT NULL DEFAULT 'EM_ANDAMENTO',
@@ -27,7 +27,7 @@ public class TGPortifolioDAO {
                 updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 CONSTRAINT uk_tg_aluno UNIQUE (aluno_id),
                 CONSTRAINT fk_portifolio_aluno FOREIGN KEY (aluno_id)
-                    REFERENCES perfil_aluno(id) ON DELETE RESTRICT ON UPDATE CASCADE
+                    REFERENCES Perfil_Aluno(id_perfil_aluno) ON DELETE RESTRICT ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """;
 

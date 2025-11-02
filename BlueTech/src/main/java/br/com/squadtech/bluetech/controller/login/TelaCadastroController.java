@@ -39,7 +39,7 @@ public class TelaCadastroController {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-    private void cadastrarAluno() {
+private void cadastrarAluno() {
         String email = txtFldSignAlunoEmail.getText();
         String nome = txtFldSignAlunoNome.getText();
         String senha = passFldSignAluno.getText();
@@ -55,12 +55,11 @@ public class TelaCadastroController {
         }
 
         try {
-            // Todo usuário cadastrado aqui será do tipo ALUNO
             Usuario aluno = new Usuario(email, nome, senha, "ALUNO");
-            usuarioDAO.insert(aluno); // Insere usando hash interno do DAO
+            usuarioDAO.insert(aluno);
             showAlert("Aluno cadastrado com sucesso!");
 
-            // Limpa os campos após cadastro
+            //Limpa os campos após cadastrar o usuário com sucesso
             txtFldSignAlunoEmail.setText("");
             txtFldSignAlunoNome.setText("");
             passFldSignAluno.setText("");

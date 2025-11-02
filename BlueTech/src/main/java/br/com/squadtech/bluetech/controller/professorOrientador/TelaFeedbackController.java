@@ -3,8 +3,9 @@ package br.com.squadtech.bluetech.controller.professorOrientador;
 import br.com.squadtech.bluetech.dao.TGVersaoDAO;
 import br.com.squadtech.bluetech.dao.FeedbackDAO;
 import br.com.squadtech.bluetech.model.TGVersao;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import br.com.squadtech.bluetech.notify.NotifierFacade;
+import br.com.squadtech.bluetech.dao.NotifierEvents;
+import br.com.squadtech.bluetech.util.Toast;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+
+import java.util.List;
 
 public class TelaFeedbackController {
 
@@ -69,7 +72,12 @@ public class TelaFeedbackController {
 
         vb_professorTG_InfoConteudo.getChildren().clear();
 
-        TGVersao versao = tgVersaoDAO.buscarPorSecaoId(secaoId);
+        // Buscar a lista de versões ligadas à seção e pegar a mais recente
+        TGVersao versao = null;
+        List<TGVersao> lista = tgVersaoDAO.listBySecaoId((int) secaoId);
+        if (lista != null && !lista.isEmpty()) {
+            versao = lista.get(0); // já vem ordenado por Data_Criacao DESC
+        }
 
         TextFlow textFlow = new TextFlow();
 
@@ -113,29 +121,39 @@ public class TelaFeedbackController {
     @FXML
     private void finalizar() {
         String comentario = ta_professorTG_Feedback.getText().trim();
-        if (!comentario.isEmpty()) {
-            boolean sucesso = feedbackDAO.salvarFeedback(secaoId, professorId, comentario, "AJUSTES");
+        if (comentario.isEmpty()) return;
 
-            if (sucesso) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso");
-                alert.setHeaderText(null);
-                alert.setContentText("Feedback enviado com sucesso!");
+        // Descobre a versão mais recente ligada a esta seção para salvar feedback
+        List<TGVersao> lista = tgVersaoDAO.listBySecaoId((int) secaoId);
+        Integer versaoId = (lista != null && !lista.isEmpty()) ? lista.get(0).getIdSecaoApi() : null;
 
-                // Fecha a tela ao clicar em OK
-                alert.showAndWait().ifPresent(response -> {
-                    if (btn_professorTG_finalizar.getScene() != null) {
-                        btn_professorTG_finalizar.getScene().getWindow().hide();
-                    }
-                });
+        Long feedbackId = null;
+        if (versaoId != null) {
+            feedbackId = feedbackDAO.salvarFeedbackReturnId(versaoId, professorId, comentario, "AJUSTES");
+        }
 
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erro");
-                alert.setHeaderText(null);
-                alert.setContentText("Erro ao enviar feedback!");
-                alert.showAndWait();
+        Alert alert;
+        if (feedbackId != null && feedbackId > 0) {
+            // Enfileira notificação assíncrona ao aluno
+            NotifierEvents.onFeedbackSaved(feedbackId);
+            if (btn_professorTG_finalizar != null && btn_professorTG_finalizar.getScene() != null) {
+                Toast.show(btn_professorTG_finalizar.getScene(), "Notificação de feedback enfileirada.");
             }
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText(null);
+            alert.setContentText("Feedback enviado com sucesso! Notificação de e-mail enfileirada.");
+            alert.showAndWait().ifPresent(r -> {
+                if (btn_professorTG_finalizar.getScene() != null) {
+                    btn_professorTG_finalizar.getScene().getWindow().hide();
+                }
+            });
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText(null);
+            alert.setContentText("Erro ao enviar feedback!");
+            alert.showAndWait();
         }
     }
 }

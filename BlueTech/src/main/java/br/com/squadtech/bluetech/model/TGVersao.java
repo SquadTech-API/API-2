@@ -3,11 +3,17 @@ package br.com.squadtech.bluetech.model;
 import java.time.LocalDateTime;
 
 public class TGVersao {
+    // Identificador
+    private Integer idSecaoApi;
 
-    // Identificador da versão
-    private Long id;                  // corresponde a id AUTO_INCREMENT
-    private Long secaoId;             // FK para tg_secao
-    private Integer numeroVersao;     // Número da versão (novo campo)
+    // Relacionamento opcional com TG_Secao (para histórico)
+    private Integer idSecao;
+
+    // Número da versão dentro da seção/API (v1, v2, ...)
+    private Integer versaoNumero;
+
+    // Conteúdo Markdown completo da versão (preferencial)
+    private String markdownContent;
 
     // Campos do formulário
     private String semestre;
@@ -23,40 +29,14 @@ public class TGVersao {
     private String hardSkills;
     private String softSkills;
 
-    // Status e auditoria
-    private Boolean aceita;
-    private Boolean avaliado;
+    // Auditoria
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
-    // 🔹 Construtor padrão
     public TGVersao() {}
 
-    // 🔹 Construtor usado no CriarSecaoAPIController (12 parâmetros)
     public TGVersao(String semestre, Integer ano, String semestreAno, String empresa,
-                    String problema, String solucao, String repositorio, String linkedin,
-                    String tecnologias, String contribuicoes, String hardSkills, String softSkills) {
-        this.semestre = semestre;
-        this.ano = ano;
-        this.semestreAno = semestreAno;
-        this.empresa = empresa;
-        this.problema = problema;
-        this.solucao = solucao;
-        this.repositorio = repositorio;
-        this.linkedin = linkedin;
-        this.tecnologias = tecnologias;
-        this.contribuicoes = contribuicoes;
-        this.hardSkills = hardSkills;
-        this.softSkills = softSkills;
-        this.aceita = false;
-        this.avaliado = false;
-    }
-
-    // 🔹 Construtor completo (mantido)
-    public TGVersao(Long secaoId, String semestre, Integer ano, String semestreAno, String empresa,
                     String problema, String solucao, String repositorio, String linkedin, String tecnologias,
-                    String contribuicoes, String hardSkills, String softSkills, Boolean aceita, Boolean avaliado) {
-        this.secaoId = secaoId;
+                    String contribuicoes, String hardSkills, String softSkills) {
         this.semestre = semestre;
         this.ano = ano;
         this.semestreAno = semestreAno;
@@ -69,19 +49,19 @@ public class TGVersao {
         this.contribuicoes = contribuicoes;
         this.hardSkills = hardSkills;
         this.softSkills = softSkills;
-        this.aceita = aceita;
-        this.avaliado = avaliado;
     }
 
-    // --- Getters e Setters ---
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Integer getIdSecaoApi() { return idSecaoApi; }
+    public void setIdSecaoApi(Integer idSecaoApi) { this.idSecaoApi = idSecaoApi; }
 
-    public Long getSecaoId() { return secaoId; }
-    public void setSecaoId(Long secaoId) { this.secaoId = secaoId; }
+    public Integer getIdSecao() { return idSecao; }
+    public void setIdSecao(Integer idSecao) { this.idSecao = idSecao; }
 
-    public Integer getNumeroVersao() { return numeroVersao; }
-    public void setNumeroVersao(Integer numeroVersao) { this.numeroVersao = numeroVersao; }
+    public Integer getVersaoNumero() { return versaoNumero; }
+    public void setVersaoNumero(Integer versaoNumero) { this.versaoNumero = versaoNumero; }
+
+    public String getMarkdownContent() { return markdownContent; }
+    public void setMarkdownContent(String markdownContent) { this.markdownContent = markdownContent; }
 
     public String getSemestre() { return semestre; }
     public void setSemestre(String semestre) { this.semestre = semestre; }
@@ -119,15 +99,6 @@ public class TGVersao {
     public String getSoftSkills() { return softSkills; }
     public void setSoftSkills(String softSkills) { this.softSkills = softSkills; }
 
-    public Boolean getAceita() { return aceita; }
-    public void setAceita(Boolean aceita) { this.aceita = aceita; }
-
-    public Boolean getAvaliado() { return avaliado; }
-    public void setAvaliado(Boolean avaliado) { this.avaliado = avaliado; }
-
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

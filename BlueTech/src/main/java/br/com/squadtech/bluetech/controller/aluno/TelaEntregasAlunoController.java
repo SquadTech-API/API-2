@@ -9,19 +9,31 @@ import java.util.ResourceBundle;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
+import br.com.squadtech.bluetech.model.Usuario;
 import br.com.squadtech.bluetech.model.SecaoContext;
-import br.com.squadtech.bluetech.model.TGSecao;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+//Implementando a classe de Interface para chamar o Painel Principal
 public class TelaEntregasAlunoController implements SupportsMainController {
+
+    private static final Logger log = LoggerFactory.getLogger(TelaEntregasAlunoController.class);
 
     @FXML
     private ResourceBundle resources;
@@ -35,93 +47,115 @@ public class TelaEntregasAlunoController implements SupportsMainController {
     @FXML
     private FlowPane flowCards;
 
-    // Referência ao painel principal
-    private PainelPrincipalController painelPrincipalController;
-
-    @Override
-    public void setPainelPrincipalController(PainelPrincipalController controller) {
-        this.painelPrincipalController = controller;
-    }
-
     @FXML
     void CriarEntregaSessaoAPI(ActionEvent event) {
+        //Usa a referência para carregar o novo conteúdo
         if (painelPrincipalController != null) {
             try {
                 String fxmlPath = "/fxml/aluno/CriarSecaoAPI.fxml";
+
                 painelPrincipalController.loadContent(fxmlPath);
             } catch (IOException e) {
-                System.err.println("Falha ao carregar CriarSecaoAPI.fxml");
-                e.printStackTrace();
+                log.error("Falha ao carregar CriarSecaoAPI.fxml", e);
             }
         } else {
-            System.err.println("Erro: PainelPrincipalController não foi injetado.");
+            log.error("PainelPrincipalController não foi injetado em TelaEntregasAlunoController.");
         }
     }
 
     @FXML
     void initialize() {
-        assert btnCriarSecao != null : "fx:id=\"btnCriarSecao\" not injected.";
-        assert flowCards != null : "fx:id=\"flowCards\" not injected.";
+        assert btnCriarSecao != null : "fx:id=\"btnCriarSecao\" was not injected: check your FXML file 'TelaEntregasAluno.fxml'.";
+        assert flowCards != null : "fx:id=\"flowCards\" was not injected: check your FXML file 'TelaEntregasAluno.fxml'.";
         carregarCards();
     }
 
     private void carregarCards() {
         flowCards.getChildren().clear();
         TGSecaoDAO dao = new TGSecaoDAO();
-
-        // Retorna lista de TGSecao
-        List<TGSecao> secoes = dao.findAll(); // ou findByPortifolioId(portifolioId)
-
+        Usuario user = SessaoUsuario.getUsuarioLogado();
+        if (user == null || user.getEmail() == null) {
+            return; // sem sessão válida
+        }
+        List<TGSecaoDAO.CardDados> cards = dao.listarCards(user.getEmail());
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        for (TGSecao s : secoes) {
+        for (TGSecaoDAO.CardDados c : cards) {
             VBox card = new VBox();
             card.getStyleClass().add("card");
-            card.setSpacing(5);
+            card.setSpacing(8);
             card.setPadding(new Insets(10));
             card.setCursor(Cursor.HAND);
-
-            Label titulo = new Label(String.format("%dº Semestre - %s/%s",
-                    s.getApiNumero(),
-                    (s.getCreatedAt() != null ? s.getCreatedAt().getYear() : "—"),
-                    (s.getStatus() != null ? s.getStatus() : "—")
-            ));
+// Header com título e botão excluir
+            HBox header = new HBox();
+            header.setSpacing(8);
+            String semCurso = (c.semestreCurso != null && !c.semestreCurso.isBlank()) ? c.semestreCurso : "—";
+            String semAno = (c.semestreAno != null && !c.semestreAno.isBlank()) ? c.semestreAno : "—";
+            Label titulo = new Label(String.format("%s -%d-%s", semCurso, c.ano, semAno));
             titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-
-            Label status = new Label("Status: " + (s.getStatus() != null ? s.getStatus() : "—"));
-            String statusClass = switch (s.getStatus() == null ? "" : s.getStatus().toLowerCase()) {
-                case "concluida", "aprovada" -> "status-entregue";
-                case "pendente", "em andamento" -> "status-em-andamento";
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+//Botão de exclusão com ícone FontAwesome
+            MaterialIconView trashIcon = new MaterialIconView(MaterialIcon.DELETE);
+            trashIcon.setGlyphSize(14);
+            trashIcon.setFill(javafx.scene.paint.Color.valueOf("#c0392b"));
+            Button btnExcluir = new Button();
+            btnExcluir.setGraphic(trashIcon);
+            btnExcluir.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+            btnExcluir.setOnAction(e -> confirmarExclusao(c.idSecao));
+            header.getChildren().addAll(titulo, spacer, btnExcluir);
+//Destaque com número da API
+            Label apiLabel = new Label("API " + c.apiNumero);
+            apiLabel.setStyle("-fx-background-color: #eef5ff; -fx-text-fill: #2c3e50; -fx-padding: 2 6; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-weight: bold;");
+            Label status = new Label("Status: " + c.status);
+            String statusClass = switch (c.status == null ? "" : c.status.toLowerCase()) {
+                case "entregue", "aprovada" -> "status-entregue";
+                case "em andamento", "aguardando feedback" -> "status-em-andamento";
                 default -> "status-em-andamento";
             };
             status.getStyleClass().add(statusClass);
-
-            String ultimaAtualizacaoTxt = (s.getUpdatedAt() != null) ? fmt.format(s.getUpdatedAt()) : "—";
+            String ultimaAtualizacaoTxt = (c.dataEnvio != null) ? fmt.format(c.dataEnvio) : "—";
             Label ultimaAtualizacao = new Label("Última atualização: " + ultimaAtualizacaoTxt);
             ultimaAtualizacao.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 11px;");
-
-            card.getChildren().addAll(titulo, status, ultimaAtualizacao);
-
-            Long idSecaoLong = s.getId(); // guarda o id para evento
-            card.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> abrirTelaSecao(idSecaoLong));
-
+            card.getChildren().addAll(header, apiLabel, status, ultimaAtualizacao);
+            card.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> abrirTelaSecao(c.idSecao));
             flowCards.getChildren().add(card);
         }
     }
 
-    private void abrirTelaSecao(Long idSecaoLong) {
+    private void confirmarExclusao(int idSecao) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Excluir Seção");
+        confirm.setHeaderText("Confirma a exclusão deste card?");
+        confirm.setContentText("Esta ação não poderá ser desfeita.");
+        confirm.showAndWait().ifPresent(res -> {
+            if (res == ButtonType.OK) {
+                TGSecaoDAO dao = new TGSecaoDAO();
+                Usuario user = SessaoUsuario.getUsuarioLogado();
+                if (user == null || user.getEmail() == null) return;
+                dao.deleteByIdAndEmail(idSecao, user.getEmail());
+                carregarCards();
+            }
+        });
+    }
+
+    private void abrirTelaSecao(int idSecao) {
         if (painelPrincipalController != null) {
             try {
-                // Converte Long para Integer, caso SecaoContext aceite Integer
-                Integer idSecao = idSecaoLong != null ? idSecaoLong.intValue() : null;
                 SecaoContext.setIdSecaoSelecionada(idSecao);
-
                 String fxmlPath = "/fxml/aluno/TelaSecaoAPI.fxml";
                 painelPrincipalController.loadContent(fxmlPath);
             } catch (IOException e) {
-                System.err.println("Falha ao carregar TelaSecaoAPI.fxml");
-                e.printStackTrace();
+                log.error("Falha ao carregar TelaSecaoAPI.fxml", e);
             }
         }
+    }
+
+    //Variável para guardar a referência
+    private PainelPrincipalController painelPrincipalController;
+
+    //Método da Interface para injetar a referência
+    @Override
+    public void setPainelPrincipalController(PainelPrincipalController controller) {
+        this.painelPrincipalController = controller;
     }
 }

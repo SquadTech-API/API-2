@@ -1,6 +1,0 @@
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.DetalhesAlunoController">
-    <Label text="Detalhes do Aluno" style="-fx-font-size: 20px;"/>
-    <Label fx:id="nomeAluno"/>
-    <Label fx:id="profOrientador"/>
-    <Label fx:id="postagemData"/>
-</VBox>

@@ -1,17 +1,13 @@
 package br.com.squadtech.bluetech.controller.aluno;
 
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
-import br.com.squadtech.bluetech.controller.professorOrientador.PainelPrincipalOrientadorController;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
@@ -26,9 +22,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class MenuAlunoController {
+import br.com.squadtech.bluetech.controller.SupportsMainController;
+
+public class MenuAlunoController implements SupportsMainController {
+
+    private static final Logger log = LoggerFactory.getLogger(MenuAlunoController.class);
 
     @FXML
     private ResourceBundle resources;
@@ -47,9 +48,6 @@ public class MenuAlunoController {
 
     @FXML
     private JFXButton btnAlunoPortifolio;
-
-    @FXML
-    private JFXButton btnTelaOrientador; // Novo botão adicionado
 
     @FXML
     private ImageView imgViewFotoAluno;
@@ -82,6 +80,7 @@ public class MenuAlunoController {
     private PainelPrincipalController painelPrincipalController;
 
     //Setter chamado pelo PainelPrincipalController após carregar este menu
+    @Override
     public void setPainelPrincipalController(PainelPrincipalController controller) {
         this.painelPrincipalController = controller;
     }
@@ -90,15 +89,16 @@ public class MenuAlunoController {
     private void loadContentIntoMain(String fxmlPath) {
         if (painelPrincipalController == null) {
             // Sem referência ao painel principal, não há onde injetar o conteúdo
-            System.err.println("[MenuAlunoController] painelPrincipalController é nulo. Verifique se foi configurado ao carregar o menu.");
+            log.error("[MenuAlunoController] painelPrincipalController é nulo. Verifique se foi configurado ao carregar o menu.");
             return;
         }
         try {
             painelPrincipalController.loadContent(fxmlPath);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Erro ao carregar conteúdo FXML: {}", fxmlPath, e);
         }
     }
+
 
     @FXML
     void AbrirEntregasSeccoes(ActionEvent event) {
@@ -110,38 +110,12 @@ public class MenuAlunoController {
         loadContentIntoMain("/fxml/aluno/TelaPerfilAluno.fxml");
     }
 
-    @FXML
-    void AbreTelaOrientador(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(
-                    getClass().getResource("/fxml/professorOrientador/painelprincipal_orientador.fxml")
-            );
-
-            Parent root = fxmlLoader.load();
-
-            // Obtém o controller e inicializa os paineis internos
-            PainelPrincipalOrientadorController controller = fxmlLoader.getController();
-            controller.loadMenuOrientador();        // Carrega o menu lateral
-            controller.mostrarTelaAlunos();        // Carrega a tela central de boas-vindas
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setTitle("BlueTech - Painel do Professor Orientador");
-            stage.setScene(scene);
-            stage.setResizable(true);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     //Atualizar a foto no menu
     public void updateFotoAluno(String imagePath) {
         if (imagePath != null && !imagePath.isEmpty()) {
             Image image = new Image("file:" + imagePath);
             imgViewFotoAluno.setImage(image);
-            // Reaplique o processamento após atualizar a imagem
+            // Reaplique o processamento ap��s atualizar a imagem
             Platform.runLater(this::applyImageProcessing);
         }
     }
@@ -152,7 +126,6 @@ public class MenuAlunoController {
         assert btnAlunoEntregas != null : "fx:id=\"btnAlunoEntregas\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPerfil != null : "fx:id=\"btnAlunoPerfil\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPortifolio != null : "fx:id=\"btnAlunoPortifolio\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert btnTelaOrientador != null : "fx:id=\"btnTelaOrientador\" was not injected: check your FXML file 'MenuAluno.fxml'."; // Novo assert
         assert imgViewFotoAluno != null : "fx:id=\"imgViewFotoAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert painelAluno != null : "fx:id=\"painelAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert paneSuperiorMenuAluno != null : "fx:id=\"paneSuperiorMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
@@ -216,8 +189,10 @@ public class MenuAlunoController {
             return; // Nada a processar se não houver imagem válida
         }
 
+        // Defina o tamanho desejado para a imagem interna (subtraindo a largura da borda: 120 - 2*4 = 112px)
         double fitSize = 112.0;
 
+        // Calcule o viewport para cropar a imagem ao centro em formato quadrado
         double imageWidth = image.getWidth();
         double imageHeight = image.getHeight();
         double side = Math.min(imageWidth, imageHeight);
@@ -225,11 +200,13 @@ public class MenuAlunoController {
         double y = (imageHeight - side) / 2.0;
         imgViewFotoAluno.setViewport(new Rectangle2D(x, y, side, side));
 
-        imgViewFotoAluno.setPreserveRatio(false);
-        imgViewFotoAluno.setSmooth(true);
+        // Configure o ImageView para escalar o conteúdo cropado para o tamanho interno
+        imgViewFotoAluno.setPreserveRatio(false); // Desative preserveRatio após crop para quadrado
+        imgViewFotoAluno.setSmooth(true); // Melhora a qualidade do escalonamento
         imgViewFotoAluno.setFitWidth(fitSize);
         imgViewFotoAluno.setFitHeight(fitSize);
 
+        // Aplique o clip circular centralizado, ajustado para o tamanho interno
         double radius = fitSize / 2.0;
         Circle clip = new Circle(radius, radius, radius);
         imgViewFotoAluno.setClip(clip);
@@ -242,6 +219,7 @@ public class MenuAlunoController {
     private double computeDesiredDividerPosition() {
         double total = Math.max(1.0, splitPanelMenuAluno.getHeight());
         double desired = paneSuperiorMenuAluno.getPrefHeight() / total;
+        //Limita para evitar posições extremas em alturas pequenas/grandes
         return Math.max(0.1, Math.min(0.9, desired));
     }
 

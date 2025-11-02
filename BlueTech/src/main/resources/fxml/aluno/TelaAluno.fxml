@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaAlunoController">
+<AnchorPane style="-fx-background-color: white;" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaAlunoController">
     <children>
         <!-- Container responsivo principal -->
         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -39,7 +39,7 @@
                         </ImageView>
 
                         <!-- Bloco de texto central com wrap -->
-                        <Label maxWidth="800.0" text="Vamos facilitar a criação do seu Portfólio para defesa da sua Tese de Graduação,\nfacilitando a inserção de dados na formatação correta, na interação com o seu\norientador para criar um portfólio perfeito para o seu TG.">
+                        <Label maxWidth="800.0" text="Vamos facilitar a criação do seu Portfólio para defesa da sua Tese de Graduação, facilitando a inserção de dados na formatação correta, na interação com o seu orientador para criar um portfólio perfeito para o seu TG.">
                             <font>
                                 <Font size="20.0" />
                             </font>
