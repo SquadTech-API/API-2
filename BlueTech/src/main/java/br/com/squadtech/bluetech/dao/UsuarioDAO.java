@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class UsuarioDAO {
 
@@ -87,5 +90,35 @@ public class UsuarioDAO {
     public boolean validateLogin(String email, String senha) {
         Usuario usuario = findByEmail(email);
         return usuario != null && BCrypt.checkpw(senha, usuario.getSenha());
+    }
+
+    public List<Usuario> listarPorTipos(String... tipos) {
+        if (tipos == null || tipos.length == 0) return List.of();
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < tipos.length; i++) {
+            if (i > 0) placeholders.append(",");
+            placeholders.append("?");
+        }
+        String sql = "SELECT email, nome, senha, tipo FROM usuario WHERE tipo IN (" + placeholders + ") ORDER BY nome";
+        List<Usuario> lista = new ArrayList<>();
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < tipos.length; i++) {
+                stmt.setString(i + 1, tipos[i]);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setEmail(rs.getString("email"));
+                    u.setNome(rs.getString("nome"));
+                    u.setSenha(rs.getString("senha"));
+                    u.setTipo(rs.getString("tipo"));
+                    lista.add(u);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar usuários por tipos: " + e.getMessage(), e);
+        }
+        return lista;
     }
 }

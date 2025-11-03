@@ -60,6 +60,36 @@ public class PerfilAlunoDAO {
     }
 
     /**
+     * Verifica se o perfil do aluno está completo (com campos principais preenchidos).
+     * Não exige idade nem foto porque podem ser opcionais.
+     */
+    public boolean isPerfilCompleto(String emailUsuario) {
+        String sql = "SELECT historico_academico, motivacao, historico_profissional, link_github, link_linkedin, conhecimentos_tecnicos " +
+                "FROM Perfil_Aluno WHERE email_usuario = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, emailUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) return false; // não há perfil
+                String histAcad = rs.getString("historico_academico");
+                String motiv = rs.getString("motivacao");
+                String histProf = rs.getString("historico_profissional");
+                String gh = rs.getString("link_github");
+                String li = rs.getString("link_linkedin");
+                String tech = rs.getString("conhecimentos_tecnicos");
+                return notBlank(histAcad) && notBlank(motiv) && notBlank(histProf)
+                        && notBlank(gh) && notBlank(li) && notBlank(tech);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar perfil completo: " + e.getMessage(), e);
+        }
+    }
+
+    private boolean notBlank(String s) {
+        return s != null && !s.trim().isEmpty();
+    }
+
+    /**
      * Busca o perfil pelo email_usuario.
      */
     public PerfilAluno getPerfilByEmail(String emailUsuario) {

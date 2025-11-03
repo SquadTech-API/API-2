@@ -8,6 +8,7 @@ import br.com.squadtech.bluetech.dao.FeedbackDAO;
 import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.dao.OrientaDAO;
 import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
+import br.com.squadtech.bluetech.dao.SolicitacaoDAO;
 import br.com.squadtech.bluetech.model.Usuario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ public class DatabaseInitializer {
         ProfessorDAO professorDAO = new ProfessorDAO();
         OrientaDAO orientaDAO = new OrientaDAO();
         TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
+        SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
 
         //Parte 1: Cria tabelas se não existirem
         usuarioDAO.createTableIfNotExists();
@@ -42,6 +44,7 @@ public class DatabaseInitializer {
         orientaDAO.createTableIfNotExists();
         portifolioDAO.createTableIfNotExists();
         feedbackDAO.createTableIfNotExists();
+        solicitacaoDAO.createTableIfNotExists();
 
         // Migrações/índices auxiliares
         TGVersaoDAO.ensureSchemaUpToDate();

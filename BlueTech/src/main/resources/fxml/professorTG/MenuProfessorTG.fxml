@@ -97,6 +97,7 @@
                         <JFXButton fx:id="btnListaAlunos" maxWidth="Infinity" onAction="#abrirListaAlunos" text="Portfólios" />
                     </children>
                 </VBox>
+            <JFXButton fx:id="btnSolicitacoesOrientacao" maxWidth="Infinity" onAction="#abrirSolicitacoesOrientacao" text="Solicitações de Orientação" />
             </children>
         </VBox>
     </items>

@@ -4,6 +4,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -24,13 +25,13 @@ public final class Toast {
         label.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 13));
         label.setStyle("-fx-background-color: rgba(0, 0, 0, 0.85); -fx-background-radius: 8; -fx-padding: 10 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,.4), 8, 0, 0, 2);");
 
-        StackPane root = (StackPane) scene.getRoot();
+        Parent rootNode = scene.getRoot();
         StackPane overlay;
-        if (root instanceof StackPane sp) {
+        if (rootNode instanceof StackPane sp) {
             overlay = sp;
         } else {
             overlay = new StackPane();
-            overlay.getChildren().add(root);
+            overlay.getChildren().add(rootNode);
             scene.setRoot(overlay);
         }
 
@@ -57,4 +58,3 @@ public final class Toast {
         stay.play();
     }
 }
-

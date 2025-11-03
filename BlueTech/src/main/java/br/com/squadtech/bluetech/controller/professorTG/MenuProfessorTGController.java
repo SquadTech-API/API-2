@@ -3,15 +3,24 @@ package br.com.squadtech.bluetech.controller.professorTG;
 import br.com.squadtech.bluetech.controller.MenuAware;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.controller.professorOrientador.MenuProfessorOrientadorController;
 import com.jfoenix.controls.JFXButton;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 public class MenuProfessorTGController implements MenuAware, SupportsMainController {
+    private static final Logger log = LoggerFactory.getLogger(MenuProfessorTGController.class);
 
     @FXML
     private Label lblTituloProfessorTG;
@@ -29,15 +38,53 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     private VBox vboxMenuProfessorTG;
 
     @FXML
+    private AnchorPane paneSuperiorMenuProfessorTG;
+
+    @FXML
+    private SplitPane splitPanelMenuProfessorTG;
+
+    @FXML
     private Accordion accordionProfessorTG;
 
     @FXML
     private JFXButton btnListaAlunos;
 
-    @FXML private JFXButton btnSubBanco5;
-    @FXML private JFXButton btnSubAnalise5;
-    @FXML private JFXButton btnSubBanco6;
-    @FXML private JFXButton btnSubAnalise6;
+    @FXML
+    private JFXButton btnSubBanco5;
+
+    @FXML
+    private JFXButton btnSubAnalise5;
+
+    @FXML
+    private JFXButton btnSubBanco6;
+
+    @FXML
+    private JFXButton btnSubAnalise6;
+
+    @FXML
+    private JFXButton btnAgendamentosTG;
+
+    @FXML
+    private JFXButton btnCadastrarOrientadores;
+
+    @FXML
+    private JFXButton btnSolicitacoesOrientacao;
+
+    @FXML
+    void abrirSolicitacoesOrientacao(ActionEvent event) {
+        if (painelPrincipalController != null) {
+            try {
+                String fxmlPath = "/fxml/professorTG/SolicitacaoAlunosOrientacao.fxml";
+
+                painelPrincipalController.loadContent(fxmlPath);
+            } catch (IOException e) {
+                log.error("Falha ao carregar SolicitacaoAlunosOrientacao.fxml", e);
+            }
+        } else {
+            log.error("PainelPrincipalController não foi injetado em MenuProfessorTGController.");
+        }
+
+    }
 
     // Referência ao painel principal unificado
     private PainelPrincipalController painelPrincipalController;
@@ -148,9 +195,23 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     }
 
     @FXML
-    private void initialize() {
-        lblTituloProfessorTG.setText("Painel do Professor TG");
-        lblProfessorTG.setText("PROFESSOR TG: Emanuel Mineda");
-        lblSemestreTG.setText("SEMESTRE RESPONSÁVEL: 6º Semestre");
+    void initialize() {
+        assert accordionProfessorTG != null : "fx:id=\"accordionProfessorTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnAgendamentosTG != null : "fx:id=\"btnAgendamentosTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnCadastrarOrientadores != null : "fx:id=\"btnCadastrarOrientadores\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnListaAlunos != null : "fx:id=\"btnListaAlunos\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnSolicitacoesOrientacao != null : "fx:id=\"btnSolicitacoesOrientacao\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnSubAnalise5 != null : "fx:id=\"btnSubAnalise5\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnSubAnalise6 != null : "fx:id=\"btnSubAnalise6\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnSubBanco5 != null : "fx:id=\"btnSubBanco5\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert btnSubBanco6 != null : "fx:id=\"btnSubBanco6\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert imgViewFotoProfessorTG != null : "fx:id=\"imgViewFotoProfessorTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert lblProfessorTG != null : "fx:id=\"lblProfessorTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert lblSemestreTG != null : "fx:id=\"lblSemestreTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert lblTituloProfessorTG != null : "fx:id=\"lblTituloProfessorTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert paneSuperiorMenuProfessorTG != null : "fx:id=\"paneSuperiorMenuProfessorTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert splitPanelMenuProfessorTG != null : "fx:id=\"splitPanelMenuProfessorTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+        assert vboxMenuProfessorTG != null : "fx:id=\"vboxMenuProfessorTG\" was not injected: check your FXML file 'MenuProfessorTG.fxml'.";
+
     }
 }

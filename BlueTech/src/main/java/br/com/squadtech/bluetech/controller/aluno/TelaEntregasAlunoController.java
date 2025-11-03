@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
+import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
 import br.com.squadtech.bluetech.model.SecaoContext;
@@ -22,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -49,6 +51,17 @@ public class TelaEntregasAlunoController implements SupportsMainController {
 
     @FXML
     void CriarEntregaSessaoAPI(ActionEvent event) {
+        // Verifica se o perfil do aluno está completo antes de permitir criar seção
+        Usuario user = SessaoUsuario.getUsuarioLogado();
+        if (user == null || user.getEmail() == null) {
+            showInfo("Sessão expirada", "Faça login novamente.");
+            return;
+        }
+        PerfilAlunoDAO perfilDAO = new PerfilAlunoDAO();
+        if (!perfilDAO.isPerfilCompleto(user.getEmail())) {
+            showInfo("Complete seu perfil", "Antes de criar uma seção, preencha seu Perfil do Aluno na opção 'Meu Perfil'.");
+            return;
+        }
         //Usa a referência para carregar o novo conteúdo
         if (painelPrincipalController != null) {
             try {
@@ -67,7 +80,36 @@ public class TelaEntregasAlunoController implements SupportsMainController {
     void initialize() {
         assert btnCriarSecao != null : "fx:id=\"btnCriarSecao\" was not injected: check your FXML file 'TelaEntregasAluno.fxml'.";
         assert flowCards != null : "fx:id=\"flowCards\" was not injected: check your FXML file 'TelaEntregasAluno.fxml'.";
+        aplicarRegraPerfilNoBotao();
         carregarCards();
+    }
+
+    private void aplicarRegraPerfilNoBotao() {
+        try {
+            Usuario user = SessaoUsuario.getUsuarioLogado();
+            boolean permitido = false;
+            if (user != null && user.getEmail() != null) {
+                PerfilAlunoDAO perfilDAO = new PerfilAlunoDAO();
+                permitido = perfilDAO.isPerfilCompleto(user.getEmail());
+            }
+            btnCriarSecao.setDisable(!permitido);
+            if (!permitido) {
+                btnCriarSecao.setTooltip(new Tooltip("Para criar uma seção, primeiro complete seu Perfil do Aluno."));
+            } else {
+                btnCriarSecao.setTooltip(null);
+            }
+        } catch (Exception ex) {
+            // Em caso de erro, não bloquear o fluxo de cards, apenas logar e manter o botão habilitado
+            log.warn("Falha ao verificar perfil do aluno: {}", ex.getMessage());
+        }
+    }
+
+    private void showInfo(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 
     private void carregarCards() {

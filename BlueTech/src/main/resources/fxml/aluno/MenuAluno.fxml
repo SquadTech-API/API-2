@@ -46,7 +46,7 @@
        <children>
           <JFXButton fx:id="btnAlunoEntregas" maxWidth="Infinity" onAction="#AbrirEntregasSeccoes" text="Entregas" />
           <JFXButton fx:id="btnAlunoPortifolio" maxWidth="Infinity" text="Portifólio" />
-          <JFXButton fx:id="bntAlunoBaixarMD" maxWidth="Infinity" text="Baixar Readme" />
+          <JFXButton fx:id="btnAlunoSolicitarOrientacao" maxWidth="Infinity" onAction="#SolicitarOrientacao" text="Solicitar Orientação" />
           <JFXButton fx:id="btnAlunoPerfil" maxWidth="Infinity" onAction="#AbreTelaPerfilAluno" text="Perfil" />
        </children>
     </VBox>

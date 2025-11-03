@@ -38,7 +38,7 @@ public class MenuAlunoController implements SupportsMainController {
     private URL location;
 
     @FXML
-    private JFXButton bntAlunoBaixarMD;
+    private JFXButton btnAlunoSolicitarOrientacao;
 
     @FXML
     private JFXButton btnAlunoEntregas;
@@ -121,8 +121,13 @@ public class MenuAlunoController implements SupportsMainController {
     }
 
     @FXML
+    void SolicitarOrientacao(ActionEvent event) {
+        loadContentIntoMain("/fxml/aluno/SolicitacaoOrientador.fxml");
+    }
+
+    @FXML
     void initialize() {
-        assert bntAlunoBaixarMD != null : "fx:id=\"bntAlunoBaixarMD\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnAlunoSolicitarOrientacao != null : "fx:id=\"btnAlunoSolicitarOrientacao\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoEntregas != null : "fx:id=\"btnAlunoEntregas\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPerfil != null : "fx:id=\"btnAlunoPerfil\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPortifolio != null : "fx:id=\"btnAlunoPortifolio\" was not injected: check your FXML file 'MenuAluno.fxml'.";

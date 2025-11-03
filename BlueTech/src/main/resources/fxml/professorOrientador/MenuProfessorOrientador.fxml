@@ -53,6 +53,7 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <children>
+            <JFXButton fx:id="btnSolicitacoesOrientacao" layoutX="30.0" layoutY="95.0" maxWidth="Infinity" onAction="#abrirSolicitacoesOrientacao" styleClass="submenu-btn" text="Solicitações de Orientação" />
                 <JFXButton fx:id="btnenviarEmail" maxWidth="Infinity" onAction="#enviarEmail" styleClass="submenu-btn" text="Enviar Email" />
             </children>
         </VBox>
