@@ -1,16 +1,7 @@
 package br.com.squadtech.bluetech.controller.professorTG;
 
-import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
-import br.com.squadtech.bluetech.dao.TGSecaoDAO;
-import br.com.squadtech.bluetech.dao.OrientaDAO;
-import br.com.squadtech.bluetech.dao.ProfessorDAO;
-import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
-import br.com.squadtech.bluetech.model.PerfilAluno;
-import br.com.squadtech.bluetech.model.Orienta;
-import br.com.squadtech.bluetech.model.Professor;
-import br.com.squadtech.bluetech.model.TGPortifolio;
-import br.com.squadtech.bluetech.dao.UsuarioDAO;
-import br.com.squadtech.bluetech.model.Usuario;
+import br.com.squadtech.bluetech.dao.*;
+import br.com.squadtech.bluetech.model.*;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import javafx.event.ActionEvent;
@@ -20,10 +11,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,14 +67,28 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     }
 
     public void criarCards(String semestre, String curso) {
+        if (cardsBox == null) {
+            System.out.println("⚠️ ERRO: cardsBox não foi inicializado. Verifique o fx:id no FXML.");
+            return;
+        }
+
         cardsBox.getChildren().clear();
 
         List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null);
+        if (alunos == null || alunos.isEmpty()) {
+            Label aviso = new Label("Nenhum aluno encontrado para o curso/semestre selecionado.");
+            aviso.getStyleClass().add("label-vazio");
+            cardsBox.getChildren().add(aviso);
+            return;
+        }
 
         for (PerfilAluno a : alunos) {
             String nomeAluno = a.getNomeAluno();
 
-            List<Orienta> orientacoes = orientaDAO.findByAlunoId(a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
+            List<Orienta> orientacoes = orientaDAO.findByAlunoId(
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
+            );
+
             String professores = "Sem professor";
             if (orientacoes != null && !orientacoes.isEmpty()) {
                 professores = orientacoes.stream()
@@ -95,16 +103,51 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                 if (professores.isBlank()) professores = "Sem professor";
             }
 
-            TGPortifolio portifolio = portifolioDAO.findByAlunoId(a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
+            TGPortifolio portifolio = portifolioDAO.findByAlunoId(
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
+            );
+
             String statusPortifolio;
             if (portifolio != null) {
-                statusPortifolio = portifolio.getStatus() + (portifolio.getPercentualConclusao() != null ? (" - " + portifolio.getPercentualConclusao() + "%") : "");
+                statusPortifolio = portifolio.getStatus() +
+                        (portifolio.getPercentualConclusao() != null ?
+                                (" - " + portifolio.getPercentualConclusao() + "%") : "");
             } else if (a.getEmailUsuario() != null) {
                 int qtd = tgSecaoDAO.countSecoes(a.getEmailUsuario());
                 statusPortifolio = qtd > 0 ? ("Seções enviadas: " + qtd) : "Sem envios";
             } else {
                 statusPortifolio = "Sem dados";
             }
+
+            // --- FOTO DO ALUNO ---
+            ImageView fotoAlunoView = new ImageView();
+            fotoAlunoView.setFitHeight(80);
+            fotoAlunoView.setFitWidth(80);
+            fotoAlunoView.setPreserveRatio(true);
+            fotoAlunoView.setSmooth(true);
+            fotoAlunoView.setCache(true);
+
+            String caminhoFoto = a.getFoto();
+            Image imagem;
+
+            if (caminhoFoto != null && !caminhoFoto.isBlank()) {
+                try {
+                    imagem = new Image("file:" + caminhoFoto);
+                    if (imagem.isError()) throw new Exception();
+                } catch (Exception ex) {
+                    imagem = carregarImagemPadrao();
+                }
+            } else {
+                imagem = carregarImagemPadrao();
+            }
+
+            fotoAlunoView.setImage(imagem);
+
+            // Aplica o recorte circular após carregar a imagem
+            Circle clip = new Circle(40, 40, 40);
+            fotoAlunoView.setClip(clip);
+
+            fotoAlunoView.getStyleClass().add("foto-aluno");
 
             Label t1 = new Label(nomeAluno);
             t1.getStyleClass().add("title");
@@ -122,7 +165,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             eye.getStyleClass().add("eye-btn");
             eye.setFocusTraversable(false);
 
-            HBox card = new HBox(12, textBox, eye);
+            HBox card = new HBox(15, fotoAlunoView, textBox, eye);
             card.setAlignment(Pos.CENTER_LEFT);
             card.getStyleClass().add("card-item");
             card.setPadding(new Insets(12));
@@ -131,6 +174,15 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             eye.setOnAction(e -> abrirVisualizador(nomeAluno, semestre, curso));
 
             cardsBox.getChildren().add(card);
+        }
+    }
+
+    private Image carregarImagemPadrao() {
+        try {
+            return new Image(getClass().getResourceAsStream("/images/Usuario.png"));
+        } catch (Exception e) {
+            System.out.println("⚠️ Imagem padrão não encontrada no resources/images/Usuario.png");
+            return new Image("https://cdn-icons-png.flaticon.com/512/847/847969.png"); // fallback online
         }
     }
 
@@ -146,7 +198,6 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                 controller.receberDadosAluno(nomeAluno, semestre, curso);
             }
         } catch (Exception ex) {
-            // log via console para simplificar
             ex.printStackTrace();
         }
     }
