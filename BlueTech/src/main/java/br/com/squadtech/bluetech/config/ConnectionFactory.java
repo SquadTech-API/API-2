@@ -16,10 +16,21 @@ public class ConnectionFactory {
     private static final String PASSWORD = "1234";
 
     private static HikariDataSource dataSource; //Implementação do Pool (inicializado sob demanda)
+    private static volatile boolean dbChecked = false; // garante verificação de criação apenas uma vez
 
     //Inicializa o pool apenas quando for necessário e quando o DB já existir
     private static synchronized HikariDataSource getDataSource() {
         if (dataSource == null) {
+            // Garantia adicional: tenta criar o DB antes de iniciar o pool
+            if (!dbChecked) {
+                try {
+                    createDatabaseIfNotExists();
+                } catch (RuntimeException e) {
+                    log.warn("Não foi possível garantir a criação do database antes do pool: {}", e.getMessage());
+                } finally {
+                    dbChecked = true;
+                }
+            }
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(DB_URL);
             config.setUsername(USER);

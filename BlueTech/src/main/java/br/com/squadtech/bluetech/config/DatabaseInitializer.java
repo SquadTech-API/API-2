@@ -15,12 +15,20 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatabaseInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(DatabaseInitializer.class);
+    private static final AtomicBoolean INITIALIZED = new AtomicBoolean(false);
 
     public static void init() {
+        // evita rodar duas vezes em diferentes entrypoints
+        if (!INITIALIZED.compareAndSet(false, true)) {
+            log.debug("DatabaseInitializer já executado, ignorando chamada adicional.");
+            return;
+        }
+
         //Parte 0: Cria o database se não existir
         ConnectionFactory.createDatabaseIfNotExists();
 

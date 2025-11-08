@@ -1,7 +1,6 @@
 package br.com.squadtech.bluetech;
 
 import br.com.squadtech.bluetech.config.ConnectionFactory;
-import br.com.squadtech.bluetech.config.DatabaseInitializer;
 import br.com.squadtech.bluetech.notify.AsyncNotifier;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -50,9 +49,9 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        DatabaseInitializer.init(); //Bootstrap do banco de dados para iniciar com a aplicação
-        launch();
+        // Main local (por exemplo, rodando via plugin do Maven) continua funcionando
+        // desde que o entrypoint padrão no JAR seja o Launcher.
+        javafx.application.Application.launch(App.class, args);
     }
-
 
 }
