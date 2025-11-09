@@ -149,7 +149,7 @@ public class PainelPrincipalController {
         assert painelPrincipal != null : "fx:id=\"painelPrincipal\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
         assert painelPrincipalExibicao != null : "fx:id=\"painelPrincipalExibicao\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
         assert painelPrincipalMenu != null : "fx:id=\"painelPrincipalMenu\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
-    }
 
+    }
 }
 

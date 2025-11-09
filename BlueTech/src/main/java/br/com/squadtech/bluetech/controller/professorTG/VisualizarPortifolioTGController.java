@@ -163,12 +163,12 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             cardBox.getStyleClass().add("card");
 
             // Tamanho fixo do card
-            cardBox.setPrefWidth(380);
-            cardBox.setPrefHeight(190);
-            cardBox.setMinWidth(380);
-            cardBox.setMinHeight(190);
-            cardBox.setMaxWidth(380);
-            cardBox.setMaxHeight(190);
+            cardBox.setPrefWidth(360);
+            cardBox.setPrefHeight(180);
+            cardBox.setMinWidth(360);
+            cardBox.setMinHeight(180);
+            cardBox.setMaxWidth(360);
+            cardBox.setMaxHeight(180);
 
             // Eventos de clique
             cardBox.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, curso));
