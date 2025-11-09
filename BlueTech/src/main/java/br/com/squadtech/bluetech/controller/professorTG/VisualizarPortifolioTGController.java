@@ -31,16 +31,11 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     private ComboBox<String> comboCurso;
 
     @FXML
-    private ComboBox<String> comboSemestre;
-
-    @FXML
-    private ComboBox<String> comboPortifolio;
-
-    @FXML
     private Button btnBuscar;
 
     private PainelPrincipalController painelPrincipalController;
 
+    // DAOs
     private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
     private final TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
     private final OrientaDAO orientaDAO = new OrientaDAO();
@@ -56,14 +51,12 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     @FXML
     private void initialize() {
         comboCurso.getItems().addAll("Banco de Dados", "Análise de Sistemas");
-        comboSemestre.getItems().addAll("5º Semestre", "6º Semestre");
     }
 
     @FXML
     private void buscarPortifolio(ActionEvent event) {
         String curso = comboCurso.getValue() != null ? comboCurso.getValue() : "";
-        String semestre = comboSemestre.getValue() != null ? comboSemestre.getValue() : "";
-        criarCards(semestre, curso);
+        criarCards(null, curso);
     }
 
     public void criarCards(String semestre, String curso) {
@@ -76,7 +69,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
 
         List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null);
         if (alunos == null || alunos.isEmpty()) {
-            Label aviso = new Label("Nenhum aluno encontrado para o curso/semestre selecionado.");
+            Label aviso = new Label("Nenhum aluno encontrado para o curso selecionado.");
             aviso.getStyleClass().add("label-vazio");
             cardsBox.getChildren().add(aviso);
             return;
@@ -143,12 +136,12 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
 
             fotoAlunoView.setImage(imagem);
 
-            // Aplica o recorte circular após carregar a imagem
+            // Recorte circular
             Circle clip = new Circle(40, 40, 40);
             fotoAlunoView.setClip(clip);
-
             fotoAlunoView.getStyleClass().add("foto-aluno");
 
+            // Textos
             Label t1 = new Label(nomeAluno);
             t1.getStyleClass().add("title");
 
@@ -161,6 +154,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             VBox textBox = new VBox(4, t1, t2, t3);
             HBox.setHgrow(textBox, Priority.ALWAYS);
 
+            // Botão de visualizar
             Button eye = new Button("👁");
             eye.getStyleClass().add("eye-btn");
             eye.setFocusTraversable(false);
@@ -170,8 +164,9 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             card.getStyleClass().add("card-item");
             card.setPadding(new Insets(12));
 
-            card.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, semestre, curso));
-            eye.setOnAction(e -> abrirVisualizador(nomeAluno, semestre, curso));
+            // Eventos de clique
+            card.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, curso));
+            eye.setOnAction(e -> abrirVisualizador(nomeAluno, curso));
 
             cardsBox.getChildren().add(card);
         }
@@ -186,7 +181,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
         }
     }
 
-    private void abrirVisualizador(String nomeAluno, String semestre, String curso) {
+    private void abrirVisualizador(String nomeAluno, String curso) {
         if (painelPrincipalController == null) return;
         try {
             VisualizadorTGController controller =
@@ -195,7 +190,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                             VisualizadorTGController.class
                     );
             if (controller != null) {
-                controller.receberDadosAluno(nomeAluno, semestre, curso);
+                controller.receberDadosAluno(nomeAluno, null, curso);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
