@@ -142,10 +142,10 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             fotoAlunoView.getStyleClass().add("foto-aluno");
 
             // Textos
-            Label t1 = new Label(nomeAluno);
+            Label t1 = new Label("ALUNO: " + nomeAluno);
             t1.getStyleClass().add("title");
 
-            Label t2 = new Label("Orientador(es): " + professores);
+            Label t2 = new Label("ORIENTADOR: " + professores);
             t2.getStyleClass().add("subtitle");
 
             Label t3 = new Label("Status: " + statusPortifolio);

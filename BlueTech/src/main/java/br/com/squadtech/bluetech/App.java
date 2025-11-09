@@ -1,6 +1,7 @@
 package br.com.squadtech.bluetech;
 
 import br.com.squadtech.bluetech.config.ConnectionFactory;
+import br.com.squadtech.bluetech.config.DatabaseInitializer;
 import br.com.squadtech.bluetech.notify.AsyncNotifier;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        // 🔹 Inicializa o banco de dados (garante que tabelas e conexões estejam prontas)
+        DatabaseInitializer.init();
+
         FXMLLoader fxmlLoader = new FXMLLoader(
                 getClass().getResource("/fxml/login/TelaLogin.fxml")
         );
@@ -35,6 +39,7 @@ public class App extends Application {
         } catch (Exception e) {
             log.error("Erro ao carregar o ícone da aplicação.", e);
         }
+
         stage.setTitle("BlueTech - Plataforma de Gestão de TGs");
         stage.setScene(scene);
         stage.setResizable(false);
