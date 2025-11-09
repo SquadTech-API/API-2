@@ -148,7 +148,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             Label t2 = new Label("ORIENTADOR: " + professores);
             t2.getStyleClass().add("subtitle");
 
-            Label t3 = new Label("Status: " + statusPortifolio);
+            Label t3 = new Label("CURSO: Banco de Dados");
             t3.getStyleClass().add("subtitle");
 
             VBox textBox = new VBox(4, t1, t2, t3);
