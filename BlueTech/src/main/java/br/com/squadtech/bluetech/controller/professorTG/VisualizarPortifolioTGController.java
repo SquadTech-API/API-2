@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class VisualizarPortifolioTGController implements SupportsMainController {
 
     @FXML
-    private VBox cardsBox;
+    private FlowPane flowCards;
 
     @FXML
     private ComboBox<String> comboCurso;
@@ -51,6 +52,9 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     @FXML
     private void initialize() {
         comboCurso.getItems().addAll("Banco de Dados", "Análise de Sistemas");
+        if (flowCards != null) {
+            flowCards.setAlignment(Pos.CENTER); // centraliza todos os cards no FlowPane
+        }
     }
 
     @FXML
@@ -60,18 +64,15 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     }
 
     public void criarCards(String semestre, String curso) {
-        if (cardsBox == null) {
-            System.out.println("⚠️ ERRO: cardsBox não foi inicializado. Verifique o fx:id no FXML.");
-            return;
-        }
+        if (flowCards == null) return;
 
-        cardsBox.getChildren().clear();
+        flowCards.getChildren().clear();
 
         List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null);
         if (alunos == null || alunos.isEmpty()) {
             Label aviso = new Label("Nenhum aluno encontrado para o curso selecionado.");
-            aviso.getStyleClass().add("label-vazio");
-            cardsBox.getChildren().add(aviso);
+            aviso.getStyleClass().add("label-title");
+            flowCards.getChildren().add(aviso);
             return;
         }
 
@@ -121,8 +122,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             fotoAlunoView.setCache(true);
 
             String caminhoFoto = a.getFoto();
-            Image imagem;
-
+            Image imagem = carregarImagemPadrao();
             if (caminhoFoto != null && !caminhoFoto.isBlank()) {
                 try {
                     imagem = new Image("file:" + caminhoFoto);
@@ -130,45 +130,51 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                 } catch (Exception ex) {
                     imagem = carregarImagemPadrao();
                 }
-            } else {
-                imagem = carregarImagemPadrao();
             }
-
             fotoAlunoView.setImage(imagem);
 
-            // Recorte circular
             Circle clip = new Circle(40, 40, 40);
             fotoAlunoView.setClip(clip);
             fotoAlunoView.getStyleClass().add("foto-aluno");
 
-            // Textos
-            Label t1 = new Label("ALUNO: " + nomeAluno);
-            t1.getStyleClass().add("title");
+            // --- TEXTOS ---
+            Label lNome = new Label("ALUNO: " + nomeAluno);
+            lNome.getStyleClass().add("card-title");
 
-            Label t2 = new Label("ORIENTADOR: " + professores);
-            t2.getStyleClass().add("subtitle");
+            Label lProfessor = new Label("ORIENTADOR: " + professores);
+            lProfessor.getStyleClass().add("subtitle");
 
-            Label t3 = new Label("CURSO: Banco de Dados");
-            t3.getStyleClass().add("subtitle");
+            Label lCurso = new Label("CURSO: " + curso);
+            lCurso.getStyleClass().add("subtitle");
 
-            VBox textBox = new VBox(4, t1, t2, t3);
+            VBox textBox = new VBox(4, lNome, lProfessor, lCurso);
+            textBox.setAlignment(Pos.CENTER_LEFT); // centraliza verticalmente ao centro do card
             HBox.setHgrow(textBox, Priority.ALWAYS);
 
-            // Botão de visualizar
-            Button eye = new Button("👁");
-            eye.getStyleClass().add("eye-btn");
-            eye.setFocusTraversable(false);
+            // --- BOTÃO VISUALIZAR (ÍCONE) ---
+            Button btnEye = new Button("👁");
+            btnEye.getStyleClass().add("eye-btn"); // mesmo estilo do outro card
+            btnEye.setFocusTraversable(false);
 
-            HBox card = new HBox(15, fotoAlunoView, textBox, eye);
-            card.setAlignment(Pos.CENTER_LEFT);
-            card.getStyleClass().add("card-item");
-            card.setPadding(new Insets(12));
+            // --- CARD BOX ---
+            HBox cardBox = new HBox(15, fotoAlunoView, textBox, btnEye);
+            cardBox.setAlignment(Pos.CENTER_LEFT); // centraliza verticalmente todos os elementos
+            cardBox.setPadding(new Insets(20));
+            cardBox.getStyleClass().add("card");
+
+            // Tamanho fixo do card
+            cardBox.setPrefWidth(380);
+            cardBox.setPrefHeight(190);
+            cardBox.setMinWidth(380);
+            cardBox.setMinHeight(190);
+            cardBox.setMaxWidth(380);
+            cardBox.setMaxHeight(190);
 
             // Eventos de clique
-            card.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, curso));
-            eye.setOnAction(e -> abrirVisualizador(nomeAluno, curso));
+            cardBox.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, curso));
+            btnEye.setOnAction(e -> abrirVisualizador(nomeAluno, curso));
 
-            cardsBox.getChildren().add(card);
+            flowCards.getChildren().add(cardBox);
         }
     }
 
