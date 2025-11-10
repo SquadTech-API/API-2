@@ -1,45 +1,20 @@
 /* ===========================
-   ESTILO GLOBAL
+   ESTILO GLOBAL / BASE
    =========================== */
 
-.root {
+.page-root, .root {
     -fx-background-color:
-        linear-gradient(
-            to bottom right,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(255, 255, 255, 0.05) 100%
-        );
-    -fx-background-insets: 2; /* Afasta o fundo para a borda interna não cobri-lo */
-    -fx-background-radius: 20 0 0 20;
-
-    /* Efeito de sombra escura e sutil para dar profundidade ao painel */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0, 0, 2);
-
-    /* Técnica de borda em camadas para criar o brilho */
-    -fx-border-color:
-        /* 1. Borda externa (o brilho) */
-        rgba(255, 215, 0, 0.35),
-        /* 2. Borda interna (o metal sólido) */
-        #FFD700;
-    -fx-border-width: 4, 2; /* 4px para o brilho, 2px para o metal */
-    -fx-border-radius: 20 0 0 20; /* Raio para ambas as bordas */
-
+            linear-gradient(to bottom, #eef2f7, #e6ebf3);
 }
 
 /* Painel com borda dourada e cantos esquerdos arredondados (para nós aninhados) */
 .panel-golden-rounded {
     -fx-background-color:
-        linear-gradient(
-            to bottom right,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(255, 255, 255, 0.05) 100%
-        );
+            linear-gradient(to bottom right, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
     -fx-background-insets: 2;
     -fx-background-radius: 20 0 0 20;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0, 0, 2);
-    -fx-border-color:
-        rgba(255, 215, 0, 0.35),
-        #FFD700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 2);
+    -fx-border-color: rgba(255,215,0,0.35), #FFD700;
     -fx-border-width: 4, 2;
     -fx-border-radius: 20 0 0 20;
 }
@@ -52,63 +27,69 @@
 }
 
 /* ===========================
-   CABEÇALHO / HEADER
+   HEADER
    =========================== */
-.hbox-header {
-    -fx-padding: 15;
-    -fx-spacing: 10;
-    -fx-alignment: CENTER_LEFT;
+
+.header-bar {
     -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);
+    -fx-padding: 10 16 18 16;
+    -fx-effect: dropshadow(gaussian, rgba(13,18,30,0.06), 16, 0.25, 0, 2);
+    -fx-border-color: transparent transparent #e5e7eb transparent;
+}
+
+.title-strong {
+    -fx-text-fill: #0f172a;
+    -fx-letter-spacing: 0.2px;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+}
+.title-weak {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #334155;
+}
+
+.pill {
+    -fx-background-color: linear-gradient(to bottom, #eef2ff, #e0e7ff);
+    -fx-text-fill: #1e3a8a;
+    -fx-padding: 6 12 6 12;
+    -fx-background-radius: 999;
+    -fx-font-weight: 700;
+    -fx-border-color: #c7d2fe;
+    -fx-border-width: 1;
+    -fx-border-radius: 999;
 }
 
 /* ===========================
-   Estilo dos Botões
+   BOTÕES
    =========================== */
 
-/* Botão padrão (primário) */
 .button {
-    -fx-background-color:
-        linear-gradient(to bottom, #2563eb, #1e3a8a);
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #1e3a8a);
     -fx-text-fill: white;
     -fx-padding: 8 20 8 20;
     -fx-background-radius: 8;
-    -fx-border-color: #FFD700; /* Dourado */
+    -fx-border-color: #FFD700;
     -fx-border-width: 2;
     -fx-border-radius: 8;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 0, 2);
-    -fx-transition: 0.3s;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.3, 0, 2);
 }
-
-/* Alias para botão primário explícito */
-.button-primary {
-    /* herda de .button; ajustes leves */
-    -fx-font-weight: 600;
-}
-
-/* Hover (quando o mouse passa por cima) */
 .button:hover {
-    -fx-background-color:
-        linear-gradient(to bottom, #1e40af, #1e3a8a);
-    -fx-border-color: #facc15; /* Dourado mais vivo */
-    -fx-effect: dropshadow(gaussian, rgba(255, 215, 0, 0.5), 10, 0.3, 0, 2);
+    -fx-background-color: linear-gradient(to bottom, #1e40af, #1e3a8a);
+    -fx-border-color: #facc15;
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.5), 10, 0.3, 0, 2);
 }
-
-/* Pressionado */
 .button:pressed {
-    -fx-background-color:
-        linear-gradient(to bottom, #1e3a8a, #0f172a);
+    -fx-background-color: linear-gradient(to bottom, #1e3a8a, #0f172a);
     -fx-translate-y: 1px;
 }
 
-/* ===========================
-   Botão Secundário (Azul Suave Premium)
-   =========================== */
+.button-primary { -fx-font-weight: 600; }
+
 .button-secondary {
-    -fx-background-color:
-        linear-gradient(to bottom, #e0ecff, #c7d2fe); /* Azul claro perolado */
-    -fx-text-fill: #1e3a8a; /* Azul escuro do tema */
+    -fx-background-color: linear-gradient(to bottom, #e0ecff, #c7d2fe);
+    -fx-text-fill: #1e3a8a;
     -fx-padding: 8 20 8 20;
     -fx-background-radius: 8;
     -fx-border-color: #FFD700;
@@ -116,94 +97,147 @@
     -fx-border-radius: 8;
     -fx-font-weight: 600;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 4, 0.3, 0, 2);
-    -fx-transition: 0.3s;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 4, 0.3, 0, 2);
 }
-
-/* Hover */
 .button-secondary:hover {
-    -fx-background-color:
-        linear-gradient(to bottom, #dbeafe, #bfdbfe); /* Leve realce */
-    -fx-border-color: #FFD700; /* Mesmo dourado do primário */
+    -fx-background-color: linear-gradient(to bottom, #dbeafe, #bfdbfe);
+    -fx-border-color: #FFD700;
     -fx-text-fill: #0f172a;
 }
-
-/* Pressionado */
 .button-secondary:pressed {
-    -fx-background-color:
-        linear-gradient(to bottom, #c7d2fe, #a5b4fc);
+    -fx-background-color: linear-gradient(to bottom, #c7d2fe, #a5b4fc);
     -fx-translate-y: 1px;
 }
 
 /* ===========================
-   CAMPOS DE TEXTO E ÁREAS
+   CAMPOS / FORM INPUTS
    =========================== */
+
 .text-field, .text-area {
     -fx-background-radius: 6;
     -fx-border-radius: 6;
     -fx-border-color: #d0d0d0;
     -fx-padding: 6;
     -fx-font-size: 13px;
+    -fx-background-color: white;
 }
-
 .text-field:focused, .text-area:focused {
     -fx-border-color: #1976d2;
     -fx-effect: dropshadow(gaussian, rgba(25,118,210,0.25), 8, 0, 0, 1);
 }
 
 /* ===========================
-   SCROLLPANE / ÁREA DE CONTEÚDO
+   SIDEBAR
    =========================== */
-.scroll-pane {
-    -fx-background-color: transparent;
-}
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
 
-/* ===========================
-   CARDS DE ENTREGA
-   =========================== */
-.card {
+.sidebar {
     -fx-background-color: white;
-    -fx-background-radius: 12;
-    -fx-padding: 15;
-    -fx-spacing: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);
-    -fx-pref-width: 260;
-    -fx-pref-height: 120;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-effect: dropshadow(gaussian, rgba(13,18,30,0.05), 10, 0.15, 0, 2);
+}
+.sidebar-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+    -fx-opacity: .8;
+}
+
+/* Toggle de sessão */
+.session-toggle {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f7f9fc);
+    -fx-text-fill: #1f2937;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #e5e7eb;
+    -fx-padding: 10 14 10 14;
+    -fx-alignment: CENTER;
     -fx-cursor: hand;
-    -fx-transition: all 0.3s ease;
+    -fx-font-weight: 600;
+    -fx-min-width: 150;
 }
-
-.card:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);
-    -fx-translate-y: -3;
+.session-toggle:hover {
+    -fx-background-color: linear-gradient(to bottom, #f8fafc, #eef2f7);
 }
-
-/* Status das entregas */
-.status-em-andamento {
-    -fx-text-fill: #f39c12;
-    -fx-font-weight: bold;
-}
-
-.status-entregue {
-    -fx-text-fill: #27ae60;
-    -fx-font-weight: bold;
-}
-
-.status-atrasado {
-    -fx-text-fill: #e74c3c;
-    -fx-font-weight: bold;
+.session-toggle:selected {
+    -fx-background-color: linear-gradient(to bottom, #dbeafe, #bfdbfe);
+    -fx-border-color: #93c5fd;
+    -fx-text-fill: #0f172a;
 }
 
 /* ===========================
-   SPLITPANE E LISTAS
+   CONTEÚDO / ÁREA PRINCIPAL
    =========================== */
-.split-pane {
-    -fx-background-color: transparent;
+
+.content-shell {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-effect: dropshadow(gaussian, rgba(13,18,30,0.05), 10, 0.15, 0, 2);
+}
+.content-pane { -fx-background-color: transparent; }
+.content-pane .viewport { -fx-background-color: transparent; }
+.content-vbox { -fx-background-color: transparent; }
+
+/* Cards gerados no controller (qualquer nó direto dentro dos VBoxSessao*) */
+#VBoxSessao1 > * ,
+#VBoxSessao2 > * ,
+#VBoxSessao3 > * ,
+#VBoxSessao4 > * ,
+#VBoxSessao5 > * ,
+#VBoxSessao6 > * {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #e5e7eb;
+    -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(13,18,30,0.04), 8, 0.15, 0, 2);
 }
 
+#VBoxSessao1 > * .label,
+#VBoxSessao2 > * .label,
+#VBoxSessao3 > * .label,
+#VBoxSessao4 > * .label,
+#VBoxSessao5 > * .label,
+#VBoxSessao6 > * .label {
+    -fx-text-fill: #111827;
+}
+
+/* ===========================
+   TITLED PANE (DROPDOWNS)
+   =========================== */
+
+.titled-pane > .title {
+    -fx-background-color: transparent;
+    -fx-padding: 6 0 6 0;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0f172a;
+}
+.titled-pane > .content {
+    -fx-background-color: transparent;
+    -fx-padding: 6 0 0 6;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1 0 0 0;
+}
+.titled-pane .label { -fx-text-fill: #334155; }
+
+/* ===========================
+   SCROLL / ROLAGEM
+   =========================== */
+
+.scroll-pane { -fx-background-color: transparent; }
+.scroll-pane .viewport { -fx-background-color: transparent; }
+.scroll-bar:horizontal, .scroll-bar:vertical { -fx-background-color: transparent; }
+.scroll-bar .thumb { -fx-background-color: rgba(15,23,42,0.25); -fx-background-radius: 4; }
+.scroll-bar .thumb:hover { -fx-background-color: rgba(15,23,42,0.35); }
+
+/* ===========================
+   LISTAS / SPLIT
+   =========================== */
+
+.split-pane { -fx-background-color: transparent; }
 .list-view {
     -fx-background-radius: 8;
     -fx-border-radius: 8;
@@ -211,204 +245,45 @@
 }
 
 /* ===========================
-   FEEDBACK / CHAT
+   STATUS
    =========================== */
-.text-area {
-    -fx-background-color: white;
-}
 
-.chat-field {
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-padding: 8 14 8 14;
-    -fx-border-color: #d0d0d0;
-}
+.status-em-andamento { -fx-text-fill: #f39c12; -fx-font-weight: bold; }
+.status-entregue     { -fx-text-fill: #27ae60; -fx-font-weight: bold; }
+.status-atrasado     { -fx-text-fill: #e74c3c; -fx-font-weight: bold; }
 
-.chat-field:focused {
-    -fx-border-color: #1976d2;
-}
+.status-aguardando { -fx-text-fill: #f39c12; -fx-font-weight: bold; }
+.status-aceito     { -fx-text-fill: #27ae60; -fx-font-weight: bold; }
+.status-recusado   { -fx-text-fill: #e74c3c; -fx-font-weight: bold; }
 
 /* ===========================
-   ROLAGEM / BARRAS
-   =========================== */
-.scroll-bar:horizontal, .scroll-bar:vertical {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar .thumb {
-    -fx-background-color: rgba(0,0,0,0.25);
-    -fx-background-radius: 4;
-}
-
-.scroll-bar .thumb:hover {
-    -fx-background-color: rgba(0,0,0,0.35);
-}
-
-/* ===========================
-   UTILITÁRIOS
-   =========================== */
-.shadow-light {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
-}
-
-.rounded {
-    -fx-background-radius: 10;
-}
-
-/* Moldura de exibição da foto do usuário */
-.profile-frame {
-    /* Fundo levemente reflexivo */
-    -fx-background-color: linear-gradient(to bottom, #f7f9fb, #d9e2f1, #f0f4fa);
-
-    /* Borda metálica azulada com reflexo */
-    -fx-border-color: linear-gradient(to bottom, #1e3a8a, #2563eb, #5a8dee, #1e3a8a);
-    -fx-border-width: 4px;
-    -fx-border-style: solid;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-
-    /* Efeitos de relevo e brilho metálico */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.45), 10, 0.3, 0, 4),
-                innershadow(gaussian, rgba(255, 255, 255, 0.6), 3, 0.5, -1, -1),
-                innershadow(gaussian, rgba(0, 0, 0, 0.35), 4, 0.4, 1, 1),
-                innershadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, -2);
-
-}
-
-/* Imagem dentro da moldura */
-.profile-Image {
-    -fx-background-color: transparent;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.2, 0, 1);
-}
-
-/* ===========================
-   SOLICITAÇÃO DE ORIENTADOR
+   CARDS / COMPONENTES REUTILIZÁVEIS
    =========================== */
 
-/* Container principal da tela de solicitações */
-.solicitacao-root {
-    -fx-background-color: transparent;
-    -fx-padding: 20;
-    -fx-spacing: 15;
-}
-
-/* Seção superior (formulário de solicitação) */
-.solicitacao-form {
+.card, .aluno-card {
     -fx-background-color: white;
     -fx-background-radius: 12;
-    -fx-border-color: linear-gradient(to right, #FFD700, #facc15);
-    -fx-border-width: 2;
-    -fx-border-radius: 12;
-    -fx-padding: 20;
-    -fx-spacing: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
-}
-
-/* Título da seção */
-.solicitacao-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1e3a8a;
-}
-
-/* Área de texto para o pedido formal */
-.solicitacao-textarea {
-    -fx-pref-height: 150;
-    -fx-border-color: #d0d0d0;
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-}
-
-/* Espaçamento e organização dos botões */
-.solicitacao-buttons {
-    -fx-alignment: CENTER_RIGHT;
-    -fx-spacing: 10;
-}
-
-/* Seção inferior (cards das solicitações enviadas) */
-.solicitacao-cards-section {
-    -fx-background-color: transparent;
-    -fx-padding: 10 20 20 20;
-    -fx-spacing: 15;
-}
-
-/* Card de solicitação de orientador */
-.card-solicitacao {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-border-color: #d1d5db;
-    -fx-border-width: 1;
     -fx-padding: 15;
     -fx-spacing: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 6, 0, 0, 2);
-    -fx-pref-width: 270;
-    -fx-cursor: hand;
-    -fx-transition: all 0.25s ease;
-}
-
-.card-solicitacao:hover {
-    -fx-effect: dropshadow(gaussian, rgba(255, 215, 0, 0.4), 12, 0, 0, 3);
-    -fx-translate-y: -3;
-}
-
-/* Título do card (professor solicitado) */
-.card-solicitacao .label-professor {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1e3a8a;
-}
-
-/* Texto do pedido */
-.card-solicitacao .label-texto {
-    -fx-font-size: 13px;
-    -fx-text-fill: #333;
-    -fx-wrap-text: true;
-}
-
-/* Status visual (em harmonia com seu padrão existente) */
-.status-aguardando {
-    -fx-text-fill: #f39c12;
-    -fx-font-weight: bold;
-}
-
-.status-aceito {
-    -fx-text-fill: #27ae60;
-    -fx-font-weight: bold;
-}
-
-.status-recusado {
-    -fx-text-fill: #e74c3c;
-    -fx-font-weight: bold;
-}
-
-/* ===========================
-   SOLICITAÇÕES - PROFESSOR (RECEBIDAS)
-   =========================== */
-.card-solicitacao-recebida {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-border-color: #cfd4dc;
-    -fx-border-width: 1;
-    -fx-padding: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);
     -fx-cursor: hand;
 }
-
-.card-solicitacao-recebida:hover {
-    -fx-effect: dropshadow(gaussian, rgba(255, 215, 0, 0.35), 10, 0, 0, 3);
+.aluno-card {
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e5e7eb;
+    -fx-transition: all .2s ease;
+}
+.aluno-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 18, 0, 0, 4);
     -fx-translate-y: -2;
 }
 
-.card-flip-front {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-}
+/* ===========================
+   BUSCA / FILTROS / ICONS
+   =========================== */
 
+<<<<<<< Updated upstream
 .card-flip-back {
     -fx-background-color: #f9fafb;
     -fx-background-radius: 10;
@@ -440,3 +315,198 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 6, 0, 1, 1);
     -fx-padding: 2;
 }
+=======
+.filters-row { -fx-spacing: 10; }
+
+.botoes {
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 100% 100%, rgba(255,255,255,0.08) 0%, rgba(200,220,255,0.06) 50%, rgba(150,180,255,0.03) 100%),
+            radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 70%, rgba(255,255,255,0.15) 0%, rgba(200,220,255,0.04) 70%, transparent 100%);
+    -fx-background-radius: 30;
+    -fx-border-color: linear-gradient(to bottom, rgba(37,99,235,0.6), rgba(30,58,138,0.4));
+    -fx-border-width: 1;
+    -fx-border-radius: 30;
+    -fx-text-fill: #00000;
+    -fx-font-size: 13px;
+    -fx-font-family: 'Roboto', 'Arial', sans-serif;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.35, 0, 2),
+    innershadow(gaussian, rgba(255,255,255,0.35), 10, 0.25, 0, -2),
+    dropshadow(gaussian, rgba(37,99,235,0.15), 5, 0.1, 0, 0);
+    -fx-padding: 5 5 5 5;
+    -fx-cursor: hand;
+    -fx-opacity: 0.9;
+    -fx-background-insets: 0;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+.botoes:hover {
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 100% 100%, rgba(255,255,255,0.15) 0%, rgba(200,220,255,0.12) 50%, rgba(150,180,255,0.08) 100%),
+            radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 80%, rgba(255,255,255,0.25) 0%, rgba(200,220,255,0.08) 70%, transparent 100%);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.45, 1, 3),
+    innershadow(gaussian, rgba(255,255,255,0.45), 12, 0.35, 0, -3),
+    dropshadow(gaussian, rgba(37,99,235,0.25), 8, 0.2, 0, 0);
+    -fx-opacity: 1.0;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+.botoes:pressed {
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 100% 100%, rgba(150,180,255,0.08) 0%, rgba(100,140,255,0.04) 50%, rgba(50,100,255,0.01) 100%),
+            radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 70%, rgba(200,220,255,0.15) 0%, rgba(150,180,255,0.04) 70%, transparent 100%);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0.25, 0, 1),
+    innershadow(gaussian, rgba(255,255,255,0.25), 8, 0.25, 0, -1),
+    dropshadow(gaussian, rgba(37,99,235,0.1), 4, 0.1, 0, 0);
+    -fx-opacity: 0.95;
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+.botoes:selected {
+    -fx-background-color: linear-gradient(to bottom, #c7d2fe, #a5b4fc);
+    -fx-text-fill: #0f172a;
+    -fx-border-color: #818cf8;
+}
+
+.filters-row .toggle { -fx-background-insets: 0; }
+.filters-row .toggle:first-child { -fx-background-radius: 10 0 0 10; -fx-border-radius: 10 0 0 10; }
+.filters-row .toggle:last-child  { -fx-background-radius: 0 10 10 0; -fx-border-radius: 0 10 10 0; }
+.filters-row .toggle { -fx-background-radius: 0; -fx-border-radius: 0; }
+.filters-row .toggle:only-child { -fx-background-radius: 10; -fx-border-radius: 10; }
+
+.search-wrap { -fx-spacing: 10; }
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #d1d5db;
+    -fx-padding: 8 12 8 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.03), 8, 0, 0, 1);
+}
+.search-field:focused {
+    -fx-border-color: #2563eb;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.18), 12, 0, 0, 2);
+}
+.icon-button-search {
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #1e3a8a);
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #1d4ed8;
+    -fx-border-width: 1.5;
+    -fx-cursor: hand;
+}
+.icon-button-search:hover {
+    -fx-background-color: linear-gradient(to bottom, #1e3a8a, #0f172a);
+}
+
+/* ===========================
+   CHAT / TEXTAREA ESPECIAL
+   =========================== */
+
+.text-area { -fx-background-color: white; }
+.chat-field {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 8 14 8 14;
+    -fx-border-color: #d0d0d0;
+}
+.chat-field:focused { -fx-border-color: #1976d2; }
+
+/* ===========================
+   FOTO DE PERFIL / MOLDURA
+   =========================== */
+
+.profile-frame {
+    -fx-background-color: linear-gradient(to bottom, #f7f9fb, #d9e2f1, #f0f4fa);
+    -fx-border-color: linear-gradient(to bottom, #1e3a8a, #2563eb, #5a8dee, #1e3a8a);
+    -fx-border-width: 4px;
+    -fx-border-style: solid;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 10, 0.3, 0, 4),
+    innershadow(gaussian, rgba(255,255,255,0.6), 3, 0.5, -1, -1),
+    innershadow(gaussian, rgba(0,0,0,0.35), 4, 0.4, 1, 1),
+    innershadow(gaussian, rgba(255,255,255,0.4), 2, 0.3, 0, -2);
+}
+.profile-Image {
+    -fx-background-color: transparent;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0.2, 0, 1);
+}
+
+/* ===========================
+   SOLICITAÇÕES / CARDS
+   =========================== */
+
+.solicitacao-root { -fx-background-color: transparent; -fx-padding: 20; -fx-spacing: 15; }
+.solicitacao-form {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: linear-gradient(to right, #FFD700, #facc15);
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+.solicitacao-title { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a; }
+.solicitacao-textarea {
+    -fx-pref-height: 150;
+    -fx-border-color: #d0d0d0;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+.solicitacao-buttons { -fx-alignment: CENTER_RIGHT; -fx-spacing: 10; }
+.solicitacao-cards-section { -fx-background-color: transparent; -fx-padding: 10 20 20 20; -fx-spacing: 15; }
+
+.card-solicitacao {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1;
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 0, 2);
+    -fx-pref-width: 270;
+    -fx-cursor: hand;
+    -fx-transition: all 0.25s ease;
+}
+.card-solicitacao:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.4), 12, 0, 0, 3);
+    -fx-translate-y: -3;
+}
+.card-solicitacao .label-professor { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a; }
+.card-solicitacao .label-texto    { -fx-font-size: 13px; -fx-text-fill: #333; -fx-wrap-text: true; }
+
+.card-solicitacao-recebida {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #cfd4dc;
+    -fx-border-width: 1;
+    -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+    -fx-cursor: hand;
+}
+.card-solicitacao-recebida:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.35), 10, 0, 0, 3);
+    -fx-translate-y: -2;
+}
+
+.card-flip-front { -fx-background-color: white; -fx-background-radius: 10; }
+.card-flip-back  { -fx-background-color: #f9fafb; -fx-background-radius: 10; }
+.card-actions    { -fx-alignment: CENTER_RIGHT; -fx-spacing: 8; }
+.card-title      { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: -fx-text-base-color; }
+.icon-button-ghost { -fx-background-color: transparent; -fx-padding: 2; -fx-background-radius: 999; }
+
+/* ===========================
+   UTILITÁRIOS
+   =========================== */
+
+.shadow-light { -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2); }
+.rounded { -fx-background-radius: 10; }
+>>>>>>> Stashed changes
