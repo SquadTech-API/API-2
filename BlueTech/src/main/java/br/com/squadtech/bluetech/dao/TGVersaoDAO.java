@@ -212,6 +212,23 @@ public class TGVersaoDAO {
         return insertReturningId(secao) != null;
     }
 
+    public Integer buscarIdSecaoPorIdVersao(int idVersao) {
+        String sql = "SELECT `Id_Secao` FROM `TG_Versao` WHERE `Id_Versao` = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idVersao);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int idSecao = rs.getInt("Id_Secao");
+                    if (!rs.wasNull()) return idSecao;
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Erro ao buscar Id_Secao por Id_Versao", e);
+        }
+        return null;
+    }
+
     public TGVersao findById(int idVersao) {
         String sql = "SELECT Id_Versao, Id_Secao, Versao_Numero, Markdown_Content, Semestre_Curso, Ano, Semestre_Ano, Empresa_Parceira, Problema, Solucao, Link_Repositorio, Link_Linkedin, Tecnologias, Contribuicoes, Hard_Skills, Soft_Skills, Data_Criacao FROM TG_Versao WHERE Id_Versao = ?";
         try (Connection conn = ConnectionFactory.getConnection();

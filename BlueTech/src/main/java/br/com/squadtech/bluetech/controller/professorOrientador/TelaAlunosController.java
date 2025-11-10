@@ -2,6 +2,10 @@ package br.com.squadtech.bluetech.controller.professorOrientador;
 
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
+import br.com.squadtech.bluetech.model.Usuario;
+import br.com.squadtech.bluetech.model.Professor;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import javafx.fxml.FXML;
@@ -85,7 +89,19 @@ public class TelaAlunosController implements SupportsMainController {
     }
 
     private void carregarAlunosDoBanco() {
-        todosAlunos = perfilAlunoDAO.listarAlunosParaCard(null);
+        // Resolve professorId pelo usuário logado
+        Usuario u = SessaoUsuario.getUsuarioLogado();
+        Long professorId = null;
+        if (u != null && u.getEmail() != null) {
+            ProfessorDAO profDAO = new ProfessorDAO();
+            Professor p = profDAO.findByUsuarioEmail(u.getEmail());
+            if (p != null && p.getId() != null) {
+                professorId = p.getId();
+            } else {
+                log.warn("Professor não encontrado para o email do usuário logado: {}", u.getEmail());
+            }
+        }
+        todosAlunos = perfilAlunoDAO.listarAlunosParaCard(null, professorId);
     }
 
     private void aplicarFiltroERender() {
@@ -94,8 +110,10 @@ public class TelaAlunosController implements SupportsMainController {
 
         for (PerfilAluno a : todosAlunos) {
             boolean matchesNome = termo.isEmpty() || (a.getNomeAluno() != null && a.getNomeAluno().toLowerCase(Locale.ROOT).contains(termo));
-            // Sem regra de corrigido real, usamos idade null como indicador de faltante (apenas placeholder)
-            boolean corrigido = a.getIdade() != null && a.getIdade() >= 0; // qualquer idade cadastrada conta como preenchido
+            // Usamos o status do último feedback para determinar se está corrigido
+            // 'APROVADO' significa corrigido. 'AJUSTES' ou null significa não corrigido/pendente.
+            String status = a.getUltimoFeedbackStatus();
+            boolean corrigido = "APROVADO".equals(status);
             boolean matchesStatus = ToggleButonTodosAlunos.isSelected() ||
                     (ToggleButtonCorrigidos.isSelected() && corrigido) ||
                     (ToggleButtonNaoCorrigidos.isSelected() && !corrigido);
@@ -113,6 +131,10 @@ public class TelaAlunosController implements SupportsMainController {
     }
 
     private Node criarCard(PerfilAluno a) {
+        if (a == null) {
+            log.error("Tentativa de criar card com PerfilAluno nulo.");
+            return new Label("Erro: Dados do aluno ausentes.");
+        }
         HBox card = new HBox(8);
         card.getStyleClass().addAll("card", "student-row");
         card.setAlignment(Pos.CENTER_LEFT);
@@ -127,12 +149,13 @@ public class TelaAlunosController implements SupportsMainController {
         spacer.setPrefWidth(20);
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
-        Label lblDias = new Label("");
-        lblDias.setStyle("-fx-font-size: 18px;");
+        Label lblDias = new Label(a.getUltimoFeedbackStatus() != null ? a.getUltimoFeedbackStatus() : "Pendente");
+        lblDias.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
         lblDias.setPrefWidth(150);
         lblDias.setAlignment(Pos.CENTER_RIGHT);
 
-        String iconPath = (a.getIdade() != null) ? "/images/check.png" : "/images/excla.png";
+        String status = a.getUltimoFeedbackStatus();
+        String iconPath = "APROVADO".equals(status) ? "/images/check.png" : "/images/excla.png";
         ImageView iv = new ImageView(loadImageSafe(iconPath));
         iv.setFitWidth(28);
         iv.setFitHeight(28);
@@ -143,26 +166,24 @@ public class TelaAlunosController implements SupportsMainController {
         card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: rgba(0,0,0,0.04); -fx-background-radius: 8;"));
         card.setOnMouseExited(e -> card.setStyle(""));
 
-        // Clique: abre TelaAlunoEspecifico.fxml em nova janela
+        // Clique: abre TelaAlunoEspecifico.fxml no painel principal (mesma janela)
         card.setOnMouseClicked(e -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/professorOrientador/telaAlunoEspecifico.fxml"));
-                Parent root = loader.load();
+                TelaAlunoEspecificoController controller =
+                        painelPrincipalController.loadContentReturnController(
+                                "/fxml/professorOrientador/telaAlunoEspecifico.fxml",
+                                TelaAlunoEspecificoController.class
+                        );
 
-                TelaAlunoEspecificoController controller = loader.getController();
                 controller.setAlunoId(
                         a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : 0L,
                         a.getNomeAluno()
                 );
-
-                Stage stage = new Stage();
-                stage.setTitle("Aluno: " + a.getNomeAluno());
-                stage.setScene(new Scene(root));
-                stage.show();
             } catch (IOException ex) {
                 log.error("Erro ao abrir tela do aluno específico", ex);
             }
         });
+
 
         return card;
     }

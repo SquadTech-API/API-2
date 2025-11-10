@@ -181,16 +181,51 @@ public class PerfilAlunoDAO {
     }
 
     // Lista alunos para cards (join com usuario p/ obter nome)
-    public List<PerfilAluno> listarAlunosParaCard(String termoNomeOpcional) {
-        String base = "SELECT p.id_perfil_aluno, p.email_usuario, p.idade, p.foto, u.nome AS nome_aluno " +
-                "FROM Perfil_Aluno p JOIN usuario u ON u.email = p.email_usuario";
+    public List<PerfilAluno> listarAlunosParaCard(String termoNomeOpcional, Long professorId) {
+        String base = """
+            SELECT
+                p.id_perfil_aluno,
+                p.email_usuario,
+                p.idade,
+                p.foto,
+                u.nome AS nome_aluno,
+                (
+                    SELECT f.status FROM feedback f
+                    JOIN TG_Versao v ON f.versao_id = v.Id_Versao
+                    JOIN TG_Secao s ON v.Id_Secao = s.Id_Secao
+                    WHERE s.email_usuario = p.email_usuario
+                    ORDER BY f.created_at DESC
+                    LIMIT 1
+                ) AS ultimo_feedback_status
+            FROM Perfil_Aluno p
+            JOIN usuario u ON u.email = p.email_usuario
+        """;
+
+        if (professorId != null) {
+            base += " JOIN orienta o ON o.aluno_id = p.id_perfil_aluno AND o.professor_id = ?";
+        }
+        
         String where = (termoNomeOpcional != null && !termoNomeOpcional.isBlank()) ? " WHERE u.nome LIKE ?" : "";
+        
+        // Se houver professorId, o WHERE já foi adicionado no JOIN (WHERE o.professor_id = ?), então ajustamos a lógica.
+        if (professorId != null && termoNomeOpcional != null && !termoNomeOpcional.isBlank()) {
+            where = " AND u.nome LIKE ?";
+        } else if (professorId == null && termoNomeOpcional != null && !termoNomeOpcional.isBlank()) {
+            where = " WHERE u.nome LIKE ?";
+        } else {
+            where = "";
+        }
+
         String sql = base + where + " ORDER BY u.nome";
         List<PerfilAluno> list = new ArrayList<>();
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+            int paramIndex = 1;
+            if (professorId != null) {
+                ps.setLong(paramIndex++, professorId);
+            }
             if (!where.isEmpty()) {
-                ps.setString(1, "%" + termoNomeOpcional + "%");
+                ps.setString(paramIndex, "%" + termoNomeOpcional + "%");
             }
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -201,6 +236,10 @@ public class PerfilAlunoDAO {
                     a.setIdade(rs.wasNull() ? null : idade);
                     a.setFoto(rs.getString("foto"));
                     a.setNomeAluno(rs.getString("nome_aluno"));
+                    
+                    // Novo campo: Status do último feedback
+                    a.setUltimoFeedbackStatus(rs.getString("ultimo_feedback_status"));
+                    
                     list.add(a);
                 }
             }

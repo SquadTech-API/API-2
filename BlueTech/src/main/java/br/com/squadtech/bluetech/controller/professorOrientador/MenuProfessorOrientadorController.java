@@ -96,49 +96,6 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         }
     }
 
-    @FXML
-    void enviarEmail(ActionEvent event) {
-        TextInputDialog dlgTo = new TextInputDialog();
-        dlgTo.setTitle("Enviar Email");
-        dlgTo.setHeaderText("Destinatário");
-        dlgTo.setContentText("E-mail para enviar:");
-        var toOpt = dlgTo.showAndWait();
-        if (toOpt.isEmpty()) return;
-
-        TextInputDialog dlgSub = new TextInputDialog("Teste BlueTech");
-        dlgSub.setTitle("Enviar Email");
-        dlgSub.setHeaderText("Assunto");
-        dlgSub.setContentText("Assunto:");
-        var subOpt = dlgSub.showAndWait();
-        if (subOpt.isEmpty()) return;
-
-        TextInputDialog dlgBody = new TextInputDialog("Olá! Este é um teste do BlueTech.");
-        dlgBody.setTitle("Enviar Email");
-        dlgBody.setHeaderText("Corpo da mensagem");
-        dlgBody.setContentText("Mensagem:");
-        var bodyOpt = dlgBody.showAndWait();
-        if (bodyOpt.isEmpty()) return;
-
-        EmailService email = new EmailService(
-                SmtpProps.FROM,
-                new EmailService.SmtpConfig(
-                        SmtpProps.HOST,
-                        SmtpProps.PORT,
-                        SmtpProps.USER,
-                        SmtpProps.PASS,
-                        SmtpProps.STARTTLS,
-                        SmtpProps.SSL
-                )
-        );
-        try {
-            email.send(toOpt.get(), subOpt.get(), bodyOpt.get());
-            showInfo("E-mail enviado para: " + toOpt.get());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            showError("Falha ao enviar e-mail: " + e.getMessage());
-        }
-    }
-
     private void showInfo(String msg) {
         var alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setHeaderText("Notificação");
