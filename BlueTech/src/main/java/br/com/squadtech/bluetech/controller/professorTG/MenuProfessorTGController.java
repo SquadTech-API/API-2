@@ -115,6 +115,13 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     @FXML
     private void abrirAgendamentos(ActionEvent event) {
         System.out.println("Abrindo Agendamentos de TG...");
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadContent("/fxml/professorTG/AgendamentoDefesaProfTG.fxml");
+            } catch (Exception e) {
+                log.error("Erro ao carregar AgendamentoDefesaProfTG.fxml", e);
+            }
+        }
     }
 
     @FXML

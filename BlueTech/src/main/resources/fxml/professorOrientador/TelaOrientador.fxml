@@ -34,7 +34,7 @@
                     <children>
                         <ImageView fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../images/Logo.png" />
+                                <Image url="@../../assets/Logo.png" />
                             </image>
                         </ImageView>
 
@@ -51,7 +51,7 @@
                             <children>
                                 <ImageView fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../images/DedoEsquerda.gif" />
+                                        <Image url="@../../assets/DedoEsquerda.gif" />
                                     </image>
                                 </ImageView>
                                 <Label text="Para começar, basta escolher uma opção no menu lateral">
@@ -87,7 +87,7 @@
                                 </VBox>
                                 <ImageView fitHeight="60.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../images/logoSquad.png" />
+                                        <Image url="@../../assets/logoSquad.png" />
                                     </image>
                                 </ImageView>
                             </children>
@@ -110,7 +110,7 @@
                                 </VBox>
                                 <ImageView fitHeight="45.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../images/LogoFatec.png" />
+                                        <Image url="@../../assets/LogoFatec.png" />
                                     </image>
                                 </ImageView>
                             </children>

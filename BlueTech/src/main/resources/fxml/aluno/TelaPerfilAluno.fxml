@@ -75,7 +75,7 @@
                     <!-- Wrapper com moldura (mesmo tamanho do ImageView + padding da moldura) -->
                     <StackPane styleClass="profile-frame">
                         <ImageView fx:id="imgFoto" fitHeight="200.0" fitWidth="200.0" nodeOrientation="INHERIT" preserveRatio="true" styleClass="profile-Image">
-                            <Image url="@../../images/Usuario.png" />
+                            <Image url="@../../assets/Usuario.png" />
                         </ImageView>
                     </StackPane>
                     <Label style="-fx-font-size:11px; -fx-text-fill:#666;" text="A foto será copiada para: ~/bluetech/fotos/" wrapText="true" />

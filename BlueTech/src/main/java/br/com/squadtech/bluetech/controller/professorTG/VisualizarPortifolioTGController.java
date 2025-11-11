@@ -182,7 +182,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
         try {
             return new Image(getClass().getResourceAsStream("/images/Usuario.png"));
         } catch (Exception e) {
-            System.out.println("⚠️ Imagem padrão não encontrada no resources/images/Usuario.png");
+            System.out.println("⚠️ Imagem padrão não encontrada no resources/assets/Usuario.png");
             return new Image("https://cdn-icons-png.flaticon.com/512/847/847969.png"); // fallback online
         }
     }

@@ -26,7 +26,7 @@
 
                         <ImageView fx:id="imgViewFotoProfessorOri" fitWidth="100" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../images/Usuario.png" />
+                                <Image url="@../../assets/Usuario.png" />
                             </image>
                         </ImageView>
 
@@ -55,6 +55,7 @@
             <children>
             <JFXButton fx:id="btnSolicitacoesOrientacao" layoutX="30.0" layoutY="95.0" maxWidth="Infinity" onAction="#abrirSolicitacoesOrientacao" styleClass="submenu-btn" text="Solicitações de Orientação" />
                 <JFXButton fx:id="btnenviarEmail" maxWidth="Infinity" onAction="#enviarEmail" styleClass="submenu-btn" text="Enviar Email" />
+                <JFXButton fx:id="btnAgendamentoDefesa" maxWidth="Infinity" onAction="#abrirAgendamentosDefesa" styleClass="submenu-btn" text="Agendamento de Defesa" />
             </children>
         </VBox>
     </items>

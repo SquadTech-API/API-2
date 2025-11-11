@@ -55,6 +55,9 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
     private JFXButton btnSolicitacoesOrientacao;
 
     @FXML
+    private JFXButton btnAgendamentoDefesa;
+
+    @FXML
     void abrirSolicitacoesOrientacao(ActionEvent event) {
         if (painelPrincipalController != null) {
             try {
@@ -68,6 +71,19 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
             log.error("PainelPrincipalController não foi injetado em MenuProfessorOrientadorController.");
         }
 
+    }
+
+    @FXML
+    void abrirAgendamentosDefesa() {
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadContent("/fxml/professorOrientador/AgendamentoDefesaOrientador.fxml");
+            } catch (IOException e) {
+                log.error("Falha ao carregar AgendamentoDefesaOrientador.fxml", e);
+            }
+        } else {
+            log.error("PainelPrincipalController não foi injetado em MenuProfessorOrientadorController.");
+        }
     }
 
 

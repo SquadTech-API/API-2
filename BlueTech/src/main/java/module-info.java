@@ -17,6 +17,7 @@ module br.com.squadtech.bluetech {
     requires ch.qos.logback.classic;
     requires jakarta.mail;
     requires javafx.base;
+    requires javafx.media;
 
 
     opens br.com.squadtech.bluetech to javafx.fxml;

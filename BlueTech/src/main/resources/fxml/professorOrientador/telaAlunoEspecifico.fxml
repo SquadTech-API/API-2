@@ -72,7 +72,7 @@
 
                 <Region VBox.vgrow="ALWAYS" />
                 <ImageView fitHeight="81.0" fitWidth="56.0" preserveRatio="true">
-                    <image><Image url="@../../images/check.png" /></image>
+                    <image><Image url="@../../assets/check.png" /></image>
                 </ImageView>
             </children>
         </VBox>
