@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import br.com.squadtech.bluetech.dao.FeedbackDAO;
+import br.com.squadtech.bluetech.model.Feedback;
+import br.com.squadtech.bluetech.model.FeedbackItem;
+import java.time.format.DateTimeFormatter;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
@@ -27,6 +31,8 @@ import org.slf4j.LoggerFactory;
 
 public class EditarSecaoAPIController implements SupportsMainController {
 
+    private final FeedbackDAO feedbackDAO = new FeedbackDAO();
+    private final DateTimeFormatter dtFeedback = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private static final Logger log = LoggerFactory.getLogger(EditarSecaoAPIController.class);
 
     @FXML
@@ -180,18 +186,18 @@ public class EditarSecaoAPIController implements SupportsMainController {
             try {
                 TGVersao v = versaoDAO.findById(idVersaoSelecionada);
                 if (v != null) {
-                    // Preferência: Markdown completo; caso não exista, reconstruir tudo dos campos
                     if (v.getMarkdownContent() != null && !v.getMarkdownContent().isBlank()) {
                         txtMarkdownEditor.setText(v.getMarkdownContent());
                     } else {
                         txtMarkdownEditor.setText(MarkdownBuilderUtil.buildMarkdownFromVersao(v, secao));
                     }
+                    // <<< ADICIONADO: carrega o feedback desta versão
+                    preencherFeedbackOrientador(v);
                 }
             } catch (Exception e) {
                 log.error("Erro ao carregar versão selecionada para edição", e);
             }
         } else if (secao != null && secao.getIdVersao() > 0) {
-            // Caso não exista versão selecionada explicitamente, usa a última da seção
             try {
                 TGVersao v = versaoDAO.findById(secao.getIdVersao());
                 if (v != null) {
@@ -200,9 +206,12 @@ public class EditarSecaoAPIController implements SupportsMainController {
                     } else {
                         txtMarkdownEditor.setText(MarkdownBuilderUtil.buildMarkdownFromVersao(v, secao));
                     }
+                    // <<< ADICIONADO: feedback da última versão da seção
+                    preencherFeedbackOrientador(v);
                 }
             } catch (Exception e) { /* ignora erros de leitura aqui */ }
         }
+
     }
 
 
@@ -238,4 +247,79 @@ public class EditarSecaoAPIController implements SupportsMainController {
         }
         return out.toString();
     }
+    private void preencherFeedbackOrientador(TGVersao v) {
+        if (v == null) {
+            txtFeedbackOrientador.setText("Nenhuma versão selecionada.");
+            return;
+        }
+
+        // tenta pegar o id da versão de forma robusta
+        Long versaoId = null;
+        try {
+            if (v.getIdSecaoApi() != null) {
+                versaoId = v.getIdSecaoApi().longValue();
+            }
+        } catch (Exception ignore) {}
+
+
+        if (versaoId == null) {
+            txtFeedbackOrientador.setText("Não foi possível identificar a versão para carregar o feedback.");
+            return;
+        }
+
+        Feedback fb = feedbackDAO.buscarPorVersaoId(versaoId);
+        if (fb == null) {
+            txtFeedbackOrientador.setText("Nenhum feedback enviado pelo orientador para esta versão.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Status: ").append(fb.getStatus()).append("\n");
+        if (fb.getCreatedAt() != null) {
+            sb.append("Data: ").append(fb.getCreatedAt().format(dtFeedback)).append("\n");
+        }
+
+        if (fb.getComentario() != null && !fb.getComentario().isBlank()) {
+            sb.append("\nComentário geral:\n")
+                    .append(fb.getComentario())
+                    .append("\n");
+        }
+
+        if (fb.getItens() != null && !fb.getItens().isEmpty()) {
+            sb.append("\nDetalhamento por campo:\n");
+            for (FeedbackItem it : fb.getItens()) {
+                String campoLabel = traduzCampo(it.getCampo());
+                sb.append("• ")
+                        .append(campoLabel)
+                        .append(" — ")
+                        .append(it.getStatus());
+                if (it.getComentario() != null && !it.getComentario().isBlank()) {
+                    sb.append(" | ").append(it.getComentario());
+                }
+                sb.append("\n");
+            }
+        }
+
+        txtFeedbackOrientador.setText(sb.toString());
+    }
+
+    /**
+     * Tradução dos ids internos dos campos para algo legível pro aluno.
+     */
+    private String traduzCampo(String campoId) {
+        if (campoId == null) return "";
+        return switch (campoId) {
+            case "problema"      -> "Problema";
+            case "solucao"       -> "Solução";
+            case "repositorio"   -> "Repositório";
+            case "linkedin"      -> "LinkedIn";
+            case "tecnologias"   -> "Tecnologias";
+            case "contribuicoes" -> "Contribuições";
+            case "hardSkills"    -> "Hard Skills";
+            case "softSkills"    -> "Soft Skills";
+            default -> campoId;
+        };
+    }
+
 }
