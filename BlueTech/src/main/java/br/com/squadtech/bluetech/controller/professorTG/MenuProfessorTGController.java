@@ -131,7 +131,17 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
 
     @FXML
     private void abrirOrientacao(ActionEvent event) {
-        System.out.println("Abrindo tela de orientação...");
+        if (painelPrincipalController == null) {
+            log.error("PainelPrincipalController não foi injetado em MenuProfessorTGController.");
+            return;
+        }
+
+        try {
+            painelPrincipalController.loadContent("/fxml/professorTG/SolicitacaoAlunosOrientacao.fxml");
+            log.info("Tela SolicitacaoAlunosOrientacao carregada com sucesso.");
+        } catch (Exception e) {
+            log.error("Erro ao carregar SolicitacaoAlunosOrientacao.fxml", e);
+        }
     }
 
     @FXML
