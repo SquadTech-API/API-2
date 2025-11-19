@@ -283,7 +283,6 @@
    BUSCA / FILTROS / ICONS
    =========================== */
 
-<<<<<<< Updated upstream
 .card-flip-back {
     -fx-background-color: #f9fafb;
     -fx-background-radius: 10;
@@ -315,7 +314,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 6, 0, 1, 1);
     -fx-padding: 2;
 }
-=======
 .filters-row { -fx-spacing: 10; }
 
 .botoes {
@@ -483,6 +481,11 @@
 .card-solicitacao .label-texto    { -fx-font-size: 13px; -fx-text-fill: #333; -fx-wrap-text: true; }
 
 .card-solicitacao-recebida {
+
+/* ===========================
+   AGENDAMENTO DE DEFESA
+   =========================== */
+.card-agendamento {
     -fx-background-color: white;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
@@ -509,4 +512,14 @@
 
 .shadow-light { -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2); }
 .rounded { -fx-background-radius: 10; }
->>>>>>> Stashed changes
+    -fx-padding: 14;
+    -fx-spacing: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-pref-width: 320;
+}
+
+.status-aguardando-orientador { -fx-text-fill: #f39c12; -fx-font-weight: bold; }
+.status-aguardando-aluno { -fx-text-fill: #0ea5e9; -fx-font-weight: bold; }
+.status-reagendamento { -fx-text-fill: #a855f7; -fx-font-weight: bold; }
+.status-agendado { -fx-text-fill: #22c55e; -fx-font-weight: bold; }

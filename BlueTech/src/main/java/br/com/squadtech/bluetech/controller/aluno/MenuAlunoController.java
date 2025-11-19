@@ -50,6 +50,9 @@ public class MenuAlunoController implements SupportsMainController {
     private JFXButton btnAlunoPortifolio;
 
     @FXML
+    private JFXButton btnAlunoAgendamentoDefesa;
+
+    @FXML
     private ImageView imgViewFotoAluno;
 
     @FXML
@@ -110,6 +113,11 @@ public class MenuAlunoController implements SupportsMainController {
         loadContentIntoMain("/fxml/aluno/TelaPerfilAluno.fxml");
     }
 
+    @FXML
+    void AbrirAgendamentoDefesa(ActionEvent event) {
+        loadContentIntoMain("/fxml/aluno/AgendamentoDefesaAluno.fxml");
+    }
+
     //Atualizar a foto no menu
     public void updateFotoAluno(String imagePath) {
         if (imagePath != null && !imagePath.isEmpty()) {
@@ -131,6 +139,7 @@ public class MenuAlunoController implements SupportsMainController {
         assert btnAlunoEntregas != null : "fx:id=\"btnAlunoEntregas\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPerfil != null : "fx:id=\"btnAlunoPerfil\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert btnAlunoPortifolio != null : "fx:id=\"btnAlunoPortifolio\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnAlunoAgendamentoDefesa != null : "fx:id=\"btnAlunoAgendamentoDefesa\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert imgViewFotoAluno != null : "fx:id=\"imgViewFotoAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert painelAluno != null : "fx:id=\"painelAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert paneSuperiorMenuAluno != null : "fx:id=\"paneSuperiorMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";

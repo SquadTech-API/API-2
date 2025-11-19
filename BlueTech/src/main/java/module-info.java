@@ -21,6 +21,7 @@ module br.com.squadtech.bluetech {
     requires jakarta.mail;
     requires jakarta.activation;
     requires javafx.base;
+    requires javafx.media;
 
 
     opens br.com.squadtech.bluetech to javafx.fxml;

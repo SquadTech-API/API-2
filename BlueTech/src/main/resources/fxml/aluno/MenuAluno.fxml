@@ -24,7 +24,7 @@
                    <StackPane fx:id="profileFrame" styleClass="profile-frame">
                        <ImageView fx:id="imgViewFotoAluno" fitHeight="112.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                               <Image url="@../../images/Usuario.png" />
+                               <Image url="@../../assets/Usuario.png" />
                            </image>
                        </ImageView>
                    </StackPane>
@@ -47,6 +47,7 @@
           <JFXButton fx:id="btnAlunoEntregas" maxWidth="Infinity" onAction="#AbrirEntregasSeccoes" text="Entregas" />
           <JFXButton fx:id="btnAlunoPortifolio" maxWidth="Infinity" text="Portifólio" />
           <JFXButton fx:id="btnAlunoSolicitarOrientacao" maxWidth="Infinity" onAction="#SolicitarOrientacao" text="Solicitar Orientação" />
+          <JFXButton fx:id="btnAlunoAgendamentoDefesa" maxWidth="Infinity" onAction="#AbrirAgendamentoDefesa" text="Agendamento Defesa" />
           <JFXButton fx:id="btnAlunoPerfil" maxWidth="Infinity" onAction="#AbreTelaPerfilAluno" text="Perfil" />
        </children>
     </VBox>

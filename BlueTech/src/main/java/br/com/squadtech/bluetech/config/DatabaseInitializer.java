@@ -1,5 +1,6 @@
 package br.com.squadtech.bluetech.config;
 
+import br.com.squadtech.bluetech.dao.AgendamentoDefesaDAO;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.dao.TGVersaoDAO;
@@ -42,6 +43,7 @@ public class DatabaseInitializer {
         OrientaDAO orientaDAO = new OrientaDAO();
         TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        AgendamentoDefesaDAO agendamentoDefesaDAO = new AgendamentoDefesaDAO();
 
         //Parte 1: Cria tabelas se não existirem
         usuarioDAO.createTableIfNotExists();
@@ -53,8 +55,9 @@ public class DatabaseInitializer {
         portifolioDAO.createTableIfNotExists();
         feedbackDAO.createTableIfNotExists();
         solicitacaoDAO.createTableIfNotExists();
+        agendamentoDefesaDAO.createTableIfNotExists();
 
-        // Migrações/índices auxiliares
+        //Migrações/índices auxiliares
         TGVersaoDAO.ensureSchemaUpToDate();
         tgSecaoDAO.ensureSchemaUpToDate();
         ensurePerfilAlunoUniqueEmail();
@@ -72,7 +75,7 @@ public class DatabaseInitializer {
             try {
                 st.executeUpdate("CREATE UNIQUE INDEX uk_perfil_aluno_email ON Perfil_Aluno(email_usuario)");
             } catch (Exception ignored) {
-                // pode já existir
+                //pode já existir
             }
         } catch (Exception e) {
             log.warn("Falha ao garantir índice único em Perfil_Aluno(email_usuario): {}", e.getMessage());

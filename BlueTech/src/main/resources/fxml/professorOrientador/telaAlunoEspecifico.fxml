@@ -52,8 +52,8 @@
                 <ToggleButton fx:id="tgS6" styleClass="session-toggle" text="Sessão 6" />
 
                 <Region VBox.vgrow="ALWAYS" />
-                <ImageView fitHeight="64" fitWidth="64" opacity="0.85" preserveRatio="true">
-                    <image><Image url="@../../images/check.png" /></image>
+                <ImageView fitHeight="81.0" fitWidth="56.0" preserveRatio="true">
+                    <image><Image url="@../../assets/check.png" /></image>
                 </ImageView>
             </children>
         </VBox>

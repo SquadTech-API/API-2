@@ -133,8 +133,17 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             cardsBox.getChildren().add(card);
         }
     }
+    private Image carregarImagemPadrao() {
+        try {
+            return new Image(getClass().getResourceAsStream("/images/Usuario.png"));
+        } catch (Exception e) {
+            System.out.println("⚠️ Imagem padrão não encontrada no resources/assets/Usuario.png");
+            return new Image("https://cdn-icons-png.flaticon.com/512/847/847969.png"); // fallback online
+        }
+    }
 
-    private void abrirVisualizador(String nomeAluno, String semestre, String curso) {
+      private void abrirVisualizador(String nomeAluno, String semestre, String curso) {
+
         if (painelPrincipalController == null) return;
         try {
             VisualizadorTGController controller =
