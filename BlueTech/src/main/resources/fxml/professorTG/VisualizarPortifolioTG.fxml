@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorTG.VisualizarPortifolioTGController">
+<BorderPane xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.squadtech.bluetech.controller.professorTG.VisualizarPortifolioTGController"
+            stylesheets="@../../css/Style.css">
 
-    <children>
-        <VBox layoutX="20" layoutY="20" spacing="15" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+    <!-- Cabeçalho com título centralizado e filtros à direita -->
+    <top>
+        <VBox spacing="10.0">
             <padding>
-                <Insets bottom="20" left="20" right="20" top="20" />
+                <Insets top="15" bottom="15" left="20" right="20"/>
             </padding>
 
-            <!-- Título -->
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Visualizar Portfólios Finalizados" />
-
-            <!-- Filtros -->
-            <HBox spacing="10">
-                <Label text="Curso:" />
-                <ComboBox fx:id="comboCurso" prefWidth="180" />
-                <Label text="Semestre:" />
-                <ComboBox fx:id="comboSemestre" prefWidth="150" />
-                <Label text="Portfólio:" />
-                <ComboBox fx:id="comboPortifolio" prefWidth="180" />
-                <Button fx:id="btnBuscar" onAction="#buscarPortifolio" text="Buscar" />
+            <!-- Linha 1: Título centralizado com fundo branco e borda arredondada -->
+            <HBox alignment="CENTER"
+                  style="-fx-background-color: white;
+                         -fx-background-radius: 15;
+                         -fx-padding: 10;
+                         -fx-border-radius: 15;">
+                <Label text="Visualizar Portfólios Finalizados" styleClass="label-title"/>
             </HBox>
 
-            <!-- Scroll para cards -->
-            <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="450" styleClass="scroll-naked" vbarPolicy="AS_NEEDED">
-                <content>
-                    <VBox fx:id="cardsBox" spacing="12">
-                        <padding>
-                            <Insets bottom="10" left="10" right="10" top="10" />
-                        </padding>
-                    </VBox>
-                </content>
-            </ScrollPane>
+            <!-- Linha 2: Filtros alinhados à direita -->
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Label text="Curso:" />
+                <ComboBox fx:id="comboCurso" prefWidth="180.0"/>
+                <Button fx:id="btnBuscar" onAction="#buscarPortifolio" text="Buscar" styleClass="button-primary"/>
+            </HBox>
         </VBox>
-    </children>
-</AnchorPane>
+    </top>
+
+    <!-- Área de cards -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+            <content>
+                <FlowPane fx:id="flowCards" alignment="TOP_CENTER" hgap="20" vgap="20">
+                    <padding>
+                        <Insets top="20" bottom="20" left="20" right="20"/>
+                    </padding>
+                </FlowPane>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

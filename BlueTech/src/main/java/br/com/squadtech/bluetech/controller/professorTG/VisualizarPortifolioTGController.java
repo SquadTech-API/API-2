@@ -5,14 +5,17 @@ import br.com.squadtech.bluetech.dao.TGSecaoDAO;
 import br.com.squadtech.bluetech.dao.OrientaDAO;
 import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
+import br.com.squadtech.bluetech.dao.UsuarioDAO;
+
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.Orienta;
 import br.com.squadtech.bluetech.model.Professor;
 import br.com.squadtech.bluetech.model.TGPortifolio;
-import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.model.Usuario;
+
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -20,6 +23,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -75,12 +79,15 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     public void criarCards(String semestre, String curso) {
         cardsBox.getChildren().clear();
 
-        List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null);
+        List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null, null);
 
         for (PerfilAluno a : alunos) {
             String nomeAluno = a.getNomeAluno();
 
-            List<Orienta> orientacoes = orientaDAO.findByAlunoId(a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
+            List<Orienta> orientacoes = orientaDAO.findByAlunoId(
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
+            );
+
             String professores = "Sem professor";
             if (orientacoes != null && !orientacoes.isEmpty()) {
                 professores = orientacoes.stream()
@@ -95,10 +102,16 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                 if (professores.isBlank()) professores = "Sem professor";
             }
 
-            TGPortifolio portifolio = portifolioDAO.findByAlunoId(a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
+            TGPortifolio portifolio = portifolioDAO.findByAlunoId(
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
+            );
+
             String statusPortifolio;
             if (portifolio != null) {
-                statusPortifolio = portifolio.getStatus() + (portifolio.getPercentualConclusao() != null ? (" - " + portifolio.getPercentualConclusao() + "%") : "");
+                statusPortifolio = portifolio.getStatus()
+                        + (portifolio.getPercentualConclusao() != null
+                        ? (" - " + portifolio.getPercentualConclusao() + "%")
+                        : "");
             } else if (a.getEmailUsuario() != null) {
                 int qtd = tgSecaoDAO.countSecoes(a.getEmailUsuario());
                 statusPortifolio = qtd > 0 ? ("Seções enviadas: " + qtd) : "Sem envios";
@@ -131,6 +144,19 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             eye.setOnAction(e -> abrirVisualizador(nomeAluno, semestre, curso));
 
             cardsBox.getChildren().add(card);
+        }
+    }
+
+    /**
+     * Carrega uma imagem padrão de usuário (caso você queira usar em cards/foto).
+     * Ainda não está sendo usada aqui, mas já deixo pronto pra reaproveitar.
+     */
+    private Image carregarImagemPadrao() {
+        try {
+            return new Image(getClass().getResourceAsStream("/images/Usuario.png"));
+        } catch (Exception e) {
+            System.out.println("⚠️ Imagem padrão não encontrada no resources/assets/Usuario.png");
+            return new Image("https://cdn-icons-png.flaticon.com/512/847/847969.png"); // fallback online
         }
     }
 

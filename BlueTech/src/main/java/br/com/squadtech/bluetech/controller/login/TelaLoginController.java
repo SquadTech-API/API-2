@@ -3,9 +3,11 @@ package br.com.squadtech.bluetech.controller.login;
 import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
+import br.com.squadtech.bluetech.util.StageUtils;
 import com.jfoenix.controls.JFXButton;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -19,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -115,6 +118,7 @@ public class TelaLoginController {
                 }
 
                 Stage newStage = new Stage();
+                StageUtils.applyAppIcon(newStage);
                 newStage.setTitle("BlueTech - Plataforma de Gestão de TG do Tipo Portfólio");
                 newStage.setScene(new Scene(root));
                 newStage.setMinWidth(960);

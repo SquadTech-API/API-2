@@ -14,6 +14,8 @@ public class PerfilAluno {
 
     // Campo auxiliar (não mapeado diretamente) para exibir o nome do aluno a partir de usuario.nome
     private transient String nomeAluno;
+    // Campo auxiliar para o status do último feedback
+    private transient String ultimoFeedbackStatus;
 
     //Construtores, getters e setters
     public PerfilAluno() {}
@@ -66,4 +68,7 @@ public class PerfilAluno {
 
     public String getNomeAluno() { return nomeAluno; }
     public void setNomeAluno(String nomeAluno) { this.nomeAluno = nomeAluno; }
+
+    public String getUltimoFeedbackStatus() { return ultimoFeedbackStatus; }
+    public void setUltimoFeedbackStatus(String ultimoFeedbackStatus) { this.ultimoFeedbackStatus = ultimoFeedbackStatus; }
 }

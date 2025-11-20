@@ -10,13 +10,18 @@ module br.com.squadtech.bluetech {
     requires de.jensd.fx.glyphs.fontawesome;
     requires jbcrypt;
     requires com.zaxxer.hikari;
+    requires org.slf4j;
     requires de.jensd.fx.glyphs.materialicons;
+
     requires flexmark;
     requires javafx.web;
-    requires org.slf4j;
+
     requires ch.qos.logback.classic;
+
     requires jakarta.mail;
+    requires jakarta.activation;
     requires javafx.base;
+    requires javafx.media;
 
 
     opens br.com.squadtech.bluetech to javafx.fxml;
@@ -34,5 +39,9 @@ module br.com.squadtech.bluetech {
     opens br.com.squadtech.bluetech.controller.professorTG to javafx.fxml;
     exports br.com.squadtech.bluetech.controller.professorTG;
 
+    opens br.com.squadtech.bluetech.model to javafx.fxml;
+    exports br.com.squadtech.bluetech.model;
+
+    opens br.com.squadtech.bluetech.config to javafx.fxml;
     exports br.com.squadtech.bluetech.util;
 }

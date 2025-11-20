@@ -17,7 +17,7 @@
          <children>
             <ImageView fitHeight="180.0" fitWidth="200.0" layoutX="15.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/Logo.png" />
+                  <Image url="@../../assets/Logo.png" />
                </image>
             </ImageView>
          </children></AnchorPane>
@@ -60,7 +60,7 @@
                         </JFXButton>
                         <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="238.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/login.png" />
+                              <Image url="@../../assets/login.png" />
                            </image>
                         </ImageView>
                      </children>

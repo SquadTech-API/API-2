@@ -6,6 +6,7 @@ import br.com.squadtech.bluetech.service.EmailService;
 import br.com.squadtech.bluetech.service.NotificationService;
 
 import java.sql.Connection;
+import java.util.Map;
 
 public final class NotifierFacade {
 
@@ -33,6 +34,9 @@ public final class NotifierFacade {
             }
         }
         return INSTANCE;
+    }
+
+    public static void notify(Object alunoTgAprovado, Map<String, Object> payload) {
     }
 
     public String notifySubmission(long versaoId) throws Exception {

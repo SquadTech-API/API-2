@@ -1,5 +1,6 @@
 package br.com.squadtech.bluetech.config;
 
+import br.com.squadtech.bluetech.dao.AgendamentoDefesaDAO;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.dao.TGVersaoDAO;
@@ -15,12 +16,20 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatabaseInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(DatabaseInitializer.class);
+    private static final AtomicBoolean INITIALIZED = new AtomicBoolean(false);
 
     public static void init() {
+        // evita rodar duas vezes em diferentes entrypoints
+        if (!INITIALIZED.compareAndSet(false, true)) {
+            log.debug("DatabaseInitializer já executado, ignorando chamada adicional.");
+            return;
+        }
+
         //Parte 0: Cria o database se não existir
         ConnectionFactory.createDatabaseIfNotExists();
 
@@ -34,6 +43,7 @@ public class DatabaseInitializer {
         OrientaDAO orientaDAO = new OrientaDAO();
         TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+        AgendamentoDefesaDAO agendamentoDefesaDAO = new AgendamentoDefesaDAO();
 
         //Parte 1: Cria tabelas se não existirem
         usuarioDAO.createTableIfNotExists();
@@ -45,8 +55,9 @@ public class DatabaseInitializer {
         portifolioDAO.createTableIfNotExists();
         feedbackDAO.createTableIfNotExists();
         solicitacaoDAO.createTableIfNotExists();
+        agendamentoDefesaDAO.createTableIfNotExists();
 
-        // Migrações/índices auxiliares
+        //Migrações/índices auxiliares
         TGVersaoDAO.ensureSchemaUpToDate();
         tgSecaoDAO.ensureSchemaUpToDate();
         ensurePerfilAlunoUniqueEmail();
@@ -64,7 +75,7 @@ public class DatabaseInitializer {
             try {
                 st.executeUpdate("CREATE UNIQUE INDEX uk_perfil_aluno_email ON Perfil_Aluno(email_usuario)");
             } catch (Exception ignored) {
-                // pode já existir
+                //pode já existir
             }
         } catch (Exception e) {
             log.warn("Falha ao garantir índice único em Perfil_Aluno(email_usuario): {}", e.getMessage());

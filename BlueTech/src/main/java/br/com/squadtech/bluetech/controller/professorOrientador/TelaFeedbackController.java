@@ -1,159 +1,255 @@
 package br.com.squadtech.bluetech.controller.professorOrientador;
 
-import br.com.squadtech.bluetech.dao.TGVersaoDAO;
+import br.com.squadtech.bluetech.controller.SupportsMainController;
+import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import br.com.squadtech.bluetech.dao.FeedbackDAO;
+import br.com.squadtech.bluetech.dao.TGVersaoDAO;
+import br.com.squadtech.bluetech.model.FeedbackItem;
 import br.com.squadtech.bluetech.model.TGVersao;
-import br.com.squadtech.bluetech.notify.NotifierFacade;
-import br.com.squadtech.bluetech.dao.NotifierEvents;
 import br.com.squadtech.bluetech.util.Toast;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
-public class TelaFeedbackController {
+public class TelaFeedbackController implements SupportsMainController {
 
-    @FXML private ScrollPane sp_professorTG_Info;
-    @FXML private VBox vb_professorTG_InfoConteudo;
-    @FXML private TextArea ta_professorTG_Feedback;
-    @FXML private Button btn_professorTG_finalizar;
+    private static final Logger log = LoggerFactory.getLogger(TelaFeedbackController.class);
+
+    @FXML private VBox vbFeedbackForm;
     @FXML private Label lblAlunoNome;
+    @FXML private Button btn_professorTG_finalizar;
+    @FXML private Button btnAprovado;
+    @FXML private TextArea ta_comentario_geral;
 
-    private long secaoId;
-    private long professorId; // professor logado
+    private PainelPrincipalController painelPrincipalController;
+
+    private long versaoId;
+    private long professorId;
     private final TGVersaoDAO tgVersaoDAO = new TGVersaoDAO();
     private final FeedbackDAO feedbackDAO = new FeedbackDAO();
 
+    private final Map<String, FeedbackItemComponents> feedbackComponents = new HashMap<>();
+
+    @Override
+    public void setPainelPrincipalController(PainelPrincipalController controller) {
+        this.painelPrincipalController = controller;
+    }
+
+    private static class FeedbackItemComponents {
+        ToggleGroup group;
+        RadioButton rbOk;
+        RadioButton rbAjuste;
+        TextArea taComentario;
+    }
+
     @FXML
     private void initialize() {
-        // Inicialmente desabilita o botão se TextArea estiver vazio
         btn_professorTG_finalizar.setDisable(true);
-
-        // Adiciona listener para habilitar/desabilitar botão conforme texto
-        ta_professorTG_Feedback.textProperty().addListener((observable, oldValue, newValue) -> {
-            btn_professorTG_finalizar.setDisable(newValue.trim().isEmpty());
-        });
-    }
-
-    /**
-     * Seta a seção/versão do TG do aluno e atualiza o nome do aluno.
-     */
-    public void setAlunoSecao(long secaoId, String nomeAluno) {
-        this.secaoId = secaoId;
-
-        if (lblAlunoNome != null) {
-            lblAlunoNome.setText(nomeAluno != null ? nomeAluno : "Nome do Aluno");
+        if (btnAprovado != null) {
+            btnAprovado.setDisable(true);
         }
-
-        carregarInformacoesAluno();
     }
 
-    /**
-     * Seta o professor que está logado (quem está dando o feedback)
-     */
-    public void setProfessorId(long professorId) {
+    public void setAlunoVersao(long versaoId, String nomeAluno, long professorId) {
+        this.versaoId = versaoId;
         this.professorId = professorId;
+        lblAlunoNome.setText(nomeAluno);
+        carregarCamposFeedback();
+        preencherComFeedbackExistente();
+    }
+
+    private void carregarCamposFeedback() {
+        TGVersao v = tgVersaoDAO.findById((int) versaoId);
+        if (v == null) return;
+
+        criarCampo("Problema:", v.getProblema(), "problema");
+        criarCampo("Solução:", v.getSolucao(), "solucao");
+        criarCampo("Repositório:", v.getRepositorio(), "repositorio");
+        criarCampo("LinkedIn:", v.getLinkedin(), "linkedin");
+        criarCampo("Tecnologias:", v.getTecnologias(), "tecnologias");
+        criarCampo("Contribuições:", v.getContribuicoes(), "contribuicoes");
+        criarCampo("Hard Skills:", v.getHardSkills(), "hardSkills");
+        criarCampo("Soft Skills:", v.getSoftSkills(), "softSkills");
+    }
+
+    private void criarCampo(String titulo, String conteudo, String campoId) {
+        VBox campoBox = new VBox(5);
+
+        Label lblTitulo = new Label(titulo);
+        lblTitulo.setFont(Font.font("System", FontWeight.BOLD, 14));
+
+        TextField tf = new TextField(conteudo != null ? conteudo : "");
+        tf.setEditable(false);
+        tf.setStyle("-fx-opacity: 1; -fx-background-color: #f9f9f9;");
+
+        HBox botoes = new HBox(10);
+        RadioButton rbOk = new RadioButton("OK");
+        RadioButton rbAjuste = new RadioButton("Ajuste");
+        ToggleGroup group = new ToggleGroup();
+        rbOk.setToggleGroup(group);
+        rbAjuste.setToggleGroup(group);
+        botoes.getChildren().addAll(rbOk, rbAjuste);
+
+        TextArea taComentario = new TextArea();
+        taComentario.setPromptText("Descreva o ajuste necessário...");
+        taComentario.setVisible(false);
+        taComentario.setManaged(false);
+        taComentario.setPrefHeight(60);
+
+        group.selectedToggleProperty().addListener((obs, old, novo) -> {
+            if (novo == null) return;
+            boolean isAjuste = novo == rbAjuste;
+            taComentario.setVisible(isAjuste);
+            taComentario.setManaged(isAjuste);
+            atualizarEstadoBotoes();
+        });
+
+        campoBox.getChildren().addAll(lblTitulo, tf, botoes, taComentario);
+        campoBox.setStyle("-fx-padding: 10; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
+
+        vbFeedbackForm.getChildren().add(campoBox);
+
+        FeedbackItemComponents comp = new FeedbackItemComponents();
+        comp.group = group;
+        comp.rbOk = rbOk;
+        comp.rbAjuste = rbAjuste;
+        comp.taComentario = taComentario;
+        feedbackComponents.put(campoId, comp);
     }
 
     /**
-     * Carrega as informações da versão do aluno (somente leitura) no ScrollPane
+     * Atualiza o estado dos botões:
+     *  - Finalizar: habilita se todos os campos estiverem selecionados E existir algum AJUSTE
+     *  - Aprovado: habilita apenas se TODOS os campos estiverem selecionados e TODOS forem OK
      */
-    private void carregarInformacoesAluno() {
-        if (vb_professorTG_InfoConteudo == null) return;
+    private void atualizarEstadoBotoes() {
+        boolean allSelected = feedbackComponents.values().stream()
+                .allMatch(c -> c.group.getSelectedToggle() != null);
 
-        vb_professorTG_InfoConteudo.getChildren().clear();
+        boolean anyAjuste = feedbackComponents.values().stream()
+                .anyMatch(c -> c.rbAjuste.isSelected());
 
-        // Buscar a lista de versões ligadas à seção e pegar a mais recente
-        TGVersao versao = null;
-        List<TGVersao> lista = tgVersaoDAO.listBySecaoId((int) secaoId);
-        if (lista != null && !lista.isEmpty()) {
-            versao = lista.get(0); // já vem ordenado por Data_Criacao DESC
+        boolean allOk = allSelected && feedbackComponents.values().stream()
+                .allMatch(c -> c.rbOk.isSelected());
+
+        // Finalizar só funciona para casos com AJUSTE
+        btn_professorTG_finalizar.setDisable(!(allSelected && anyAjuste));
+
+        // Aprovado só quando tudo está OK
+        if (btnAprovado != null) {
+            btnAprovado.setDisable(!allOk);
         }
-
-        TextFlow textFlow = new TextFlow();
-
-        if (versao != null) {
-            adicionarSecao(textFlow, "Problema:", versao.getProblema());
-            adicionarSecao(textFlow, "Solução:", versao.getSolucao());
-            adicionarSecao(textFlow, "Repositório:", versao.getRepositorio());
-            adicionarSecao(textFlow, "Linkedin:", versao.getLinkedin());
-            adicionarSecao(textFlow, "Tecnologias:", versao.getTecnologias());
-            adicionarSecao(textFlow, "Contribuições:", versao.getContribuicoes());
-            adicionarSecao(textFlow, "Hard Skills:", versao.getHardSkills());
-            adicionarSecao(textFlow, "Soft Skills:", versao.getSoftSkills());
-        } else {
-            textFlow.getChildren().add(criarConteudo("Nenhuma informação encontrada para esta seção."));
-        }
-
-        vb_professorTG_InfoConteudo.getChildren().add(textFlow);
-        sp_professorTG_Info.setFitToWidth(true);
     }
 
-    private void adicionarSecao(TextFlow textFlow, String titulo, String conteudo) {
-        textFlow.getChildren().add(criarTitulo(titulo));
-        textFlow.getChildren().add(criarConteudo(conteudo));
+    // Mantém por compatibilidade
+    private void verificarCamposPreenchidos() {
+        atualizarEstadoBotoes();
     }
 
-    private Text criarTitulo(String texto) {
-        Text t = new Text(texto + "\n");
-        t.setFont(Font.font("System", FontWeight.BOLD, 16));
-        return t;
-    }
-
-    private Text criarConteudo(String texto) {
-        Text t = new Text((texto != null ? texto : "") + "\n\n");
-        t.setFont(Font.font("System", FontWeight.NORMAL, 14));
-        return t;
-    }
-
-    /**
-     * Salva o feedback no banco e exibe alerta de sucesso antes de fechar a tela
-     */
     @FXML
     private void finalizar() {
-        String comentario = ta_professorTG_Feedback.getText().trim();
-        if (comentario.isEmpty()) return;
+        try {
+            List<FeedbackItem> itens = new ArrayList<>();
 
-        // Descobre a versão mais recente ligada a esta seção para salvar feedback
-        List<TGVersao> lista = tgVersaoDAO.listBySecaoId((int) secaoId);
-        Integer versaoId = (lista != null && !lista.isEmpty()) ? lista.get(0).getIdSecaoApi() : null;
+            for (Map.Entry<String, FeedbackItemComponents> e : feedbackComponents.entrySet()) {
+                String campo = e.getKey();
+                FeedbackItemComponents c = e.getValue();
+                String status = c.rbOk.isSelected() ? "OK" : "AJUSTE";
+                String comentario = c.taComentario.getText().trim();
 
-        Long feedbackId = null;
-        if (versaoId != null) {
-            feedbackId = feedbackDAO.salvarFeedbackReturnId(versaoId, professorId, comentario, "AJUSTES");
-        }
-
-        Alert alert;
-        if (feedbackId != null && feedbackId > 0) {
-            // Enfileira notificação assíncrona ao aluno
-            NotifierEvents.onFeedbackSaved(feedbackId);
-            if (btn_professorTG_finalizar != null && btn_professorTG_finalizar.getScene() != null) {
-                Toast.show(btn_professorTG_finalizar.getScene(), "Notificação de feedback enfileirada.");
+                if ("AJUSTE".equals(status) && comentario.isEmpty()) {
+                    Toast.show(btn_professorTG_finalizar.getScene(),
+                            "Informe o comentário para o campo: " + campo);
+                    return;
+                }
+                itens.add(new FeedbackItem(null, campo, status, comentario));
             }
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Sucesso");
-            alert.setHeaderText(null);
-            alert.setContentText("Feedback enviado com sucesso! Notificação de e-mail enfileirada.");
-            alert.showAndWait().ifPresent(r -> {
-                if (btn_professorTG_finalizar.getScene() != null) {
-                    btn_professorTG_finalizar.getScene().getWindow().hide();
+
+            String comentarioGeral = ta_comentario_geral.getText().trim();
+
+            Long id = feedbackDAO.salvarFeedbackReturnIdAndNotify(
+                    versaoId, professorId, comentarioGeral, itens);
+
+            if (id != null && id > 0) {
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Feedback enviado e aluno notificado!", ButtonType.OK).showAndWait();
+
+                painelPrincipalController.loadContent("/fxml/professorOrientador/telaOrientador.fxml");
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Erro ao salvar feedback!").showAndWait();
+            }
+
+        } catch (IOException io) {
+            log.error("Erro ao abrir tela do orientador: {}", io.getMessage(), io);
+            new Alert(Alert.AlertType.ERROR, "Erro ao abrir tela do orientador!").showAndWait();
+
+        } catch (Exception e) {
+            log.error("Erro ao finalizar feedback: {}", e.getMessage(), e);
+            new Alert(Alert.AlertType.ERROR, "Erro ao finalizar feedback!").showAndWait();
+        }
+    }
+
+    @FXML
+    private void aprovar() {
+        // Garante visualmente que está tudo OK
+        feedbackComponents.forEach((campo, comp) -> {
+            comp.rbOk.setSelected(true);
+            comp.taComentario.clear();
+            comp.taComentario.setVisible(false);
+            comp.taComentario.setManaged(false);
+        });
+        atualizarEstadoBotoes();
+        finalizar(); // status geral = APROVADO lá no DAO, pois não haverá AJUSTE
+    }
+
+    private void preencherComFeedbackExistente() {
+        try {
+            var feedback = feedbackDAO.buscarPorVersaoId(versaoId);
+            if (feedback == null) return;
+
+            if (feedback.getComentario() != null) {
+                ta_comentario_geral.setText(feedback.getComentario());
+            }
+
+            Map<String, FeedbackItem> itensPorCampo = new HashMap<>();
+            if (feedback.getItens() != null) {
+                for (FeedbackItem it : feedback.getItens()) {
+                    if (it.getCampo() != null) {
+                        itensPorCampo.put(it.getCampo(), it);
+                    }
+                }
+            }
+
+            feedbackComponents.forEach((campoId, comp) -> {
+                FeedbackItem salvo = itensPorCampo.get(campoId);
+                if (salvo == null) return;
+
+                String st = salvo.getStatus() != null ? salvo.getStatus().toUpperCase() : "";
+                if ("AJUSTE".equals(st)) {
+                    comp.rbAjuste.setSelected(true);
+                    comp.taComentario.setText(
+                            salvo.getComentario() != null ? salvo.getComentario() : ""
+                    );
+                    comp.taComentario.setVisible(true);
+                    comp.taComentario.setManaged(true);
+                } else {
+                    comp.rbOk.setSelected(true);
+                    comp.taComentario.setVisible(false);
+                    comp.taComentario.setManaged(false);
                 }
             });
-        } else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao enviar feedback!");
-            alert.showAndWait();
+
+            atualizarEstadoBotoes();
+
+        } catch (Exception e) {
+            log.warn("Não foi possível pré-carregar feedback existente: {}", e.getMessage());
         }
     }
 }
