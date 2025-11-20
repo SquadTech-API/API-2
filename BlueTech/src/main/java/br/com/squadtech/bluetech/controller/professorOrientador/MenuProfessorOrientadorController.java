@@ -4,6 +4,9 @@ import br.com.squadtech.bluetech.config.SmtpProps;
 import br.com.squadtech.bluetech.controller.MenuAware;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.model.Professor;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.service.EmailService;
 import com.jfoenix.controls.JFXButton;
 import jakarta.mail.MessagingException;
@@ -33,8 +36,6 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
     @FXML
     private Label lblProfessorOri;
 
-    @FXML
-    private Label lblSemestreOri;
 
     @FXML
     private AnchorPane paneSuperiorMenuProfessorOri;
@@ -112,49 +113,6 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         }
     }
 
-    @FXML
-    void enviarEmail(ActionEvent event) {
-        TextInputDialog dlgTo = new TextInputDialog();
-        dlgTo.setTitle("Enviar Email");
-        dlgTo.setHeaderText("Destinatário");
-        dlgTo.setContentText("E-mail para enviar:");
-        var toOpt = dlgTo.showAndWait();
-        if (toOpt.isEmpty()) return;
-
-        TextInputDialog dlgSub = new TextInputDialog("Teste BlueTech");
-        dlgSub.setTitle("Enviar Email");
-        dlgSub.setHeaderText("Assunto");
-        dlgSub.setContentText("Assunto:");
-        var subOpt = dlgSub.showAndWait();
-        if (subOpt.isEmpty()) return;
-
-        TextInputDialog dlgBody = new TextInputDialog("Olá! Este é um teste do BlueTech.");
-        dlgBody.setTitle("Enviar Email");
-        dlgBody.setHeaderText("Corpo da mensagem");
-        dlgBody.setContentText("Mensagem:");
-        var bodyOpt = dlgBody.showAndWait();
-        if (bodyOpt.isEmpty()) return;
-
-        EmailService email = new EmailService(
-                SmtpProps.FROM,
-                new EmailService.SmtpConfig(
-                        SmtpProps.HOST,
-                        SmtpProps.PORT,
-                        SmtpProps.USER,
-                        SmtpProps.PASS,
-                        SmtpProps.STARTTLS,
-                        SmtpProps.SSL
-                )
-        );
-        try {
-            email.send(toOpt.get(), subOpt.get(), bodyOpt.get());
-            showInfo("E-mail enviado para: " + toOpt.get());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            showError("Falha ao enviar e-mail: " + e.getMessage());
-        }
-    }
-
     private void showInfo(String msg) {
         var alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setHeaderText("Notificação");
@@ -168,6 +126,53 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    private void carregarDadosProfessor() {
+        try {
+            // 1. Usuário logado (onde está o NOME de verdade)
+            var usuario = SessaoUsuario.getUsuarioLogado();
+            if (usuario == null || usuario.getEmail() == null) {
+                lblProfessorOri.setText("PROFESSOR ORIENTADOR: (não identificado)");
+                return;
+            }
+
+            // 2. Nome do professor vem direto do Usuario
+            String nome = (usuario.getNome() != null && !usuario.getNome().isBlank())
+                    ? usuario.getNome()
+                    : usuario.getEmail();
+            lblProfessorOri.setText(nome);
+
+            // 3. Busca registro na tabela PROFESSOR para mostrar cargo / tipo TG
+            ProfessorDAO profDAO = new ProfessorDAO();
+            Professor professor = profDAO.findByUsuarioEmail(usuario.getEmail());
+
+            if (professor != null) {
+                String cargo = professor.getCargo();
+                String tipoTG = professor.getTipoTG();   // "TG1", "TG2", "AMBOS", etc.
+
+                StringBuilder sb = new StringBuilder();
+                if (cargo != null && !cargo.isBlank()) {
+                    sb.append(cargo);
+                }
+                if (tipoTG != null && !tipoTG.isBlank()) {
+                    if (sb.length() > 0) sb.append(" • ");
+                    sb.append("Tipo TG: ").append(tipoTG);
+                }
+
+                if (sb.length() == 0) {
+                    sb.append("Perfil não informado");
+                }
+
+
+            } else {
+                // Não tem linha na tabela professor, mas pelo menos mostra algo
+            }
+
+        } catch (Exception e) {
+            log.error("Erro ao carregar dados do professor orientador", e);
+            lblProfessorOri.setText("PROFESSOR ORIENTADOR: (erro ao carregar)");
+        }
+    }
+
 
     @FXML
     void initialize() {
@@ -175,11 +180,10 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         assert btnenviarEmail != null : "fx:id=\"btnenviarEmail\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert imgViewFotoProfessorOri != null : "fx:id=\"imgViewFotoProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert lblProfessorOri != null : "fx:id=\"lblProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
-        assert lblSemestreOri != null : "fx:id=\"lblSemestreOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert lblTituloProfessorOri != null : "fx:id=\"lblTituloProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert paneSuperiorMenuProfessorOri != null : "fx:id=\"paneSuperiorMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert splitPanelMenuProfessorOri != null : "fx:id=\"splitPanelMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert vboxMenuProfessorOri != null : "fx:id=\"vboxMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
-
+        carregarDadosProfessor();
     }
 }

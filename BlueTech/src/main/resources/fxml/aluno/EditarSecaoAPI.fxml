@@ -4,39 +4,111 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@../../css/Style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="br.com.squadtech.bluetech.controller.aluno.EditarSecaoAPIController">
+<BorderPane stylesheets="@../../css/Style.css"
+            xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.squadtech.bluetech.controller.aluno.EditarSecaoAPIController">
 
     <!-- Cabeçalho -->
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="header-bar">
             <padding>
                 <Insets bottom="15" left="20" right="20" top="15" />
             </padding>
 
-            <Label styleClass="label-title" text="Editar Seção API" HBox.hgrow="ALWAYS" />
+            <Label text="Editar Seção API"
+                   styleClass="label-title"
+                   HBox.hgrow="ALWAYS" />
 
-            <!-- Espaço elástico para alinhar o botão à direita -->
             <Region HBox.hgrow="ALWAYS" />
 
-            <Button fx:id="btnVoltar" onAction="#voltarTelaSecaoAPI" styleClass="button-secondary" text="Voltar" />
+            <Button fx:id="btnVoltar"
+                    onAction="#voltarTelaSecaoAPI"
+                    text="Voltar"
+                    styleClass="button-secondary" />
         </HBox>
     </top>
 
-    <!-- Corpo principal dividido -->
+    <!-- Corpo principal: formulário + feedback -->
     <center>
-        <SplitPane dividerPositions="0.7">
+        <SplitPane dividerPositions="0.65">
             <items>
 
-                <!-- Painel Esquerdo: Editor Markdown -->
-                <VBox spacing="10">
-                    <padding>
-                        <Insets bottom="20" left="20" right="20" top="20" />
-                    </padding>
+                <!-- Painel Esquerdo: Formulário da Seção -->
+                <!-- Painel Esquerdo: Formulário da Seção -->
+                <ScrollPane fitToWidth="true">
+                    <content>
+                        <VBox spacing="16" style="-fx-padding: 20;">
 
-                    <Label style="-fx-font-weight: bold;" text="Conteúdo da Seção (Markdown editável):" />
+                            <!-- PROBLEMA -->
+                            <VBox spacing="4">
+                                <Label text="Problema:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taProblema"
+                                          wrapText="true"
+                                          prefRowCount="3"
+                                          VBox.vgrow="NEVER"/>
+                            </VBox>
 
-                    <TextArea fx:id="txtMarkdownEditor" promptText="Edite aqui o conteúdo da seção em formato Markdown..." style="-fx-font-family: Consolas; -fx-font-size: 12px;" wrapText="true" VBox.vgrow="ALWAYS" />
-                </VBox>
+                            <!-- SOLUÇÃO -->
+                            <VBox spacing="4">
+                                <Label text="Solução:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taSolucao"
+                                          wrapText="true"
+                                          prefRowCount="3" />
+                            </VBox>
+
+                            <!-- REPOSITÓRIO -->
+                            <VBox spacing="4">
+                                <Label text="Repositório:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taRepositorio"
+                                          wrapText="true"
+                                          prefRowCount="2" />
+                            </VBox>
+
+                            <!-- LINKEDIN -->
+                            <VBox spacing="4">
+                                <Label text="LinkedIn:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taLinkedin"
+                                          wrapText="true"
+                                          prefRowCount="2" />
+                            </VBox>
+
+                            <!-- TECNOLOGIAS -->
+                            <VBox spacing="4">
+                                <Label text="Tecnologias:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taTecnologias"
+                                          wrapText="true"
+                                          prefRowCount="3" />
+                            </VBox>
+
+                            <!-- CONTRIBUIÇÕES -->
+                            <VBox spacing="4">
+                                <Label text="Contribuições:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taContribuicoes"
+                                          wrapText="true"
+                                          prefRowCount="3" />
+                            </VBox>
+
+                            <!-- HARD SKILLS -->
+                            <VBox spacing="4">
+                                <Label text="Hard Skills:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taHardSkills"
+                                          wrapText="true"
+                                          prefRowCount="3" />
+                            </VBox>
+
+                            <!-- SOFT SKILLS -->
+                            <VBox spacing="4">
+                                <Label text="Soft Skills:" style="-fx-font-weight: bold;" />
+                                <TextArea fx:id="taSoftSkills"
+                                          wrapText="true"
+                                          prefRowCount="3" />
+                            </VBox>
+
+                        </VBox>
+                    </content>
+                </ScrollPane>
+
 
                 <!-- Painel Direito: Feedback do Orientador -->
                 <VBox spacing="10">
@@ -44,9 +116,14 @@
                         <Insets bottom="20" left="20" right="20" top="20" />
                     </padding>
 
-                    <Label style="-fx-font-weight: bold;" text="Feedback do Orientador:" />
+                    <Label text="Feedback do Orientador"
+                           style="-fx-font-weight: bold; -fx-font-size: 14px;" />
 
-                    <TextArea fx:id="txtFeedbackOrientador" editable="false" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" wrapText="true" VBox.vgrow="ALWAYS" />
+                    <TextArea fx:id="txtFeedbackOrientador"
+                              editable="false"
+                              wrapText="true"
+                              VBox.vgrow="ALWAYS"
+                              style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" />
                 </VBox>
 
             </items>
@@ -60,9 +137,15 @@
                 <Insets bottom="15" left="20" right="20" top="15" />
             </padding>
 
-            <Button fx:id="btnCancelar" onAction="#cancelaMudancas" styleClass="button-secondary" text="Cancelar" />
+            <Button fx:id="btnCancelar"
+                    onAction="#cancelaMudancas"
+                    text="Cancelar"
+                    styleClass="button-secondary" />
 
-            <Button fx:id="btnSalvar" onAction="#salvarNovaVersaoSessaoAPI" styleClass="button-primary" text="Salvar Alterações" />
+            <Button fx:id="btnSalvar"
+                    onAction="#salvarNovaVersaoSessaoAPI"
+                    text="Salvar Alterações"
+                    styleClass="button-primary" />
         </HBox>
     </bottom>
 
