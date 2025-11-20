@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="AncorPanePerfilProfessor" prefHeight="700" prefWidth="900" styleClass="painel" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller">
+<AnchorPane fx:id="AncorPanePerfilProfessor" prefHeight="700" prefWidth="900" styleClass="painel" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaPerfilProfessorController">
 
     <!-- Scroll para ficar responsivo em janelas menores -->
     <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">

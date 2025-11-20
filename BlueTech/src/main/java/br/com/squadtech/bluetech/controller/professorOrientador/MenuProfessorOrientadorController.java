@@ -59,6 +59,10 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
     private JFXButton btnAgendamentoDefesa;
 
     @FXML
+    private JFXButton btnEditarPerfilprofessor;
+
+
+    @FXML
     void abrirSolicitacoesOrientacao(ActionEvent event) {
         if (painelPrincipalController != null) {
             try {
@@ -170,6 +174,19 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         } catch (Exception e) {
             log.error("Erro ao carregar dados do professor orientador", e);
             lblProfessorOri.setText("PROFESSOR ORIENTADOR: (erro ao carregar)");
+        }
+    }
+
+    @FXML
+    void abrirTelaPerfilProfessorOrientador() {
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadContent("/fxml/professorOrientador/TelaPerfilProfessorOrientador.fxml");
+            } catch (IOException e) {
+                log.error("Falha ao carregar TelaPerfilProfessorOrientador.fxml", e);
+            }
+        } else {
+            log.error("PainelPrincipalController não foi injetado em MenuProfessorOrientadorController.");
         }
     }
 
