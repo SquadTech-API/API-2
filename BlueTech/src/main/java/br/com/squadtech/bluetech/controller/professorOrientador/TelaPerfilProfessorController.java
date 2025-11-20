@@ -2,6 +2,7 @@ package br.com.squadtech.bluetech.controller.professorOrientador;
 
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.Professor;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
@@ -16,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,8 +70,61 @@ public class TelaPerfilProfessorController{
 
     @FXML
     void handleSalvar(ActionEvent event) {
+        try {
+            Usuario usuario = SessaoUsuario.getUsuarioLogado();
+            if (usuario == null) {
+                showAlert("Erro", "Usuário não encontrado. Faça login novamente.");
+                return;
+            }
+
+            String senhaAtual = txtSenhaAtual.getText();
+            String novaSenha = txtNovaSenha.getText();
+
+            // ---- VALIDAÇÕES ----
+
+            if (senhaAtual.isEmpty() || novaSenha.isEmpty()) {
+                showAlert("Erro", "Preencha todos os campos de senha.");
+                return;
+            }
+
+            // Verificar senha atual com BCrypt
+            if (!BCrypt.checkpw(senhaAtual, usuario.getSenha())) {
+                showAlert("Erro", "A senha atual está incorreta.");
+                return;
+            }
+
+            // Nova senha não pode ser igual à antiga
+            if (senhaAtual.equals(novaSenha)) {
+                showAlert("Erro", "A nova senha deve ser diferente da senha atual.");
+                return;
+            }
 
 
+            // ---- ATUALIZAR SENHA ----
+            String novoHash = BCrypt.hashpw(novaSenha, BCrypt.gensalt());
+
+            UsuarioDAO dao = new UsuarioDAO();
+            boolean updated = dao.updateSenhaProfessor(usuario.getEmail(), novoHash);
+
+            if (!updated) {
+                showAlert("Erro", "Não foi possível atualizar a senha.");
+                return;
+            }
+
+            // Atualiza na sessão
+
+            usuario.setSenha(novoHash);
+
+            showAlert("Sucesso", "Senha alterada com sucesso!");
+
+            // Limpa campos
+            txtSenhaAtual.clear();
+            txtNovaSenha.clear();
+
+
+        } catch (Exception e) {
+            showAlert("Erro", "Ocorreu um erro: " + e.getMessage());
+        }
     }
 
     @FXML
