@@ -25,6 +25,7 @@ public class TelaFeedbackController implements SupportsMainController {
     @FXML private VBox vbFeedbackForm;
     @FXML private Label lblAlunoNome;
     @FXML private Button btn_professorTG_finalizar;
+    @FXML private Button btnAprovado;
     @FXML private TextArea ta_comentario_geral;
 
     private PainelPrincipalController painelPrincipalController;
@@ -51,6 +52,9 @@ public class TelaFeedbackController implements SupportsMainController {
     @FXML
     private void initialize() {
         btn_professorTG_finalizar.setDisable(true);
+        if (btnAprovado != null) {
+            btnAprovado.setDisable(true);
+        }
     }
 
     public void setAlunoVersao(long versaoId, String nomeAluno, long professorId) {
@@ -81,12 +85,10 @@ public class TelaFeedbackController implements SupportsMainController {
         Label lblTitulo = new Label(titulo);
         lblTitulo.setFont(Font.font("System", FontWeight.BOLD, 14));
 
-        // TextField “placeholder” somente leitura
         TextField tf = new TextField(conteudo != null ? conteudo : "");
         tf.setEditable(false);
         tf.setStyle("-fx-opacity: 1; -fx-background-color: #f9f9f9;");
 
-        // Botões de OK/Ajuste
         HBox botoes = new HBox(10);
         RadioButton rbOk = new RadioButton("OK");
         RadioButton rbAjuste = new RadioButton("Ajuste");
@@ -95,7 +97,6 @@ public class TelaFeedbackController implements SupportsMainController {
         rbAjuste.setToggleGroup(group);
         botoes.getChildren().addAll(rbOk, rbAjuste);
 
-        // Comentário (visível apenas se Ajuste)
         TextArea taComentario = new TextArea();
         taComentario.setPromptText("Descreva o ajuste necessário...");
         taComentario.setVisible(false);
@@ -107,7 +108,7 @@ public class TelaFeedbackController implements SupportsMainController {
             boolean isAjuste = novo == rbAjuste;
             taComentario.setVisible(isAjuste);
             taComentario.setManaged(isAjuste);
-            verificarCamposPreenchidos();
+            atualizarEstadoBotoes();
         });
 
         campoBox.getChildren().addAll(lblTitulo, tf, botoes, taComentario);
@@ -123,18 +124,39 @@ public class TelaFeedbackController implements SupportsMainController {
         feedbackComponents.put(campoId, comp);
     }
 
-    private void verificarCamposPreenchidos() {
+    /**
+     * Atualiza o estado dos botões:
+     *  - Finalizar: habilita se todos os campos estiverem selecionados E existir algum AJUSTE
+     *  - Aprovado: habilita apenas se TODOS os campos estiverem selecionados e TODOS forem OK
+     */
+    private void atualizarEstadoBotoes() {
         boolean allSelected = feedbackComponents.values().stream()
                 .allMatch(c -> c.group.getSelectedToggle() != null);
-        btn_professorTG_finalizar.setDisable(!allSelected);
+
+        boolean anyAjuste = feedbackComponents.values().stream()
+                .anyMatch(c -> c.rbAjuste.isSelected());
+
+        boolean allOk = allSelected && feedbackComponents.values().stream()
+                .allMatch(c -> c.rbOk.isSelected());
+
+        // Finalizar só funciona para casos com AJUSTE
+        btn_professorTG_finalizar.setDisable(!(allSelected && anyAjuste));
+
+        // Aprovado só quando tudo está OK
+        if (btnAprovado != null) {
+            btnAprovado.setDisable(!allOk);
+        }
+    }
+
+    // Mantém por compatibilidade
+    private void verificarCamposPreenchidos() {
+        atualizarEstadoBotoes();
     }
 
     @FXML
     private void finalizar() {
         try {
-            // ===== monte os itens como você já faz acima =====
             List<FeedbackItem> itens = new ArrayList<>();
-            boolean temAjuste = false;
 
             for (Map.Entry<String, FeedbackItemComponents> e : feedbackComponents.entrySet()) {
                 String campo = e.getKey();
@@ -142,7 +164,6 @@ public class TelaFeedbackController implements SupportsMainController {
                 String status = c.rbOk.isSelected() ? "OK" : "AJUSTE";
                 String comentario = c.taComentario.getText().trim();
 
-                if ("AJUSTE".equals(status)) temAjuste = true;
                 if ("AJUSTE".equals(status) && comentario.isEmpty()) {
                     Toast.show(btn_professorTG_finalizar.getScene(),
                             "Informe o comentário para o campo: " + campo);
@@ -160,7 +181,6 @@ public class TelaFeedbackController implements SupportsMainController {
                 new Alert(Alert.AlertType.INFORMATION,
                         "Feedback enviado e aluno notificado!", ButtonType.OK).showAndWait();
 
-                // troca a tela na MESMA janela
                 painelPrincipalController.loadContent("/fxml/professorOrientador/telaOrientador.fxml");
             } else {
                 new Alert(Alert.AlertType.ERROR, "Erro ao salvar feedback!").showAndWait();
@@ -176,18 +196,28 @@ public class TelaFeedbackController implements SupportsMainController {
         }
     }
 
+    @FXML
+    private void aprovar() {
+        // Garante visualmente que está tudo OK
+        feedbackComponents.forEach((campo, comp) -> {
+            comp.rbOk.setSelected(true);
+            comp.taComentario.clear();
+            comp.taComentario.setVisible(false);
+            comp.taComentario.setManaged(false);
+        });
+        atualizarEstadoBotoes();
+        finalizar(); // status geral = APROVADO lá no DAO, pois não haverá AJUSTE
+    }
+
     private void preencherComFeedbackExistente() {
         try {
-            // Busca o feedback já salvo para esta versão (se existir)
             var feedback = feedbackDAO.buscarPorVersaoId(versaoId);
             if (feedback == null) return;
 
-            // Comentário geral
             if (feedback.getComentario() != null) {
                 ta_comentario_geral.setText(feedback.getComentario());
             }
 
-            // Mapeia itens por "campo" para facilitar acesso
             Map<String, FeedbackItem> itensPorCampo = new HashMap<>();
             if (feedback.getItens() != null) {
                 for (FeedbackItem it : feedback.getItens()) {
@@ -197,7 +227,6 @@ public class TelaFeedbackController implements SupportsMainController {
                 }
             }
 
-            // Itera pelos componentes montados em criarCampo(...) e aplica o que veio do banco
             feedbackComponents.forEach((campoId, comp) -> {
                 FeedbackItem salvo = itensPorCampo.get(campoId);
                 if (salvo == null) return;
@@ -205,29 +234,22 @@ public class TelaFeedbackController implements SupportsMainController {
                 String st = salvo.getStatus() != null ? salvo.getStatus().toUpperCase() : "";
                 if ("AJUSTE".equals(st)) {
                     comp.rbAjuste.setSelected(true);
-                    // Mostra e preenche o comentário
-                    comp.taComentario.setText(salvo.getComentario() != null ? salvo.getComentario() : "");
+                    comp.taComentario.setText(
+                            salvo.getComentario() != null ? salvo.getComentario() : ""
+                    );
                     comp.taComentario.setVisible(true);
                     comp.taComentario.setManaged(true);
                 } else {
-                    // Trata como OK para qualquer coisa diferente de AJUSTE
                     comp.rbOk.setSelected(true);
-                    // Garante que a área de comentário fique oculta
                     comp.taComentario.setVisible(false);
                     comp.taComentario.setManaged(false);
                 }
             });
 
-            // Se todos os itens tiverem seleção, habilita o botão
-            verificarCamposPreenchidos();
+            atualizarEstadoBotoes();
 
         } catch (Exception e) {
-            // só loga se quiser; não impede a tela de abrir
-            // log.warn("Não foi possível pré-carregar feedback existente: {}", e.getMessage(), e);
+            log.warn("Não foi possível pré-carregar feedback existente: {}", e.getMessage());
         }
     }
-
-
-
-
 }

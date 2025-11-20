@@ -188,6 +188,7 @@ public class PerfilAlunoDAO {
                 p.email_usuario,
                 p.idade,
                 p.foto,
+                p.link_github,
                 u.nome AS nome_aluno,
                 (
                     SELECT f.status FROM feedback f
@@ -232,6 +233,7 @@ public class PerfilAlunoDAO {
                     PerfilAluno a = new PerfilAluno();
                     a.setIdPerfilAluno(rs.getInt("id_perfil_aluno"));
                     a.setEmailUsuario(rs.getString("email_usuario"));
+                    a.setLinkGithub(rs.getString("link_github"));  // 👈 ESSA LINHA
                     int idade = rs.getInt("idade");
                     a.setIdade(rs.wasNull() ? null : idade);
                     a.setFoto(rs.getString("foto"));

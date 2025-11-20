@@ -9,12 +9,9 @@ import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -22,9 +19,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,11 +109,19 @@ public class TelaAlunosController implements SupportsMainController {
             boolean matchesNome = termo.isEmpty() || (a.getNomeAluno() != null && a.getNomeAluno().toLowerCase(Locale.ROOT).contains(termo));
             // Usamos o status do último feedback para determinar se está corrigido
             // 'APROVADO' significa corrigido. 'AJUSTES' ou null significa não corrigido/pendente.
-            String status = a.getUltimoFeedbackStatus();
-            boolean corrigido = "APROVADO".equals(status);
-            boolean matchesStatus = ToggleButonTodosAlunos.isSelected() ||
-                    (ToggleButtonCorrigidos.isSelected() && corrigido) ||
-                    (ToggleButtonNaoCorrigidos.isSelected() && !corrigido);
+            // status do último feedback (APROVADO / AJUSTES / null)
+            String fb = a.getUltimoFeedbackStatus();
+
+// Lógica correta:
+            boolean isCorrigido = "APROVADO".equals(fb) || "AJUSTES".equals(fb);
+            boolean isNaoCorrigido = !"APROVADO".equals(fb) && !"AJUSTES".equals(fb);
+// isto pega: null, EM_ANDAMENTO, PENDENTE, etc.
+
+            boolean matchesStatus =
+                    ToggleButonTodosAlunos.isSelected() ||
+                            (ToggleButtonCorrigidos.isSelected() && isCorrigido) ||
+                            (ToggleButtonNaoCorrigidos.isSelected() && isNaoCorrigido);
+
             if (matchesNome && matchesStatus) filtrados.add(a);
         }
 
@@ -131,42 +136,58 @@ public class TelaAlunosController implements SupportsMainController {
     }
 
     private Node criarCard(PerfilAluno a) {
-        if (a == null) {
-            log.error("Tentativa de criar card com PerfilAluno nulo.");
-            return new Label("Erro: Dados do aluno ausentes.");
-        }
-        HBox card = new HBox(8);
+
+        HBox card = new HBox(12);
         card.getStyleClass().addAll("card", "student-row");
         card.setAlignment(Pos.CENTER_LEFT);
         card.setCursor(Cursor.HAND);
-        card.setPrefHeight(65);
+        card.setPrefHeight(90);
 
+        VBox info = new VBox(4);
+
+        // NOME
         Label lblNome = new Label(a.getNomeAluno());
-        lblNome.setStyle("-fx-font-size: 18px;");
-        lblNome.setPrefWidth(438);
+        lblNome.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        Region spacer = new Region();
-        spacer.setPrefWidth(20);
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        // Idade
+        Label lblIdade = new Label("Idade: " + (a.getIdade() != null ? a.getIdade() : "—") + " Anos");
+        lblIdade.setStyle("-fx-font-size: 14px;");
 
-        Label lblDias = new Label(a.getUltimoFeedbackStatus() != null ? a.getUltimoFeedbackStatus() : "Pendente");
-        lblDias.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-        lblDias.setPrefWidth(150);
-        lblDias.setAlignment(Pos.CENTER_RIGHT);
+        // TIPO TG
+        Label lblLinkGithub = new Label("GitHub: " + (a.getLinkGithub() != null ? a.getLinkGithub() : "—"));
+        lblLinkGithub.setStyle("-fx-font-size: 14px;");
 
-        String status = a.getUltimoFeedbackStatus();
-        String iconPath = "APROVADO".equals(status) ? "/images/check.png" : "/images/excla.png";
+        // STATUS
+        String status = a.getUltimoFeedbackStatus() != null ? a.getUltimoFeedbackStatus() : "Pendente";
+        Label lblStatus = new Label("Status: " + status);
+        lblStatus.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        info.getChildren().addAll(lblNome, lblIdade, lblLinkGithub, lblStatus);
+
+        // ÍCONE
+        String iconPath = "APROVADO".equals(status)
+                ? "/images/check.png"
+                : "/images/excla.png";
+
         ImageView iv = new ImageView(loadImageSafe(iconPath));
-        iv.setFitWidth(28);
-        iv.setFitHeight(28);
+        iv.setFitWidth(32);
+        iv.setFitHeight(32);
         iv.setPreserveRatio(true);
 
-        card.getChildren().addAll(lblNome, spacer, lblDias, iv);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: rgba(0,0,0,0.04); -fx-background-radius: 8;"));
-        card.setOnMouseExited(e -> card.setStyle(""));
+        card.getChildren().addAll(info, spacer, iv);
 
-        // Clique: abre TelaAlunoEspecifico.fxml no painel principal (mesma janela)
+        // Hover
+        card.setOnMouseEntered(e ->
+                card.setStyle("-fx-background-color: rgba(0,0,0,0.04); -fx-background-radius: 10;")
+        );
+        card.setOnMouseExited(e ->
+                card.setStyle("")
+        );
+
+        // Clique → Abrir aluno específico
         card.setOnMouseClicked(e -> {
             try {
                 TelaAlunoEspecificoController controller =
@@ -183,7 +204,6 @@ public class TelaAlunosController implements SupportsMainController {
                 log.error("Erro ao abrir tela do aluno específico", ex);
             }
         });
-
 
         return card;
     }

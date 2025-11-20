@@ -85,7 +85,9 @@
     -fx-translate-y: 1px;
 }
 
-.button-primary { -fx-font-weight: 600; }
+.button-primary {
+    -fx-font-weight: 600;
+}
 
 .button-secondary {
     -fx-background-color: linear-gradient(to bottom, #e0ecff, #c7d2fe);
@@ -221,7 +223,9 @@
     -fx-border-color: #e5e7eb;
     -fx-border-width: 1 0 0 0;
 }
-.titled-pane .label { -fx-text-fill: #334155; }
+.titled-pane .label {
+    -fx-text-fill: #334155;
+}
 
 /* ===========================
    SCROLL / ROLAGEM
@@ -229,9 +233,17 @@
 
 .scroll-pane { -fx-background-color: transparent; }
 .scroll-pane .viewport { -fx-background-color: transparent; }
-.scroll-bar:horizontal, .scroll-bar:vertical { -fx-background-color: transparent; }
-.scroll-bar .thumb { -fx-background-color: rgba(15,23,42,0.25); -fx-background-radius: 4; }
-.scroll-bar .thumb:hover { -fx-background-color: rgba(15,23,42,0.35); }
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+.scroll-bar .thumb {
+    -fx-background-color: rgba(15,23,42,0.25);
+    -fx-background-radius: 4;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(15,23,42,0.35);
+}
 
 /* ===========================
    LISTAS / SPLIT
@@ -283,6 +295,10 @@
    BUSCA / FILTROS / ICONS
    =========================== */
 
+.card-flip-front {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+}
 .card-flip-back {
     -fx-background-color: #f9fafb;
     -fx-background-radius: 10;
@@ -314,7 +330,10 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 6, 0, 1, 1);
     -fx-padding: 2;
 }
-.filters-row { -fx-spacing: 10; }
+
+.filters-row {
+    -fx-spacing: 10;
+}
 
 .botoes {
     -fx-background-color:
@@ -324,7 +343,7 @@
     -fx-border-color: linear-gradient(to bottom, rgba(37,99,235,0.6), rgba(30,58,138,0.4));
     -fx-border-width: 1;
     -fx-border-radius: 30;
-    -fx-text-fill: #00000;
+    -fx-text-fill: #000000;
     -fx-font-size: 13px;
     -fx-font-family: 'Roboto', 'Arial', sans-serif;
     -fx-font-weight: 500;
@@ -366,13 +385,29 @@
     -fx-border-color: #818cf8;
 }
 
-.filters-row .toggle { -fx-background-insets: 0; }
-.filters-row .toggle:first-child { -fx-background-radius: 10 0 0 10; -fx-border-radius: 10 0 0 10; }
-.filters-row .toggle:last-child  { -fx-background-radius: 0 10 10 0; -fx-border-radius: 0 10 10 0; }
-.filters-row .toggle { -fx-background-radius: 0; -fx-border-radius: 0; }
-.filters-row .toggle:only-child { -fx-background-radius: 10; -fx-border-radius: 10; }
+.filters-row .toggle {
+    -fx-background-insets: 0;
+}
+.filters-row .toggle:first-child {
+    -fx-background-radius: 10 0 0 10;
+    -fx-border-radius: 10 0 0 10;
+}
+.filters-row .toggle:last-child {
+    -fx-background-radius: 0 10 10 0;
+    -fx-border-radius: 0 10 10 0;
+}
+.filters-row .toggle {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+.filters-row .toggle:only-child {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
 
-.search-wrap { -fx-spacing: 10; }
+.search-wrap {
+    -fx-spacing: 10;
+}
 .search-field {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -402,14 +437,15 @@
    CHAT / TEXTAREA ESPECIAL
    =========================== */
 
-.text-area { -fx-background-color: white; }
 .chat-field {
     -fx-background-radius: 20;
     -fx-border-radius: 20;
     -fx-padding: 8 14 8 14;
     -fx-border-color: #d0d0d0;
 }
-.chat-field:focused { -fx-border-color: #1976d2; }
+.chat-field:focused {
+    -fx-border-color: #1976d2;
+}
 
 /* ===========================
    FOTO DE PERFIL / MOLDURA
@@ -438,7 +474,11 @@
    SOLICITAÇÕES / CARDS
    =========================== */
 
-.solicitacao-root { -fx-background-color: transparent; -fx-padding: 20; -fx-spacing: 15; }
+.solicitacao-root {
+    -fx-background-color: transparent;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+}
 .solicitacao-form {
     -fx-background-color: white;
     -fx-background-radius: 12;
@@ -449,7 +489,11 @@
     -fx-spacing: 15;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
 }
-.solicitacao-title { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a; }
+.solicitacao-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+}
 .solicitacao-textarea {
     -fx-pref-height: 150;
     -fx-border-color: #d0d0d0;
@@ -457,8 +501,15 @@
     -fx-background-radius: 8;
     -fx-border-radius: 8;
 }
-.solicitacao-buttons { -fx-alignment: CENTER_RIGHT; -fx-spacing: 10; }
-.solicitacao-cards-section { -fx-background-color: transparent; -fx-padding: 10 20 20 20; -fx-spacing: 15; }
+.solicitacao-buttons {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-spacing: 10;
+}
+.solicitacao-cards-section {
+    -fx-background-color: transparent;
+    -fx-padding: 10 20 20 20;
+    -fx-spacing: 15;
+}
 
 .card-solicitacao {
     -fx-background-color: white;
@@ -477,41 +528,46 @@
     -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.4), 12, 0, 0, 3);
     -fx-translate-y: -3;
 }
-.card-solicitacao .label-professor { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a; }
-.card-solicitacao .label-texto    { -fx-font-size: 13px; -fx-text-fill: #333; -fx-wrap-text: true; }
+.card-solicitacao .label-professor {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+}
+.card-solicitacao .label-texto {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
+    -fx-wrap-text: true;
+}
 
+/* card-solicitacao-recebida = opção B */
 .card-solicitacao-recebida {
-
-/* ===========================
-   AGENDAMENTO DE DEFESA
-   =========================== */
-.card-agendamento {
     -fx-background-color: white;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
-    -fx-border-color: #cfd4dc;
+    -fx-border-color: #d1d5db;
     -fx-border-width: 1;
-    -fx-padding: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 0, 2);
+    -fx-pref-width: 270;
     -fx-cursor: hand;
+    -fx-transition: all 0.25s ease;
 }
 .card-solicitacao-recebida:hover {
     -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.35), 10, 0, 0, 3);
     -fx-translate-y: -2;
 }
 
-.card-flip-front { -fx-background-color: white; -fx-background-radius: 10; }
-.card-flip-back  { -fx-background-color: #f9fafb; -fx-background-radius: 10; }
-.card-actions    { -fx-alignment: CENTER_RIGHT; -fx-spacing: 8; }
-.card-title      { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: -fx-text-base-color; }
-.icon-button-ghost { -fx-background-color: transparent; -fx-padding: 2; -fx-background-radius: 999; }
-
 /* ===========================
-   UTILITÁRIOS
+   AGENDAMENTO DE DEFESA
    =========================== */
 
-.shadow-light { -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2); }
-.rounded { -fx-background-radius: 10; }
+.card-agendamento {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #cfd4dc;
+    -fx-border-width: 1;
     -fx-padding: 14;
     -fx-spacing: 8;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
@@ -519,7 +575,35 @@
     -fx-pref-width: 320;
 }
 
-.status-aguardando-orientador { -fx-text-fill: #f39c12; -fx-font-weight: bold; }
-.status-aguardando-aluno { -fx-text-fill: #0ea5e9; -fx-font-weight: bold; }
-.status-reagendamento { -fx-text-fill: #a855f7; -fx-font-weight: bold; }
-.status-agendado { -fx-text-fill: #22c55e; -fx-font-weight: bold; }
+.status-aguardando-orientador {
+    -fx-text-fill: #f39c12;
+    -fx-font-weight: bold;
+}
+.status-aguardando-aluno {
+    -fx-text-fill: #0ea5e9;
+    -fx-font-weight: bold;
+}
+.status-reagendamento {
+    -fx-text-fill: #a855f7;
+    -fx-font-weight: bold;
+}
+.status-agendado {
+    -fx-text-fill: #22c55e;
+    -fx-font-weight: bold;
+}
+
+/* ===========================
+   UTILITÁRIOS
+   =========================== */
+
+.shadow-light {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+.rounded {
+    -fx-background-radius: 10;
+}
+.campo-bloqueado-ok {
+    -fx-control-inner-background: #f3f4f6; /* cinza claro */
+    -fx-border-color: #22c55e;            /* verde para indicar OK */
+    -fx-border-width: 1.5;
+}

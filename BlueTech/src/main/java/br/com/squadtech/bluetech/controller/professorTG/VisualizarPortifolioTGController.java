@@ -5,14 +5,17 @@ import br.com.squadtech.bluetech.dao.TGSecaoDAO;
 import br.com.squadtech.bluetech.dao.OrientaDAO;
 import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
+import br.com.squadtech.bluetech.dao.UsuarioDAO;
+
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.Orienta;
 import br.com.squadtech.bluetech.model.Professor;
 import br.com.squadtech.bluetech.model.TGPortifolio;
-import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.model.Usuario;
+
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -20,6 +23,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -80,7 +84,10 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
         for (PerfilAluno a : alunos) {
             String nomeAluno = a.getNomeAluno();
 
-            List<Orienta> orientacoes = orientaDAO.findByAlunoId(a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
+            List<Orienta> orientacoes = orientaDAO.findByAlunoId(
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
+            );
+
             String professores = "Sem professor";
             if (orientacoes != null && !orientacoes.isEmpty()) {
                 professores = orientacoes.stream()
@@ -95,10 +102,16 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                 if (professores.isBlank()) professores = "Sem professor";
             }
 
-            TGPortifolio portifolio = portifolioDAO.findByAlunoId(a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
+            TGPortifolio portifolio = portifolioDAO.findByAlunoId(
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
+            );
+
             String statusPortifolio;
             if (portifolio != null) {
-                statusPortifolio = portifolio.getStatus() + (portifolio.getPercentualConclusao() != null ? (" - " + portifolio.getPercentualConclusao() + "%") : "");
+                statusPortifolio = portifolio.getStatus()
+                        + (portifolio.getPercentualConclusao() != null
+                        ? (" - " + portifolio.getPercentualConclusao() + "%")
+                        : "");
             } else if (a.getEmailUsuario() != null) {
                 int qtd = tgSecaoDAO.countSecoes(a.getEmailUsuario());
                 statusPortifolio = qtd > 0 ? ("Seções enviadas: " + qtd) : "Sem envios";
@@ -133,6 +146,11 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             cardsBox.getChildren().add(card);
         }
     }
+
+    /**
+     * Carrega uma imagem padrão de usuário (caso você queira usar em cards/foto).
+     * Ainda não está sendo usada aqui, mas já deixo pronto pra reaproveitar.
+     */
     private Image carregarImagemPadrao() {
         try {
             return new Image(getClass().getResourceAsStream("/images/Usuario.png"));
@@ -142,8 +160,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
         }
     }
 
-      private void abrirVisualizador(String nomeAluno, String semestre, String curso) {
-
+    private void abrirVisualizador(String nomeAluno, String semestre, String curso) {
         if (painelPrincipalController == null) return;
         try {
             VisualizadorTGController controller =

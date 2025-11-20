@@ -33,7 +33,6 @@
                         <VBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="6.0">
                             <children>
                                 <Label fx:id="lblProfessorOri" style="-fx-font-weight: bold; -fx-font-size: 16px;" text="PROFESSOR ORIENTADOR: Fulano" textFill="WHITE" />
-                                <Label fx:id="lblSemestreOri" style="-fx-font-size: 14px;" text="SEMESTRE RESPONSÁVEL: 6º Semestre" textFill="WHITE" />
                             </children>
                         </VBox>
                     </children>

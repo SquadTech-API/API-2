@@ -3,12 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -39,7 +37,7 @@
     <HBox spacing="16" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="72.0">
 
         <!-- SIDEBAR -->
-        <VBox alignment="TOP_CENTER" prefWidth="230" spacing="12" styleClass="sidebar">
+        <VBox alignment="TOP_CENTER" prefHeight="684.0" prefWidth="821.0" spacing="12" styleClass="sidebar">
             <padding><Insets bottom="18" left="14" right="14" top="18" /></padding>
             <children>
                 <Label styleClass="sidebar-title" text="Sessões" />
@@ -50,18 +48,15 @@
                 <ToggleButton fx:id="tgS4" styleClass="session-toggle" text="Sessão 4" />
                 <ToggleButton fx:id="tgS5" styleClass="session-toggle" text="Sessão 5" />
                 <ToggleButton fx:id="tgS6" styleClass="session-toggle" text="Sessão 6" />
-
-                <Region VBox.vgrow="ALWAYS" />
-                <ImageView fitHeight="81.0" fitWidth="56.0" preserveRatio="true">
-                    <image><Image url="@../../assets/check.png" /></image>
-                </ImageView>
+            <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="610.0" style="-fx-font-weight: bold;" text="Chat com o Aluno:" />
+            <TextArea fx:id="txtChatVisualizacao" editable="false" prefHeight="312.0" prefRowCount="8" prefWidth="610.0" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" wrapText="true" />
             </children>
         </VBox>
 
         <!-- CONTEÚDO -->
         <StackPane styleClass="content-shell" HBox.hgrow="ALWAYS">
 
-            <ScrollPane fx:id="spSessao1" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="true">
+            <ScrollPane fx:id="spSessao1" fitToWidth="true" hbarPolicy="NEVER" prefHeight="682.0" prefWidth="855.0" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="true">
                 <content>
                     <VBox fx:id="VBoxSessao1" spacing="14" styleClass="content-vbox">
                         <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
