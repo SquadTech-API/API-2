@@ -133,6 +133,7 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         alert.setContentText(msg);
         alert.showAndWait();
     }
+
     private void carregarDadosProfessor() {
         try {
             // 1. Usuário logado (onde está o NOME de verdade)
@@ -140,7 +141,10 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
             if (usuario == null || usuario.getEmail() == null) {
                 lblProfessorOri.setText("PROFESSOR ORIENTADOR: (não identificado)");
                 // garantir invisibilidade do botão se não houver usuário
-                if (btnProfessorTG != null) btnProfessorTG.setVisible(false);
+                if (btnProfessorTG != null) {
+                    btnProfessorTG.setVisible(false);
+                    btnProfessorTG.setManaged(false);
+                }
                 return;
             }
 
@@ -150,44 +154,42 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
                     : usuario.getEmail();
             lblProfessorOri.setText(nome);
 
-            // 3. Busca registro na tabela PROFESSOR para mostrar cargo / tipo TG
+            // 3. Busca registro na tabela PROFESSOR para mostrar cargo / tipo TG (mantido por compatibilidade)
             ProfessorDAO profDAO = new ProfessorDAO();
             Professor professor = profDAO.findByUsuarioEmail(usuario.getEmail());
 
-            if (professor != null) {
-                String cargo = professor.getCargo();
-                String tipoTG = professor.getTipoTG();   // "TG1", "TG2", "AMBOS", etc.
+            // ✅ VERIFICAÇÃO CORRETA: o tipo vem da tabela USUARIO.coluna tipo
+            String tipoUsuario = null;
+            try {
+                tipoUsuario = usuario.getTipo(); // assume getter getTipo() em SessaoUsuario->Usuario
+            } catch (Exception ex) {
+                // se a sua classe Usuario usa outro nome para o campo, ajuste aqui
+                log.debug("Não foi possível obter o tipo direto do objeto usuario: {}", ex.getMessage());
+            }
 
-                StringBuilder sb = new StringBuilder();
-                if (cargo != null && !cargo.isBlank()) {
-                    sb.append(cargo);
-                }
-                if (tipoTG != null && !tipoTG.isBlank()) {
-                    if (sb.length() > 0) sb.append(" • ");
-                    sb.append("Tipo TG: ").append(tipoTG);
-                }
+            if (tipoUsuario == null && professor != null) {
+                // fallback: se por algum motivo não estiver no usuário, tentar buscar no professor
+                tipoUsuario = professor.getTipoTG();
+            }
 
-                if (sb.length() == 0) {
-                    sb.append("Perfil não informado");
+            if (btnProfessorTG != null) {
+                boolean isProfTG = tipoUsuario != null && "PROF_TG".equalsIgnoreCase(tipoUsuario.trim());
+                if (isProfTG) {
+                    btnProfessorTG.setManaged(true);
+                    btnProfessorTG.setVisible(true);
+                } else {
+                    btnProfessorTG.setVisible(false);
+                    btnProfessorTG.setManaged(false);
                 }
-
-                if (btnProfessorTG != null) {
-                    if ("PROF_TG".equalsIgnoreCase(tipoTG)) {
-                        btnProfessorTG.setVisible(true);
-                    } else {
-                        btnProfessorTG.setVisible(false);
-                    }
-                }
-
-            } else {
-                // Não tem linha na tabela professor, mas pelo menos mostra algo
-                if (btnProfessorTG != null) btnProfessorTG.setVisible(false);
             }
 
         } catch (Exception e) {
             log.error("Erro ao carregar dados do professor orientador", e);
             lblProfessorOri.setText("PROFESSOR ORIENTADOR: (erro ao carregar)");
-            if (btnProfessorTG != null) btnProfessorTG.setVisible(false);
+            if (btnProfessorTG != null) {
+                btnProfessorTG.setVisible(false);
+                btnProfessorTG.setManaged(false);
+            }
         }
     }
 
@@ -221,6 +223,12 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
 
     @FXML
     void initialize() {
+        // GARANTE QUE O BOTÃO COMEÇA INVISÍVEL E NÃO OCUPA ESPAÇO
+        if (btnProfessorTG != null) {
+            btnProfessorTG.setVisible(false);
+            btnProfessorTG.setManaged(false);
+        }
+
         assert btnSolicitacoesOrientacao != null : "fx:id=\"btnSolicitacoesOrientacao\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert btnenviarEmail != null : "fx:id=\"btnenviarEmail\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert imgViewFotoProfessorOri != null : "fx:id=\"imgViewFotoProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
@@ -230,6 +238,7 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         assert splitPanelMenuProfessorOri != null : "fx:id=\"splitPanelMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert vboxMenuProfessorOri != null : "fx:id=\"vboxMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert btnProfessorTG != null : "fx:id=\"btnProfessorTG\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
+
         carregarDadosProfessor();
     }
 }
