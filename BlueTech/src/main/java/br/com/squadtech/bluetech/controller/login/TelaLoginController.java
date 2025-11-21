@@ -7,7 +7,6 @@ import br.com.squadtech.bluetech.util.StageUtils;
 import com.jfoenix.controls.JFXButton;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -21,7 +20,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -96,6 +94,7 @@ public class TelaLoginController {
 
                 // Seleciona telas iniciais conforme o tipo de usuário
                 String tipo = usuario.getTipo() == null ? "" : usuario.getTipo().trim().toUpperCase();
+
                 switch (tipo) {
                     case "ALUNO" -> {
                         controller.loadMenu("/fxml/aluno/MenuAluno.fxml");
@@ -109,8 +108,12 @@ public class TelaLoginController {
                         controller.loadMenu("/fxml/professorTG/MenuProfessorTG.fxml");
                         controller.loadContent("/fxml/professorTG/TelaProfessorTG.fxml");
                     }
+                    // CASE PARA ADMIN
+                    case "ADMIN" -> {
+                        controller.loadMenu("/fxml/admin/MenuADM.fxml");
+                        controller.loadContent("/fxml/admin/TelaInicialADM.fxml");
+                    }
                     default -> {
-                        // fallback para ALUNO caso tipo seja desconhecido
                         log.warn("Tipo de usuário desconhecido: '{}'. Aplicando layout de ALUNO por padrão.", tipo);
                         controller.loadMenu("/fxml/aluno/MenuAluno.fxml");
                         controller.loadContent("/fxml/aluno/TelaAluno.fxml");
@@ -136,7 +139,6 @@ public class TelaLoginController {
             showAlert("Credenciais inválidas!");
         }
     }
-
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -187,5 +189,4 @@ public class TelaLoginController {
         assert txtFldUser != null : "fx:id=\"txtFldUser\" was not injected: check your FXML file 'TelaLogin.fxml'.";
 
     }
-
 }
