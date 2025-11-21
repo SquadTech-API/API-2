@@ -29,7 +29,7 @@
                         </Label>
                         <ImageView fx:id="imgViewFotoProfessorTG" fitWidth="100" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../../../../../../../Users/dasmi/Downloads/API-2-main/API-2-main/BlueTech/src/main/resources/images/Usuario.png" />
+                                <Image url="@../../../../main/resources/assets/Usuario.png" />
                             </image>
                         </ImageView>
 

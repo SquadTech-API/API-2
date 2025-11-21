@@ -115,7 +115,7 @@ public class TGSecaoDAO {
 
     // Lista cards apenas do usuário
     public List<CardDados> listarCards(String emailUsuario) {
-        String sql = "SELECT s.Id_Secao, s.API_Numero, s.Data_Envio, s.Status, v.Semestre_Curso, v.Ano, COALESCE(NULLIF(v.Semestre_Ano, ''), v.Semestre_Curso) AS Semestre_Ano " +
+        String sql = "SELECT s.Id_Secao, s.API_Numero, s.Data_Envio, s.Status, s.Id_Versao, v.Semestre_Curso, v.Ano, COALESCE(NULLIF(v.Semestre_Ano, ''), v.Semestre_Curso) AS Semestre_Ano " +
                 "FROM TG_Secao s " +
                 "JOIN TG_Versao v ON v.Id_Versao = s.Id_Versao " +
                 "WHERE s.email_usuario = ? " +
@@ -129,6 +129,7 @@ public class TGSecaoDAO {
                     CardDados c = new CardDados();
                     c.idSecao = rs.getInt("Id_Secao");
                     c.apiNumero = rs.getInt("API_Numero");
+                    c.idVersao = rs.getInt("Id_Versao");
                     c.dataEnvio = rs.getTimestamp("Data_Envio").toLocalDateTime();
                     c.status = rs.getString("Status");
                     c.semestreCurso = rs.getString("Semestre_Curso");
@@ -152,6 +153,7 @@ public class TGSecaoDAO {
         public String semestreCurso;
         public int ano;
         public String semestreAno;
+        public int idVersao;
     }
 
     // Busca por id garantindo dono

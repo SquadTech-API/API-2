@@ -4,6 +4,9 @@ import br.com.squadtech.bluetech.config.SmtpProps;
 import br.com.squadtech.bluetech.controller.MenuAware;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.model.Professor;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.service.EmailService;
 import com.jfoenix.controls.JFXButton;
 import jakarta.mail.MessagingException;
@@ -22,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class MenuProfessorOrientadorController implements MenuAware, SupportsMainController {
+
     private static final Logger log = LoggerFactory.getLogger(MenuProfessorOrientadorController.class);
 
     @FXML
@@ -33,8 +37,6 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
     @FXML
     private Label lblProfessorOri;
 
-    @FXML
-    private Label lblSemestreOri;
 
     @FXML
     private AnchorPane paneSuperiorMenuProfessorOri;
@@ -56,6 +58,12 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
 
     @FXML
     private JFXButton btnAgendamentoDefesa;
+
+    @FXML
+    private JFXButton btnEditarPerfilprofessor;
+
+    @FXML
+    private JFXButton btnProfessorTG;
 
     @FXML
     void abrirSolicitacoesOrientacao(ActionEvent event) {
@@ -112,49 +120,6 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         }
     }
 
-    @FXML
-    void enviarEmail(ActionEvent event) {
-        TextInputDialog dlgTo = new TextInputDialog();
-        dlgTo.setTitle("Enviar Email");
-        dlgTo.setHeaderText("Destinatário");
-        dlgTo.setContentText("E-mail para enviar:");
-        var toOpt = dlgTo.showAndWait();
-        if (toOpt.isEmpty()) return;
-
-        TextInputDialog dlgSub = new TextInputDialog("Teste BlueTech");
-        dlgSub.setTitle("Enviar Email");
-        dlgSub.setHeaderText("Assunto");
-        dlgSub.setContentText("Assunto:");
-        var subOpt = dlgSub.showAndWait();
-        if (subOpt.isEmpty()) return;
-
-        TextInputDialog dlgBody = new TextInputDialog("Olá! Este é um teste do BlueTech.");
-        dlgBody.setTitle("Enviar Email");
-        dlgBody.setHeaderText("Corpo da mensagem");
-        dlgBody.setContentText("Mensagem:");
-        var bodyOpt = dlgBody.showAndWait();
-        if (bodyOpt.isEmpty()) return;
-
-        EmailService email = new EmailService(
-                SmtpProps.FROM,
-                new EmailService.SmtpConfig(
-                        SmtpProps.HOST,
-                        SmtpProps.PORT,
-                        SmtpProps.USER,
-                        SmtpProps.PASS,
-                        SmtpProps.STARTTLS,
-                        SmtpProps.SSL
-                )
-        );
-        try {
-            email.send(toOpt.get(), subOpt.get(), bodyOpt.get());
-            showInfo("E-mail enviado para: " + toOpt.get());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            showError("Falha ao enviar e-mail: " + e.getMessage());
-        }
-    }
-
     private void showInfo(String msg) {
         var alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setHeaderText("Notificação");
@@ -169,17 +134,111 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         alert.showAndWait();
     }
 
+    private void carregarDadosProfessor() {
+        try {
+            // 1. Usuário logado (onde está o NOME de verdade)
+            var usuario = SessaoUsuario.getUsuarioLogado();
+            if (usuario == null || usuario.getEmail() == null) {
+                lblProfessorOri.setText("PROFESSOR ORIENTADOR: (não identificado)");
+                // garantir invisibilidade do botão se não houver usuário
+                if (btnProfessorTG != null) {
+                    btnProfessorTG.setVisible(false);
+                    btnProfessorTG.setManaged(false);
+                }
+                return;
+            }
+
+            // 2. Nome do professor vem direto do Usuario
+            String nome = (usuario.getNome() != null && !usuario.getNome().isBlank())
+                    ? usuario.getNome()
+                    : usuario.getEmail();
+            lblProfessorOri.setText(nome);
+
+            // 3. Busca registro na tabela PROFESSOR para mostrar cargo / tipo TG (mantido por compatibilidade)
+            ProfessorDAO profDAO = new ProfessorDAO();
+            Professor professor = profDAO.findByUsuarioEmail(usuario.getEmail());
+
+            // ✅ VERIFICAÇÃO CORRETA: o tipo vem da tabela USUARIO.coluna tipo
+            String tipoUsuario = null;
+            try {
+                tipoUsuario = usuario.getTipo(); // assume getter getTipo() em SessaoUsuario->Usuario
+            } catch (Exception ex) {
+                // se a sua classe Usuario usa outro nome para o campo, ajuste aqui
+                log.debug("Não foi possível obter o tipo direto do objeto usuario: {}", ex.getMessage());
+            }
+
+            if (tipoUsuario == null && professor != null) {
+                // fallback: se por algum motivo não estiver no usuário, tentar buscar no professor
+                tipoUsuario = professor.getTipoTG();
+            }
+
+            if (btnProfessorTG != null) {
+                boolean isProfTG = tipoUsuario != null && "PROF_TG".equalsIgnoreCase(tipoUsuario.trim());
+                if (isProfTG) {
+                    btnProfessorTG.setManaged(true);
+                    btnProfessorTG.setVisible(true);
+                } else {
+                    btnProfessorTG.setVisible(false);
+                    btnProfessorTG.setManaged(false);
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("Erro ao carregar dados do professor orientador", e);
+            lblProfessorOri.setText("PROFESSOR ORIENTADOR: (erro ao carregar)");
+            if (btnProfessorTG != null) {
+                btnProfessorTG.setVisible(false);
+                btnProfessorTG.setManaged(false);
+            }
+        }
+    }
+
+    @FXML
+    void abrirTelaPerfilProfessorOrientador() {
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadContent("/fxml/professorOrientador/TelaPerfilProfessorOrientador.fxml");
+            } catch (IOException e) {
+                log.error("Falha ao carregar TelaPerfilProfessorOrientador.fxml", e);
+            }
+        } else {
+            log.error("PainelPrincipalController não foi injetado em MenuProfessorOrientadorController.");
+        }
+    }
+
+
+    @FXML
+    void abrirTelaPerfilTG(ActionEvent event) {
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadMenu("/fxml/professorTG/MenuProfessorTG.fxml");
+                painelPrincipalController.loadContent("/fxml/professorTG/TelaProfessorTG.fxml");
+            } catch (IOException e) {
+                log.error("Falha ao carregar telas de Professor TG", e);
+            }
+        } else {
+            log.error("PainelPrincipalController não foi injetado em MenuProfessorOrientadorController.");
+        }
+    }
+
     @FXML
     void initialize() {
+        // GARANTE QUE O BOTÃO COMEÇA INVISÍVEL E NÃO OCUPA ESPAÇO
+        if (btnProfessorTG != null) {
+            btnProfessorTG.setVisible(false);
+            btnProfessorTG.setManaged(false);
+        }
+
         assert btnSolicitacoesOrientacao != null : "fx:id=\"btnSolicitacoesOrientacao\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert btnenviarEmail != null : "fx:id=\"btnenviarEmail\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert imgViewFotoProfessorOri != null : "fx:id=\"imgViewFotoProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert lblProfessorOri != null : "fx:id=\"lblProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
-        assert lblSemestreOri != null : "fx:id=\"lblSemestreOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert lblTituloProfessorOri != null : "fx:id=\"lblTituloProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert paneSuperiorMenuProfessorOri != null : "fx:id=\"paneSuperiorMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert splitPanelMenuProfessorOri != null : "fx:id=\"splitPanelMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert vboxMenuProfessorOri != null : "fx:id=\"vboxMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
+        assert btnProfessorTG != null : "fx:id=\"btnProfessorTG\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
 
+        carregarDadosProfessor();
     }
 }

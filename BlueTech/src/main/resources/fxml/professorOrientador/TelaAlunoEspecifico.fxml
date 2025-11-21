@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1356.0" styleClass="page-root" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaAlunoEspecificoController">
+
+    <!-- HEADER -->
+    <HBox styleClass="header-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding><Insets bottom="14" left="20" right="20" top="16" /></padding>
+        <children>
+            <!-- Esquerda: aluno -->
+            <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                <children>
+                    <Label styleClass="title-strong" text="Aluno:" />
+                    <Label fx:id="lblNomeAluno" styleClass="title-weak" text="" />
+                </children>
+            </HBox>
+
+            <!-- Direita: semestre (placeholder fixo que você já usava) -->
+            <HBox alignment="CENTER_RIGHT">
+                <children>
+                    <Label styleClass="pill" text="6º SEM" />
+                </children>
+            </HBox>
+        </children>
+    </HBox>
+
+    <!-- CORPO -->
+    <HBox spacing="16" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="72.0">
+
+        <!-- SIDEBAR -->
+        <VBox alignment="TOP_CENTER" prefHeight="684.0" prefWidth="821.0" spacing="12" styleClass="sidebar">
+            <padding><Insets bottom="18" left="14" right="14" top="18" /></padding>
+            <children>
+                <Label styleClass="sidebar-title" text="Sessões" />
+
+                <ToggleButton fx:id="tgS1" selected="true" styleClass="session-toggle" text="Sessão 1" textAlignment="CENTER" VBox.vgrow="NEVER" />
+                <ToggleButton fx:id="tgS2" styleClass="session-toggle" text="Sessão 2" />
+                <ToggleButton fx:id="tgS3" styleClass="session-toggle" text="Sessão 3" />
+                <ToggleButton fx:id="tgS4" styleClass="session-toggle" text="Sessão 4" />
+                <ToggleButton fx:id="tgS5" styleClass="session-toggle" text="Sessão 5" />
+                <ToggleButton fx:id="tgS6" styleClass="session-toggle" text="Sessão 6" />
+            <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="610.0" style="-fx-font-weight: bold;" text="Chat com o Aluno:" />
+            <TextArea fx:id="txtChatVisualizacao" editable="false" prefHeight="312.0" prefRowCount="8" prefWidth="610.0" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" wrapText="true" />
+            </children>
+        </VBox>
+
+        <!-- CONTEÚDO -->
+        <StackPane styleClass="content-shell" HBox.hgrow="ALWAYS">
+
+            <ScrollPane fx:id="spSessao1" fitToWidth="true" hbarPolicy="NEVER" prefHeight="682.0" prefWidth="855.0" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="true">
+                <content>
+                    <VBox fx:id="VBoxSessao1" spacing="14" styleClass="content-vbox">
+                        <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao2" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao2" spacing="14" styleClass="content-vbox">
+                        <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao3" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao3" spacing="14" styleClass="content-vbox">
+                        <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao4" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao4" spacing="14" styleClass="content-vbox">
+                        <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao5" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao5" spacing="14" styleClass="content-vbox">
+                        <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <ScrollPane fx:id="spSessao6" fitToWidth="true" hbarPolicy="NEVER" styleClass="content-pane" vbarPolicy="AS_NEEDED" visible="false">
+                <content>
+                    <VBox fx:id="VBoxSessao6" spacing="14" styleClass="content-vbox">
+                        <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+        </StackPane>
+    </HBox>
+</AnchorPane>

@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
  * Keeps controllers lean and makes events easy to invoke from persistence layer.
  */
 public final class NotifierEvents {
+    public static final String ALUNO_TG_AJUSTES  = "ALUNO_TG_AJUSTES";
+    public static final String ALUNO_TG_APROVADO = "ALUNO_TG_APROVADO";
     private static final Logger log = LoggerFactory.getLogger(NotifierEvents.class);
     private NotifierEvents() {}
 

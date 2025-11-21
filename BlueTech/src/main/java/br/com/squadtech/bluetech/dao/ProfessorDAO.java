@@ -18,6 +18,7 @@ public class ProfessorDAO {
                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
                 usuario_email VARCHAR(190) NOT NULL,
                 cargo VARCHAR(150),
+                foto VARCHAR(255),
                 tipo_tg ENUM('TG1','TG2','AMBOS','NENHUM') NOT NULL DEFAULT 'NENHUM',
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

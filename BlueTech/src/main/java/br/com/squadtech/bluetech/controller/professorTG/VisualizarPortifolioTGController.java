@@ -1,9 +1,21 @@
 package br.com.squadtech.bluetech.controller.professorTG;
 
-import br.com.squadtech.bluetech.dao.*;
-import br.com.squadtech.bluetech.model.*;
+import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
+import br.com.squadtech.bluetech.dao.TGSecaoDAO;
+import br.com.squadtech.bluetech.dao.OrientaDAO;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
+import br.com.squadtech.bluetech.dao.UsuarioDAO;
+
+import br.com.squadtech.bluetech.model.PerfilAluno;
+import br.com.squadtech.bluetech.model.Orienta;
+import br.com.squadtech.bluetech.model.Professor;
+import br.com.squadtech.bluetech.model.TGPortifolio;
+import br.com.squadtech.bluetech.model.Usuario;
+
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -12,13 +24,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,17 +35,22 @@ import java.util.stream.Collectors;
 public class VisualizarPortifolioTGController implements SupportsMainController {
 
     @FXML
-    private FlowPane flowCards;
+    private VBox cardsBox;
 
     @FXML
     private ComboBox<String> comboCurso;
+
+    @FXML
+    private ComboBox<String> comboSemestre;
+
+    @FXML
+    private ComboBox<String> comboPortifolio;
 
     @FXML
     private Button btnBuscar;
 
     private PainelPrincipalController painelPrincipalController;
 
-    // DAOs
     private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
     private final TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
     private final OrientaDAO orientaDAO = new OrientaDAO();
@@ -52,29 +66,20 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     @FXML
     private void initialize() {
         comboCurso.getItems().addAll("Banco de Dados", "Análise de Sistemas");
-        if (flowCards != null) {
-            flowCards.setAlignment(Pos.CENTER); // centraliza todos os cards no FlowPane
-        }
+        comboSemestre.getItems().addAll("5º Semestre", "6º Semestre");
     }
 
     @FXML
     private void buscarPortifolio(ActionEvent event) {
         String curso = comboCurso.getValue() != null ? comboCurso.getValue() : "";
-        criarCards(null, curso);
+        String semestre = comboSemestre.getValue() != null ? comboSemestre.getValue() : "";
+        criarCards(semestre, curso);
     }
 
     public void criarCards(String semestre, String curso) {
-        if (flowCards == null) return;
+        cardsBox.getChildren().clear();
 
-        flowCards.getChildren().clear();
-
-        List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null);
-        if (alunos == null || alunos.isEmpty()) {
-            Label aviso = new Label("Nenhum aluno encontrado para o curso selecionado.");
-            aviso.getStyleClass().add("label-title");
-            flowCards.getChildren().add(aviso);
-            return;
-        }
+        List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null, null);
 
         for (PerfilAluno a : alunos) {
             String nomeAluno = a.getNomeAluno();
@@ -103,9 +108,10 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
 
             String statusPortifolio;
             if (portifolio != null) {
-                statusPortifolio = portifolio.getStatus() +
-                        (portifolio.getPercentualConclusao() != null ?
-                                (" - " + portifolio.getPercentualConclusao() + "%") : "");
+                statusPortifolio = portifolio.getStatus()
+                        + (portifolio.getPercentualConclusao() != null
+                        ? (" - " + portifolio.getPercentualConclusao() + "%")
+                        : "");
             } else if (a.getEmailUsuario() != null) {
                 int qtd = tgSecaoDAO.countSecoes(a.getEmailUsuario());
                 statusPortifolio = qtd > 0 ? ("Seções enviadas: " + qtd) : "Sem envios";
@@ -113,71 +119,38 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                 statusPortifolio = "Sem dados";
             }
 
-            // --- FOTO DO ALUNO ---
-            ImageView fotoAlunoView = new ImageView();
-            fotoAlunoView.setFitHeight(80);
-            fotoAlunoView.setFitWidth(80);
-            fotoAlunoView.setPreserveRatio(true);
-            fotoAlunoView.setSmooth(true);
-            fotoAlunoView.setCache(true);
+            Label t1 = new Label(nomeAluno);
+            t1.getStyleClass().add("title");
 
-            String caminhoFoto = a.getFoto();
-            Image imagem = carregarImagemPadrao();
-            if (caminhoFoto != null && !caminhoFoto.isBlank()) {
-                try {
-                    imagem = new Image("file:" + caminhoFoto);
-                    if (imagem.isError()) throw new Exception();
-                } catch (Exception ex) {
-                    imagem = carregarImagemPadrao();
-                }
-            }
-            fotoAlunoView.setImage(imagem);
+            Label t2 = new Label("Orientador(es): " + professores);
+            t2.getStyleClass().add("subtitle");
 
-            Circle clip = new Circle(40, 40, 40);
-            fotoAlunoView.setClip(clip);
-            fotoAlunoView.getStyleClass().add("foto-aluno");
+            Label t3 = new Label("Status: " + statusPortifolio);
+            t3.getStyleClass().add("subtitle");
 
-            // --- TEXTOS ---
-            Label lNome = new Label("ALUNO: " + nomeAluno);
-            lNome.getStyleClass().add("card-title");
-
-            Label lProfessor = new Label("ORIENTADOR: " + professores);
-            lProfessor.getStyleClass().add("subtitle");
-
-            Label lCurso = new Label("CURSO: " + curso);
-            lCurso.getStyleClass().add("subtitle");
-
-            VBox textBox = new VBox(4, lNome, lProfessor, lCurso);
-            textBox.setAlignment(Pos.CENTER_LEFT); // centraliza verticalmente ao centro do card
+            VBox textBox = new VBox(4, t1, t2, t3);
             HBox.setHgrow(textBox, Priority.ALWAYS);
 
-            // --- BOTÃO VISUALIZAR (ÍCONE) ---
-            Button btnEye = new Button("👁");
-            btnEye.getStyleClass().add("eye-btn"); // mesmo estilo do outro card
-            btnEye.setFocusTraversable(false);
+            Button eye = new Button("👁");
+            eye.getStyleClass().add("eye-btn");
+            eye.setFocusTraversable(false);
 
-            // --- CARD BOX ---
-            HBox cardBox = new HBox(15, fotoAlunoView, textBox, btnEye);
-            cardBox.setAlignment(Pos.CENTER_LEFT); // centraliza verticalmente todos os elementos
-            cardBox.setPadding(new Insets(20));
-            cardBox.getStyleClass().add("card");
+            HBox card = new HBox(12, textBox, eye);
+            card.setAlignment(Pos.CENTER_LEFT);
+            card.getStyleClass().add("card-item");
+            card.setPadding(new Insets(12));
 
-            // Tamanho fixo do card
-            cardBox.setPrefWidth(360);
-            cardBox.setPrefHeight(180);
-            cardBox.setMinWidth(360);
-            cardBox.setMinHeight(180);
-            cardBox.setMaxWidth(360);
-            cardBox.setMaxHeight(180);
+            card.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, semestre, curso));
+            eye.setOnAction(e -> abrirVisualizador(nomeAluno, semestre, curso));
 
-            // Eventos de clique
-            cardBox.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, curso));
-            btnEye.setOnAction(e -> abrirVisualizador(nomeAluno, curso));
-
-            flowCards.getChildren().add(cardBox);
+            cardsBox.getChildren().add(card);
         }
     }
 
+    /**
+     * Carrega uma imagem padrão de usuário (caso você queira usar em cards/foto).
+     * Ainda não está sendo usada aqui, mas já deixo pronto pra reaproveitar.
+     */
     private Image carregarImagemPadrao() {
         try {
             return new Image(getClass().getResourceAsStream("/images/Usuario.png"));
@@ -187,7 +160,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
         }
     }
 
-    private void abrirVisualizador(String nomeAluno, String curso) {
+    private void abrirVisualizador(String nomeAluno, String semestre, String curso) {
         if (painelPrincipalController == null) return;
         try {
             VisualizadorTGController controller =
@@ -196,9 +169,10 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
                             VisualizadorTGController.class
                     );
             if (controller != null) {
-                controller.receberDadosAluno(nomeAluno, null, curso);
+                controller.receberDadosAluno(nomeAluno, semestre, curso);
             }
         } catch (Exception ex) {
+            // log via console para simplificar
             ex.printStackTrace();
         }
     }

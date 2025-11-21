@@ -6,6 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import br.com.squadtech.bluetech.dao.FeedbackDAO;
+import br.com.squadtech.bluetech.model.Feedback;
+import br.com.squadtech.bluetech.model.FeedbackItem;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import br.com.squadtech.bluetech.model.SecaoContext;
@@ -34,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 public class TelaSecaoAPIController implements SupportsMainController {
 
+    private final FeedbackDAO feedbackDAO = new FeedbackDAO();
     private static final Logger log = LoggerFactory.getLogger(TelaSecaoAPIController.class);
 
     @FXML
@@ -139,8 +143,12 @@ public class TelaSecaoAPIController implements SupportsMainController {
 
         // Listener para seleção de versão
         listVersoes.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
-            if (newV != null) renderVersaoToWebView(newV);
+            if (newV != null) {
+                renderVersaoToWebView(newV);
+                carregarFeedbackDaVersao(newV); // <<< adiciona aqui
+            }
         });
+
     }
 
     private void carregarMarkdownDaUltimaVersaoSelecionada() {
@@ -203,7 +211,8 @@ public class TelaSecaoAPIController implements SupportsMainController {
             }
 
             // Feedbacks placeholder — se houver campo de feedback salvo nas versões, buscar e preencher
-            txtFeedbacks.setText("");
+            carregarFeedbackDaVersao(versao);
+
 
         } catch (Exception e) {
             log.error("Erro ao carregar versão", e);
@@ -238,5 +247,75 @@ public class TelaSecaoAPIController implements SupportsMainController {
     public void setPainelPrincipalController(PainelPrincipalController controller) {
         this.painelPrincipalController = controller;
 
+    }
+    private void carregarFeedbackDaVersao(TGVersao v) {
+        if (txtFeedbacks == null) return;
+        txtFeedbacks.clear();
+
+        if (v == null) {
+            txtFeedbacks.setText("Nenhuma versão selecionada.");
+            return;
+        }
+
+        Long versaoId = null;
+        try {
+            if (v.getIdSecaoApi() != null) {
+                versaoId = v.getIdSecaoApi().longValue();
+            }
+        } catch (Exception ignore) {}
+
+
+        if (versaoId == null) {
+            txtFeedbacks.setText("Não foi possível identificar a versão para carregar o feedback.");
+            return;
+        }
+
+        Feedback fb = feedbackDAO.buscarPorVersaoId(versaoId);
+        if (fb == null) {
+            txtFeedbacks.setText("Nenhum feedback para esta versão.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Status: ").append(fb.getStatus()).append("\n");
+        if (fb.getCreatedAt() != null) {
+            sb.append("Data: ").append(fb.getCreatedAt().format(dtf)).append("\n");
+        }
+        if (fb.getComentario() != null && !fb.getComentario().isBlank()) {
+            sb.append("\nComentário geral:\n")
+                    .append(fb.getComentario())
+                    .append("\n");
+        }
+        if (fb.getItens() != null && !fb.getItens().isEmpty()) {
+            sb.append("\nDetalhamento por campo:\n");
+            for (FeedbackItem it : fb.getItens()) {
+                String campoLabel = traduzCampo(it.getCampo());
+                sb.append("• ")
+                        .append(campoLabel)
+                        .append(" — ")
+                        .append(it.getStatus());
+                if (it.getComentario() != null && !it.getComentario().isBlank()) {
+                    sb.append(" | ").append(it.getComentario());
+                }
+                sb.append("\n");
+            }
+        }
+
+        txtFeedbacks.setText(sb.toString());
+    }
+
+    private String traduzCampo(String campoId) {
+        if (campoId == null) return "";
+        return switch (campoId) {
+            case "problema"      -> "Problema";
+            case "solucao"       -> "Solução";
+            case "repositorio"   -> "Repositório";
+            case "linkedin"      -> "LinkedIn";
+            case "tecnologias"   -> "Tecnologias";
+            case "contribuicoes" -> "Contribuições";
+            case "hardSkills"    -> "Hard Skills";
+            case "softSkills"    -> "Soft Skills";
+            default -> campoId;
+        };
     }
 }
