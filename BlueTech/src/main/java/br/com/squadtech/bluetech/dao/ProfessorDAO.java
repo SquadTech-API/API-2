@@ -61,11 +61,11 @@ public class ProfessorDAO {
      * Atualiza um professor existente pelo email do usuário
      */
     public boolean atualizarProfessor(Professor professor) {
-        String sql = "UPDATE professor SET cargo = ?, tipo_tg = ? WHERE usuario_email = ?";
+        String sql = "UPDATE professor SET cargo = ?, foto = ? WHERE usuario_email = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, professor.getCargo());
-            stmt.setString(2, professor.getTipoTG());
+            stmt.setString(2, professor.getFoto());
             stmt.setString(3, professor.getUsuarioEmail());
             stmt.executeUpdate();
             return true;

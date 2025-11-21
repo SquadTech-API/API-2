@@ -9,7 +9,6 @@
             fx:controller="br.com.squadtech.bluetech.controller.professorTG.VisualizarPortifolioTGController"
             stylesheets="@../../css/Style.css">
 
-    <!-- Cabeçalho com título centralizado e filtros à direita -->
     <top>
         <VBox spacing="10.0">
             <padding>
@@ -25,10 +24,13 @@
                 <Label text="Visualizar Portfólios Finalizados" styleClass="label-title"/>
             </HBox>
 
-            <!-- Linha 2: Filtros alinhados à direita -->
+            <!-- Linha 2: Filtros e pesquisa -->
             <HBox alignment="CENTER_RIGHT" spacing="10">
                 <Label text="Curso:" />
                 <ComboBox fx:id="comboCurso" prefWidth="180.0"/>
+
+                <TextField fx:id="TextFieldNomePesquisa" promptText="Pesquisar por nome" styleClass="search-field" prefWidth="200.0"/>
+
                 <Button fx:id="btnBuscar" onAction="#buscarPortifolio" text="Buscar" styleClass="button-primary"/>
             </HBox>
         </VBox>
@@ -38,11 +40,11 @@
     <center>
         <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
             <content>
-                <FlowPane fx:id="flowCards" alignment="TOP_CENTER" hgap="20" vgap="20">
+                <VBox fx:id="cardsBox" spacing="10">
                     <padding>
                         <Insets top="20" bottom="20" left="20" right="20"/>
                     </padding>
-                </FlowPane>
+                </VBox>
             </content>
         </ScrollPane>
     </center>

@@ -137,4 +137,22 @@ public class UsuarioDAO {
             return false;
         }
     }
+
+    public boolean atualizarNomeUsuario(String email, String novoNome) {
+        String sql = "UPDATE usuario SET nome = ? WHERE email = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, novoNome);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar nome do usuário: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
