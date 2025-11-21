@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class MenuProfessorOrientadorController implements MenuAware, SupportsMainController {
+
     private static final Logger log = LoggerFactory.getLogger(MenuProfessorOrientadorController.class);
 
     @FXML
@@ -61,6 +62,8 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
     @FXML
     private JFXButton btnEditarPerfilprofessor;
 
+    @FXML
+    private JFXButton btnProfessorTG;
 
     @FXML
     void abrirSolicitacoesOrientacao(ActionEvent event) {
@@ -136,6 +139,8 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
             var usuario = SessaoUsuario.getUsuarioLogado();
             if (usuario == null || usuario.getEmail() == null) {
                 lblProfessorOri.setText("PROFESSOR ORIENTADOR: (não identificado)");
+                // garantir invisibilidade do botão se não houver usuário
+                if (btnProfessorTG != null) btnProfessorTG.setVisible(false);
                 return;
             }
 
@@ -166,14 +171,23 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
                     sb.append("Perfil não informado");
                 }
 
+                if (btnProfessorTG != null) {
+                    if ("PROF_TG".equalsIgnoreCase(tipoTG)) {
+                        btnProfessorTG.setVisible(true);
+                    } else {
+                        btnProfessorTG.setVisible(false);
+                    }
+                }
 
             } else {
                 // Não tem linha na tabela professor, mas pelo menos mostra algo
+                if (btnProfessorTG != null) btnProfessorTG.setVisible(false);
             }
 
         } catch (Exception e) {
             log.error("Erro ao carregar dados do professor orientador", e);
             lblProfessorOri.setText("PROFESSOR ORIENTADOR: (erro ao carregar)");
+            if (btnProfessorTG != null) btnProfessorTG.setVisible(false);
         }
     }
 
@@ -192,6 +206,20 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
 
 
     @FXML
+    void abrirTelaPerfilTG(ActionEvent event) {
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadMenu("/fxml/professorTG/MenuProfessorTG.fxml");
+                painelPrincipalController.loadContent("/fxml/professorTG/TelaProfessorTG.fxml");
+            } catch (IOException e) {
+                log.error("Falha ao carregar telas de Professor TG", e);
+            }
+        } else {
+            log.error("PainelPrincipalController não foi injetado em MenuProfessorOrientadorController.");
+        }
+    }
+
+    @FXML
     void initialize() {
         assert btnSolicitacoesOrientacao != null : "fx:id=\"btnSolicitacoesOrientacao\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert btnenviarEmail != null : "fx:id=\"btnenviarEmail\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
@@ -201,6 +229,7 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         assert paneSuperiorMenuProfessorOri != null : "fx:id=\"paneSuperiorMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert splitPanelMenuProfessorOri != null : "fx:id=\"splitPanelMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert vboxMenuProfessorOri != null : "fx:id=\"vboxMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
+        assert btnProfessorTG != null : "fx:id=\"btnProfessorTG\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         carregarDadosProfessor();
     }
 }

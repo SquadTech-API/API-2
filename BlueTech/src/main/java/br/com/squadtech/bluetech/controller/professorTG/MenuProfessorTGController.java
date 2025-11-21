@@ -41,7 +41,7 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     private SplitPane splitPanelMenuProfessorTG;
 
     @FXML
-    private Accordion accordionProfessorTG; // ainda declarado, mesmo que não usado
+    private Accordion accordionProfessorTG;
 
     @FXML
     private JFXButton btnPortfolios;
@@ -58,7 +58,6 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     @FXML
     private JFXButton btnOrientacao;
 
-    // Referência ao painel principal unificado
     private PainelPrincipalController painelPrincipalController;
 
     @Override
@@ -68,7 +67,6 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
 
     @Override
     public void onContentChanged(String fxmlPath, Object contentController) {
-        // Mantém compatibilidade com o comportamento anterior (ativar estilo quando a tela está aberta)
         if (btnPortfolios != null) {
             boolean active = fxmlPath.contains("VisualizarPortifolioTG.fxml");
             btnPortfolios.getStyleClass().remove("active");
@@ -76,7 +74,6 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
         }
     }
 
-    // 🔹 Novo método: substitui o comportamento antigo do accordion
     @FXML
     private void abrirPortfolio(ActionEvent event) {
         if (painelPrincipalController == null) {
@@ -85,16 +82,13 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
         }
 
         try {
-            // carrega a tela do portfólio
-            VisualizarPortifolioTGController controller =
+            var controller =
                     painelPrincipalController.loadContentReturnController(
                             "/fxml/professorTG/VisualizarPortifolioTG.fxml",
                             VisualizarPortifolioTGController.class
                     );
 
             if (controller != null) {
-                // no código original, esses parâmetros vinham do accordion
-                // como não há mais semestres e cursos, chamamos criarCards() sem argumentos
                 controller.criarCards(null, null);
             }
 
@@ -102,14 +96,12 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
 
         } catch (Exception e) {
             log.error("Erro ao carregar VisualizarPortifolioTG.fxml", e);
-            e.printStackTrace();
         }
     }
 
     @FXML
     private void abrirCadastrarOrientadores() {
         System.out.println("Abrindo tela de Cadastrar Orientadores...");
-        // você pode adicionar aqui futuramente a navegação dessa tela
     }
 
     @FXML
@@ -129,6 +121,7 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
         System.out.println("Abrindo tela de alunos em progresso...");
     }
 
+    // 🔥 MÉTODO SOLICITADO ALTERADO
     @FXML
     private void abrirOrientacao(ActionEvent event) {
         if (painelPrincipalController == null) {
@@ -137,26 +130,30 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
         }
 
         try {
-            painelPrincipalController.loadContent("/fxml/professorTG/SolicitacaoAlunosOrientacao.fxml");
-            log.info("Tela SolicitacaoAlunosOrientacao carregada com sucesso.");
+            // 🔥 ALTERAÇÃO PEDIDA
+            painelPrincipalController.loadMenu("/fxml/professorOrientador/MenuProfessorOrientador.fxml");
+            painelPrincipalController.loadContent("/fxml/professorOrientador/TelaOrientador.fxml");
+
+            log.info("Redirecionado para TelaOrientador.fxml a partir do MenuProfessorTG.");
+
         } catch (Exception e) {
-            log.error("Erro ao carregar SolicitacaoAlunosOrientacao.fxml", e);
+            log.error("Erro ao carregar TelaOrientador.fxml", e);
         }
     }
 
     @FXML
     void initialize() {
-        assert btnPortfolios != null : "fx:id=\"btnPortfolios\" não foi injetado: verifique seu FXML 'MenuProfessorTG.fxml'.";
-        assert btnCadastrarOrientadores != null : "fx:id=\"btnCadastrarOrientadores\" não foi injetado: verifique seu FXML.";
-        assert btnAgendamentosTG != null : "fx:id=\"btnAgendamentosTG\" não foi injetado: verifique seu FXML.";
-        assert btnProgressso != null : "fx:id=\"btnProgressso\" não foi injetado: verifique seu FXML.";
-        assert btnOrientacao != null : "fx:id=\"btnOrientacao\" não foi injetado: verifique seu FXML.";
-        assert imgViewFotoProfessorTG != null : "fx:id=\"imgViewFotoProfessorTG\" não foi injetado: verifique seu FXML.";
-        assert lblProfessorTG != null : "fx:id=\"lblProfessorTG\" não foi injetado: verifique seu FXML.";
-        assert lblSemestreTG != null : "fx:id=\"lblSemestreTG\" não foi injetado: verifique seu FXML.";
-        assert lblTituloProfessorTG != null : "fx:id=\"lblTituloProfessorTG\" não foi injetado: verifique seu FXML.";
-        assert vboxMenuProfessorTG != null : "fx:id=\"vboxMenuProfessorTG\" não foi injetado: verifique seu FXML.";
-        assert splitPanelMenuProfessorTG != null : "fx:id=\"splitPanelMenuProfessorTG\" não foi injetado: verifique seu FXML.";
+        assert btnPortfolios != null : "fx:id=\"btnPortfolios\" não foi injetado: verifique seu FXML.";
+        assert btnCadastrarOrientadores != null : "fx:id=\"btnCadastrarOrientadores\" não foi injetado.";
+        assert btnAgendamentosTG != null : "fx:id=\"btnAgendamentosTG\" não foi injetado.";
+        assert btnProgressso != null : "fx:id=\"btnProgressso\" não foi injetado.";
+        assert btnOrientacao != null : "fx:id=\"btnOrientacao\" não foi injetado.";
+        assert imgViewFotoProfessorTG != null : "fx:id=\"imgViewFotoProfessorTG\" não foi injetado.";
+        assert lblProfessorTG != null : "fx:id=\"lblProfessorTG\" não foi injetado.";
+        assert lblSemestreTG != null : "fx:id=\"lblSemestreTG\" não foi injetado.";
+        assert lblTituloProfessorTG != null : "fx:id=\"lblTituloProfessorTG\" não foi injetado.";
+        assert vboxMenuProfessorTG != null : "fx:id=\"vboxMenuProfessorTG\" não foi injetado.";
+        assert splitPanelMenuProfessorTG != null : "fx:id=\"splitPanelMenuProfessorTG\" não foi injetado.";
 
         log.info("MenuProfessorTGController inicializado com sucesso.");
     }
