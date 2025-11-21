@@ -13,7 +13,7 @@ public class ConnectionFactory {
     private static final String SERVER_URL = "jdbc:mysql://localhost:3306/";
     private static final String DB_URL = SERVER_URL + "bluetech";
     private static final String USER = "root";
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "GUItec@0909";
 
     private static HikariDataSource dataSource; //Implementação do Pool (inicializado sob demanda)
     private static volatile boolean dbChecked = false; // garante verificação de criação apenas uma vez

@@ -77,50 +77,107 @@ public class TelaPerfilProfessorController{
                 return;
             }
 
+            // --- CAMPOS DA TELA ---
             String senhaAtual = txtSenhaAtual.getText();
             String novaSenha = txtNovaSenha.getText();
+            String novoNome = txtNome.getText();
+            String novoCargo = txtCargo.getText();
+            String novaFoto = caminhoFoto;
 
-            // ---- VALIDAÇÕES ----
+            boolean querAlterarSenha = !senhaAtual.isEmpty() || !novaSenha.isEmpty();
 
-            if (senhaAtual.isEmpty() || novaSenha.isEmpty()) {
-                showAlert("Erro", "Preencha todos os campos de senha.");
-                return;
-            }
 
-            // Verificar senha atual com BCrypt
-            if (!BCrypt.checkpw(senhaAtual, usuario.getSenha())) {
-                showAlert("Erro", "A senha atual está incorreta.");
-                return;
-            }
+            //VALIDAÇÃO DO NOME
 
-            // Nova senha não pode ser igual à antiga
-            if (senhaAtual.equals(novaSenha)) {
-                showAlert("Erro", "A nova senha deve ser diferente da senha atual.");
+            if (novoNome == null || novoNome.trim().isEmpty()) {
+                showAlert("Erro", "O campo Nome não pode estar vazio.");
                 return;
             }
 
 
-            // ---- ATUALIZAR SENHA ----
-            String novoHash = BCrypt.hashpw(novaSenha, BCrypt.gensalt());
+            //VALIDAÇÃO DO CARGO
 
-            UsuarioDAO dao = new UsuarioDAO();
-            boolean updated = dao.updateSenhaProfessor(usuario.getEmail(), novoHash);
-
-            if (!updated) {
-                showAlert("Erro", "Não foi possível atualizar a senha.");
+            if (novoCargo == null || novoCargo.trim().isEmpty()) {
+                showAlert("Erro", "O campo Cargo não pode estar vazio.");
                 return;
             }
 
-            // Atualiza na sessão
 
-            usuario.setSenha(novoHash);
+            //ATUALIZAÇÃO DO NOME
 
-            showAlert("Sucesso", "Senha alterada com sucesso!");
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            boolean nomeOk = usuarioDAO.atualizarNomeUsuario(usuario.getEmail(), novoNome);
 
-            // Limpa campos
-            txtSenhaAtual.clear();
-            txtNovaSenha.clear();
+            if (!nomeOk) {
+                showAlert("Erro", "Não foi possível atualizar o nome.");
+                return;
+            }
 
+            // Atualiza na memória
+            usuario.setNome(novoNome);
+
+
+            //ATUALIZAR PROFESSOR (cargo + foto)
+
+            Professor professor = new Professor();
+            professor.setUsuarioEmail(usuario.getEmail());
+            professor.setCargo(novoCargo);
+            professor.setFoto(novaFoto);
+
+            ProfessorDAO professorDAO = new ProfessorDAO();
+
+            boolean profOk = professorDAO.atualizarProfessor(professor);
+
+            if (!profOk) {
+                showAlert("Erro", "Não foi possível atualizar cargo/foto.");
+                return;
+            }
+
+
+            //ATUALIZAR SENHA (SE PEDIR)
+
+            if (querAlterarSenha) {
+
+                // Campos obrigatórios
+                if (senhaAtual.isEmpty() || novaSenha.isEmpty()) {
+                    showAlert("Erro", "Preencha os dois campos de senha para alterar a senha.");
+                    return;
+                }
+
+                // Verificar senha atual
+                if (!BCrypt.checkpw(senhaAtual, usuario.getSenha())) {
+                    showAlert("Erro", "A senha atual está incorreta.");
+                    return;
+                }
+
+                // Nova senha diferente
+                if (senhaAtual.equals(novaSenha)) {
+                    showAlert("Erro", "A nova senha deve ser diferente da atual.");
+                    return;
+                }
+
+                // Hash nova senha
+                String novoHash = BCrypt.hashpw(novaSenha, BCrypt.gensalt());
+
+                boolean updated = usuarioDAO.updateSenhaProfessor(usuario.getEmail(), novoHash);
+
+                if (!updated) {
+                    showAlert("Erro", "Não foi possível atualizar a senha.");
+                    return;
+                }
+
+                // Atualiza na sessão
+                usuario.setSenha(novoHash);
+
+                // Limpa campos de senha
+                txtSenhaAtual.clear();
+                txtNovaSenha.clear();
+            }
+
+            
+            // SUCESSO GERAL
+
+            showAlert("Sucesso", "Dados atualizados com sucesso!");
 
         } catch (Exception e) {
             showAlert("Erro", "Ocorreu um erro: " + e.getMessage());
@@ -250,6 +307,7 @@ public class TelaPerfilProfessorController{
             }
 
             txtCargo.setText(perfil.getCargo() != null ? perfil.getCargo() : "");
+            imgFoto.setImage(new Image("file:" + perfil.getFoto()));
 
         }
 
