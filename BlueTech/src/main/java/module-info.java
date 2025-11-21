@@ -19,10 +19,15 @@ module br.com.squadtech.bluetech {
     requires javafx.base;
     requires javafx.media;
 
-
+    // ABERTURAS PARA JAVAFX (ADICIONE ESTAS LINHAS)
     opens br.com.squadtech.bluetech to javafx.fxml;
+    opens br.com.squadtech.bluetech.dao to javafx.base;  // ← LINHA NOVA
+    opens br.com.squadtech.bluetech.model to javafx.base; // ← LINHA NOVA (se tiver model)
+
+    // EXPORTS PRINCIPAIS
     exports br.com.squadtech.bluetech;
 
+    // CONTROLLERS
     opens br.com.squadtech.bluetech.controller.professorOrientador to javafx.fxml;
     exports br.com.squadtech.bluetech.controller.professorOrientador;
 
@@ -35,5 +40,6 @@ module br.com.squadtech.bluetech {
     opens br.com.squadtech.bluetech.controller.professorTG to javafx.fxml;
     exports br.com.squadtech.bluetech.controller.professorTG;
 
+    // UTIL
     exports br.com.squadtech.bluetech.util;
 }

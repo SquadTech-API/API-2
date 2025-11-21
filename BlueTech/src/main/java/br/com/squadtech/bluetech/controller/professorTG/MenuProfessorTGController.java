@@ -58,6 +58,10 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     @FXML
     private JFXButton btnOrientacao;
 
+    // 🔥 NOVO BOTÃO 🔥
+    @FXML
+    private JFXButton btnImportarCSV;
+
     // Referência ao painel principal unificado
     private PainelPrincipalController painelPrincipalController;
 
@@ -107,9 +111,29 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     }
 
     @FXML
-    private void abrirCadastrarOrientadores() {
+    private void abrirCadastrarOrientadores(ActionEvent event) {
         System.out.println("Abrindo tela de Cadastrar Orientadores...");
-        // você pode adicionar aqui futuramente a navegação dessa tela
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadContent("/fxml/professorTG/cadastroProfessores.fxml");
+            } catch (Exception e) {
+                log.error("Erro ao carregar cadastroProfessores.fxml", e);
+            }
+        }
+    }
+
+    // 🔥 NOVO MÉTODO PARA IMPORTACAO CSV 🔥
+    @FXML
+    private void abrirImportacaoCSV(ActionEvent event) {
+        System.out.println("Abrindo tela de Importação CSV...");
+        if (painelPrincipalController != null) {
+            try {
+                painelPrincipalController.loadContent("/fxml/professorTG/importacao_csv.fxml");
+                log.info("Tela de importação CSV carregada com sucesso.");
+            } catch (Exception e) {
+                log.error("Erro ao carregar importacao_csv.fxml", e);
+            }
+        }
     }
 
     @FXML
@@ -141,6 +165,7 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
         assert btnAgendamentosTG != null : "fx:id=\"btnAgendamentosTG\" não foi injetado: verifique seu FXML.";
         assert btnProgressso != null : "fx:id=\"btnProgressso\" não foi injetado: verifique seu FXML.";
         assert btnOrientacao != null : "fx:id=\"btnOrientacao\" não foi injetado: verifique seu FXML.";
+        assert btnImportarCSV != null : "fx:id=\"btnImportarCSV\" não foi injetado: verifique seu FXML."; // 🔥 NOVA VALIDAÇÃO 🔥
         assert imgViewFotoProfessorTG != null : "fx:id=\"imgViewFotoProfessorTG\" não foi injetado: verifique seu FXML.";
         assert lblProfessorTG != null : "fx:id=\"lblProfessorTG\" não foi injetado: verifique seu FXML.";
         assert lblSemestreTG != null : "fx:id=\"lblSemestreTG\" não foi injetado: verifique seu FXML.";

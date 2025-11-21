@@ -57,6 +57,10 @@
 
                         <!-- Botões extras -->
                         <JFXButton fx:id="btnPortfolios" maxWidth="Infinity" onAction="#abrirPortfolio" text="Portfólios Concluídos" />
+
+                        <!-- 🔥 NOVO BOTÃO DE IMPORTACAO CSV 🔥 -->
+                        <JFXButton fx:id="btnImportarCSV" maxWidth="Infinity" onAction="#abrirImportacaoCSV" text="Importar CSV Orientadores" />
+
                         <JFXButton fx:id="btnCadastrarOrientadores" maxWidth="Infinity" onAction="#abrirCadastrarOrientadores" text="Cadastrar Orientadores" />
                         <JFXButton fx:id="btnAgendamentosTG" maxWidth="Infinity" onAction="#abrirAgendamentos" text="Agendamentos de TG" />
                         <JFXButton fx:id="btnProgressso" maxWidth="Infinity" onAction="#abrirProgressoAluno" text="Alunos em Progresso" />
