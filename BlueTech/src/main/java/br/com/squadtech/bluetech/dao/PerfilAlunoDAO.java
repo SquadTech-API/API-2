@@ -2,6 +2,7 @@ package br.com.squadtech.bluetech.dao;
 
 import br.com.squadtech.bluetech.config.ConnectionFactory;
 import br.com.squadtech.bluetech.model.PerfilAluno;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class PerfilAlunoDAO {
 
@@ -182,7 +184,7 @@ public class PerfilAlunoDAO {
 
     // Lista alunos para cards (join com usuario p/ obter nome)
     public List<PerfilAluno> listarAlunosParaCard(String termoNomeOpcional, Long professorId) {
-        String base = """
+        StringBuilder sql = new StringBuilder("""
             SELECT
                 p.id_perfil_aluno,
                 p.email_usuario,
@@ -200,33 +202,30 @@ public class PerfilAlunoDAO {
                 ) AS ultimo_feedback_status
             FROM Perfil_Aluno p
             JOIN usuario u ON u.email = p.email_usuario
-        """;
+        """);
 
-        if (professorId != null) {
-            base += " JOIN orienta o ON o.aluno_id = p.id_perfil_aluno AND o.professor_id = ?";
-        }
-        
-        String where = (termoNomeOpcional != null && !termoNomeOpcional.isBlank()) ? " WHERE u.nome LIKE ?" : "";
-        
-        // Se houver professorId, o WHERE já foi adicionado no JOIN (WHERE o.professor_id = ?), então ajustamos a lógica.
-        if (professorId != null && termoNomeOpcional != null && !termoNomeOpcional.isBlank()) {
-            where = " AND u.nome LIKE ?";
-        } else if (professorId == null && termoNomeOpcional != null && !termoNomeOpcional.isBlank()) {
-            where = " WHERE u.nome LIKE ?";
-        } else {
-            where = "";
+        boolean filtrarPorProfessor = professorId != null;
+        if (filtrarPorProfessor) {
+            sql.append(" JOIN orienta o ON o.aluno_id = p.id_perfil_aluno AND o.professor_id = ? AND o.ativo = TRUE");
         }
 
-        String sql = base + where + " ORDER BY u.nome";
+        sql.append(" WHERE 1=1");
+        boolean filtrarPorNome = termoNomeOpcional != null && !termoNomeOpcional.isBlank();
+        if (filtrarPorNome) {
+            sql.append(" AND LOWER(u.nome) LIKE ?");
+        }
+
+        sql.append(" ORDER BY u.nome");
+
         List<PerfilAluno> list = new ArrayList<>();
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             int paramIndex = 1;
-            if (professorId != null) {
+            if (filtrarPorProfessor) {
                 ps.setLong(paramIndex++, professorId);
             }
-            if (!where.isEmpty()) {
-                ps.setString(paramIndex, "%" + termoNomeOpcional + "%");
+            if (filtrarPorNome) {
+                ps.setString(paramIndex, "%" + termoNomeOpcional.trim().toLowerCase(Locale.ROOT) + "%");
             }
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

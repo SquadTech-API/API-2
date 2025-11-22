@@ -99,6 +99,9 @@ public class TelaAlunosController implements SupportsMainController {
             }
         }
         todosAlunos = perfilAlunoDAO.listarAlunosParaCard(null, professorId);
+        if (professorId == null) {
+            todosAlunos.clear();
+        }
     }
 
     private void aplicarFiltroERender() {

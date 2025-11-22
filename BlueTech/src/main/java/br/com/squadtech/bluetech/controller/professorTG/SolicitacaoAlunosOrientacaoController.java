@@ -262,12 +262,17 @@ public class SolicitacaoAlunosOrientacaoController {
     }
 
     private void updateFrontAfterDecision(VBox front, Solicitacao s) {
-        // simples: substitui último label (status)
-        front.getChildren().removeIf(n -> n instanceof Label lbl && lbl.getText().startsWith("Status:"));
+        VBox target = front;
+        if (!front.getChildren().isEmpty() && front.getChildren().get(0) instanceof VBox inner) {
+            target = inner;
+        }
+
+        target.getChildren().removeIf(n -> n instanceof Label lbl && lbl.getText().startsWith("Status:"));
+
         Label novo = new Label("Status: " + s.getStatus());
         String statusClass = mapStatusClass(s.getStatus());
         if (statusClass != null) novo.getStyleClass().add(statusClass);
-        front.getChildren().add(novo);
+        target.getChildren().add(novo);
     }
 
     private void toast(String msg) {
