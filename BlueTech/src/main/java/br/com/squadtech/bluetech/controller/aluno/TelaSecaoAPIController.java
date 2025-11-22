@@ -1,43 +1,51 @@
 package br.com.squadtech.bluetech.controller.aluno;
 
-import java.io.IOException;
-import java.net.URL;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import br.com.squadtech.bluetech.dao.FeedbackDAO;
-import br.com.squadtech.bluetech.model.Feedback;
-import br.com.squadtech.bluetech.model.FeedbackItem;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
-import br.com.squadtech.bluetech.model.SecaoContext;
+import br.com.squadtech.bluetech.dao.FeedbackDAO;
+import br.com.squadtech.bluetech.dao.MensagensDAO;
+import br.com.squadtech.bluetech.dao.OrientaDAO;
+import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
 import br.com.squadtech.bluetech.dao.TGVersaoDAO;
+import br.com.squadtech.bluetech.model.Feedback;
+import br.com.squadtech.bluetech.model.FeedbackItem;
+import br.com.squadtech.bluetech.model.Mensagens;
+import br.com.squadtech.bluetech.model.Orienta;
+import br.com.squadtech.bluetech.model.PerfilAluno;
+import br.com.squadtech.bluetech.model.SecaoContext;
+import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.TGSecao;
 import br.com.squadtech.bluetech.model.TGVersao;
-import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
 import br.com.squadtech.bluetech.util.MarkdownBuilderUtil;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
 public class TelaSecaoAPIController implements SupportsMainController {
 
     private final FeedbackDAO feedbackDAO = new FeedbackDAO();
+    private final MensagensDAO mensagensDAO = new MensagensDAO();
+    private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
+    private final OrientaDAO orientaDAO = new OrientaDAO();
     private static final Logger log = LoggerFactory.getLogger(TelaSecaoAPIController.class);
 
     @FXML
@@ -77,6 +85,10 @@ public class TelaSecaoAPIController implements SupportsMainController {
 
     // Guarda a seção atual para enriquecer metadados no Markdown
     private TGSecao secaoAtual;
+    private FinalizableChatRefresher chatRefresher;
+    private Long professorIdOrientador;
+    private Long orientacaoId;
+    private Integer alunoPerfilId;
 
     // Ajustado para assinar ActionEvent conforme esperado pelo FXML (onAction)
     @FXML
@@ -109,8 +121,27 @@ public class TelaSecaoAPIController implements SupportsMainController {
 
     @FXML
     public void enviarMensagemOrientador(ActionEvent event) {
-
-
+        if (orientacaoId == null || professorIdOrientador == null || alunoPerfilId == null) {
+            return;
+        }
+        if (secaoAtual == null || secaoAtual.getIdSecao() == null) {
+            return;
+        }
+        String conteudo = txtMensagem.getText();
+        if (conteudo == null || conteudo.isBlank()) {
+            return;
+        }
+        Mensagens msg = new Mensagens();
+        msg.setDataHora(LocalDateTime.now());
+        msg.setConteudo(conteudo.trim());
+        msg.setAlunoId(alunoPerfilId);
+        msg.setProfessorId(professorIdOrientador);
+        msg.setOrientacaoId(orientacaoId);
+        msg.setSecaoId(secaoAtual.getIdSecao());
+        msg.setEnviadoPorProfessor(false);
+        mensagensDAO.salvar(msg);
+        txtMensagem.clear();
+        carregarChat();
     }
 
     @FXML
@@ -164,6 +195,18 @@ public class TelaSecaoAPIController implements SupportsMainController {
             return;
         }
 
+        PerfilAluno perfilAluno = perfilAlunoDAO.getPerfilByEmail(user.getEmail());
+        if (perfilAluno != null) {
+            alunoPerfilId = perfilAluno.getIdPerfilAluno();
+            Optional<Orienta> orientacao = orientaDAO.findByAlunoId(alunoPerfilId.longValue()).stream().filter(Orienta::isAtivo).findFirst();
+            orientacaoId = orientacao.map(Orienta::getId).orElse(null);
+            professorIdOrientador = orientacao.map(Orienta::getProfessorId).orElse(null);
+            btnEnviar.setDisable(orientacaoId == null);
+            if (orientacaoId == null) {
+                txtChatVisualizacao.setText("Você ainda não possui orientador ativo.");
+            }
+        }
+
         TGSecaoDAO secaoDAO = new TGSecaoDAO();
         TGVersaoDAO versaoDAO = new TGVersaoDAO();
             // Garante que esquema/colunas da tabela TG_Versao estejam atualizados (evita missing column como Data_Criacao)
@@ -212,12 +255,49 @@ public class TelaSecaoAPIController implements SupportsMainController {
 
             // Feedbacks placeholder — se houver campo de feedback salvo nas versões, buscar e preencher
             carregarFeedbackDaVersao(versao);
+            carregarChat();
+            iniciarChatRefresher();
 
 
         } catch (Exception e) {
             log.error("Erro ao carregar versão", e);
             renderHtmlInWebView("<p><b>Erro ao carregar versão:</b> " + e.getMessage() + "</p>");
         }
+    }
+
+    private void carregarChat() {
+        if (secaoAtual == null || secaoAtual.getIdSecao() == null || orientacaoId == null || professorIdOrientador == null || alunoPerfilId == null) {
+            return;
+        }
+        List<Mensagens> mensagens = mensagensDAO.listarChat(professorIdOrientador, alunoPerfilId.longValue(), secaoAtual.getIdSecao(), 200);
+        if (mensagens.isEmpty()) {
+            txtChatVisualizacao.setText("Nenhuma mensagem ainda.");
+            ultimaMensagem = null;
+            return;
+        }
+        ultimaMensagem = mensagens.get(mensagens.size() - 1).getDataHora();
+        if (chatRefresher != null) {
+            chatRefresher.setUltimaMensagem(ultimaMensagem);
+        }
+        StringBuilder sb = new StringBuilder();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+        for (Mensagens m : mensagens) {
+            String autor = Boolean.TRUE.equals(m.getEnviadoPorProfessor()) ? "Professor" : "Você";
+            String data = m.getDataHora() != null ? m.getDataHora().atZone(ZoneId.systemDefault()).format(formatter) : "";
+            sb.append("[").append(data).append("] ").append(autor).append(": ").append(m.getConteudo()).append("\n");
+        }
+        txtChatVisualizacao.setText(sb.toString());
+        txtChatVisualizacao.positionCaret(txtChatVisualizacao.getText().length());
+    }
+
+    private LocalDateTime ultimaMensagem;
+
+    private void iniciarChatRefresher() {
+        if (chatRefresher != null) {
+            chatRefresher.parar();
+        }
+        chatRefresher = new FinalizableChatRefresher();
+        chatRefresher.start();
     }
 
     private void renderVersaoToWebView(TGVersao v) {
@@ -246,8 +326,8 @@ public class TelaSecaoAPIController implements SupportsMainController {
     @Override
     public void setPainelPrincipalController(PainelPrincipalController controller) {
         this.painelPrincipalController = controller;
-
     }
+
     private void carregarFeedbackDaVersao(TGVersao v) {
         if (txtFeedbacks == null) return;
         txtFeedbacks.clear();
@@ -317,5 +397,60 @@ public class TelaSecaoAPIController implements SupportsMainController {
             case "softSkills"    -> "Soft Skills";
             default -> campoId;
         };
+    }
+
+    private class FinalizableChatRefresher extends Thread {
+        private volatile boolean rodando = true;
+        private LocalDateTime referencia;
+
+        FinalizableChatRefresher() {
+            super("chat-aluno-refresh");
+            setDaemon(true);
+            referencia = ultimaMensagem;
+        }
+
+        void setUltimaMensagem(LocalDateTime dt) {
+            referencia = dt;
+        }
+
+        void parar() {
+            rodando = false;
+            interrupt();
+        }
+
+        @Override
+        public void run() {
+            while (rodando) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ignored) { }
+                if (!rodando || secaoAtual == null || orientacaoId == null || professorIdOrientador == null || alunoPerfilId == null || referencia == null) {
+                    continue;
+                }
+                List<Mensagens> novas = mensagensDAO.listarChatApos(professorIdOrientador, alunoPerfilId.longValue(), secaoAtual.getIdSecao(), referencia, 100);
+                if (!novas.isEmpty()) {
+                    referencia = novas.get(novas.size() - 1).getDataHora();
+                    Platform.runLater(() -> appendMensagens(novas));
+                }
+            }
+        }
+
+        private void appendMensagens(List<Mensagens> novas) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+            StringBuilder sb = new StringBuilder(txtChatVisualizacao.getText());
+            for (Mensagens m : novas) {
+                String autor = Boolean.TRUE.equals(m.getEnviadoPorProfessor()) ? "Professor" : "Você";
+                String data = m.getDataHora() != null ? m.getDataHora().atZone(ZoneId.systemDefault()).format(formatter) : "";
+                sb.append("[").append(data).append("] ").append(autor).append(": ").append(m.getConteudo()).append("\n");
+            }
+            txtChatVisualizacao.setText(sb.toString());
+            txtChatVisualizacao.positionCaret(txtChatVisualizacao.getText().length());
+        }
+    }
+
+    public void dispose() {
+        if (chatRefresher != null) {
+            chatRefresher.parar();
+        }
     }
 }

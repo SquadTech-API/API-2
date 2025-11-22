@@ -1,33 +1,49 @@
 package br.com.squadtech.bluetech.controller.professorOrientador;
 
-
-import br.com.squadtech.bluetech.model.FeedbackItem;
-import javafx.scene.control.TitledPane;
-import javafx.scene.Node;
-import javafx.geometry.Insets;
-import br.com.squadtech.bluetech.dao.FeedbackDAO;
-import br.com.squadtech.bluetech.viewmodel.FeedbackHistoricoVM; // o VM/DTO do histórico
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.dao.FeedbackDAO;
+import br.com.squadtech.bluetech.dao.MensagensDAO;
+import br.com.squadtech.bluetech.dao.OrientaDAO;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO.CardDados;
-import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.model.FeedbackItem;
+import br.com.squadtech.bluetech.model.Mensagens;
+import br.com.squadtech.bluetech.model.Orienta;
+import br.com.squadtech.bluetech.model.PerfilAluno;
+import br.com.squadtech.bluetech.model.Professor;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
-import br.com.squadtech.bluetech.model.Professor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import br.com.squadtech.bluetech.viewmodel.FeedbackHistoricoVM;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class TelaAlunoEspecificoController implements SupportsMainController {
 
@@ -42,35 +58,156 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
     @FXML private ToggleButton tgS1, tgS2, tgS3, tgS4, tgS5, tgS6;
     @FXML private ScrollPane spSessao1, spSessao2, spSessao3, spSessao4, spSessao5, spSessao6;
     @FXML private VBox VBoxSessao1, VBoxSessao2, VBoxSessao3, VBoxSessao4, VBoxSessao5, VBoxSessao6;
+    @FXML private TextArea txtChatVisualizacao;
+    @FXML private TextField txtChatMensagem;
+    @FXML private Button btnEnviarMensagem;
 
-    private long alunoId; // id_perfil_aluno
-
-    private final FeedbackDAO feedbackDAO = new FeedbackDAO();
+    private final MensagensDAO mensagensDAO = new MensagensDAO();
     private final TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
     private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
+    private final OrientaDAO orientaDAO = new OrientaDAO();
+    private final FeedbackDAO feedbackDAO = new FeedbackDAO();
+    private final ProfessorDAO professorDAO = new ProfessorDAO();
     private static final Logger log = LoggerFactory.getLogger(TelaAlunoEspecificoController.class);
+
+    private long alunoId; // id_perfil_aluno
+    private Integer secaoSelecionadaId;
+    private Integer secaoSelecionadaApiNumero;
+    private final Map<Integer, Integer> secaoIdPorApi = new HashMap<>();
+    private Long orientacaoId;
+    private Long professorId;
+    private LocalDateTime ultimaMensagemCarregada;
+    private final ExecutorService chatExecutor = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("chat-professor-refresh");
+        return t;
+    });
 
     public void setAlunoId(long alunoId, String nomeAluno) {
         this.alunoId = alunoId;
         lblNomeAluno.setText(nomeAluno);
+        initializeChatContext();
         carregarSecoesDoAluno();
         configurarToggleButtons();
+        selecionarPrimeiraSecaoDisponivel();
+        carregarChat();
+        agendarRefreshChat();
+    }
+
+    private void initializeChatContext() {
+        Usuario u = SessaoUsuario.getUsuarioLogado();
+        if (u == null || u.getEmail() == null) {
+            btnEnviarMensagem.setDisable(true);
+            txtChatVisualizacao.setText("Sessão expirada.");
+            return;
+        }
+        Professor professor = professorDAO.findByUsuarioEmail(u.getEmail());
+        if (professor == null || professor.getId() == null) {
+            btnEnviarMensagem.setDisable(true);
+            txtChatVisualizacao.setText("Professor não identificado.");
+            return;
+        }
+        this.professorId = professor.getId();
+        Optional<Orienta> orientacao = orientaDAO.findByAlunoId(alunoId).stream().filter(Orienta::isAtivo).findFirst();
+        orientacaoId = orientacao.map(Orienta::getId).orElse(null);
+        btnEnviarMensagem.setDisable(orientacaoId == null);
+        if (orientacaoId == null) {
+            txtChatVisualizacao.setText("Nenhuma orientação ativa para este aluno.");
+        }
+    }
+
+    private void agendarRefreshChat() {
+        chatExecutor.submit(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+                if (professorId == null || orientacaoId == null || secaoSelecionadaId == null || ultimaMensagemCarregada == null) {
+                    continue;
+                }
+                List<Mensagens> novas = mensagensDAO.listarChatApos(professorId, alunoId, secaoSelecionadaId, ultimaMensagemCarregada, 50);
+                if (!novas.isEmpty()) {
+                    ultimaMensagemCarregada = novas.get(novas.size() - 1).getDataHora();
+                    Platform.runLater(() -> appendMensagens(novas));
+                }
+            }
+        });
+    }
+
+    private void carregarChat() {
+        if (professorId == null || orientacaoId == null || secaoSelecionadaId == null) {
+            return;
+        }
+        List<Mensagens> mensagens = mensagensDAO.listarChat(professorId, alunoId, secaoSelecionadaId, 200);
+        ultimaMensagemCarregada = mensagens.isEmpty() ? null : mensagens.get(mensagens.size() - 1).getDataHora();
+        if (mensagens.isEmpty()) {
+            txtChatVisualizacao.setText("Sem mensagens nesta seção.");
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+        for (Mensagens m : mensagens) {
+            String autor = Boolean.TRUE.equals(m.getEnviadoPorProfessor()) ? "Você" : "Aluno";
+            String data = m.getDataHora() != null ? m.getDataHora().atZone(ZoneId.systemDefault()).format(fmt) : "";
+            sb.append("[").append(data).append("] ").append(autor).append(": ").append(m.getConteudo()).append("\n");
+        }
+        txtChatVisualizacao.setText(sb.toString());
+        txtChatVisualizacao.positionCaret(txtChatVisualizacao.getText().length());
+    }
+
+    private void appendMensagens(List<Mensagens> novas) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+        StringBuilder sb = new StringBuilder(txtChatVisualizacao.getText());
+        for (Mensagens m : novas) {
+            String autor = Boolean.TRUE.equals(m.getEnviadoPorProfessor()) ? "Você" : "Aluno";
+            String data = m.getDataHora() != null ? m.getDataHora().atZone(ZoneId.systemDefault()).format(fmt) : "";
+            sb.append("[").append(data).append("] ").append(autor).append(": ").append(m.getConteudo()).append("\n");
+        }
+        txtChatVisualizacao.setText(sb.toString());
+        txtChatVisualizacao.positionCaret(txtChatVisualizacao.getText().length());
+    }
+
+    @FXML
+    private void enviarMensagemAluno() {
+        if (orientacaoId == null || professorId == null || secaoSelecionadaId == null) {
+            return;
+        }
+        String conteudo = txtChatMensagem.getText();
+        if (conteudo == null || conteudo.isBlank()) {
+            return;
+        }
+        Mensagens msg = new Mensagens();
+        msg.setDataHora(LocalDateTime.now());
+        msg.setConteudo(conteudo.trim());
+        msg.setAlunoId((int) alunoId);
+        msg.setProfessorId(professorId);
+        msg.setOrientacaoId(orientacaoId);
+        msg.setSecaoId(secaoSelecionadaId);
+        msg.setEnviadoPorProfessor(true);
+        mensagensDAO.salvar(msg);
+        txtChatMensagem.clear();
+        carregarChat();
     }
 
     /**
      * Carrega todas as seções do aluno direto em código (sem FXML de card)
      */
     private void carregarSecoesDoAluno() {
-        // Obter email do aluno a partir do id_perfil_aluno
         String email = perfilAlunoDAO.getEmailByPerfilId((int) alunoId);
         if (email == null || email.isBlank()) {
             limparVBoxes();
+            secaoIdPorApi.clear();
             return;
         }
         List<CardDados> secoes = tgSecaoDAO.listarCards(email);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         limparVBoxes();
+        secaoIdPorApi.clear();
 
         for (CardDados secao : secoes) {
             // Container do card (header + dropdown)
@@ -102,23 +239,6 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
 
             header.getChildren().addAll(lblTitulo, lblStatus, lblData);
 
-            // Clique no header: abre feedback (se quiser manter essa navegação)
-            header.setOnMouseClicked(e -> {
-                Usuario u = SessaoUsuario.getUsuarioLogado();
-                if (u != null && u.getEmail() != null) {
-                    ProfessorDAO profDAO = new ProfessorDAO();
-                    Professor p = profDAO.findByUsuarioEmail(u.getEmail());
-                    if (p != null && p.getId() != null) {
-                        abrirTelaFeedback(secao.idVersao, p.getId());
-                    } else {
-                        log.warn("Professor não encontrado para o email do usuário logado: {}", u.getEmail());
-                    }
-                } else {
-                    log.warn("Usuário não logado, não é possível dar feedback.");
-                }
-            });
-
-            // ----- Dropdown de feedback (se houver histórico)
             Node feedbackDrop = buildFeedbackDropdown(secao.idSecao);
             if (feedbackDrop != null) {
                 cardContainer.getChildren().addAll(header, feedbackDrop);
@@ -126,10 +246,7 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
                 cardContainer.getChildren().add(header);
             }
 
-            // coloca no VBox da API correspondente
-            int idx = Math.max(1, Math.min(6, secao.apiNumero)) - 1;
-            VBox[] vboxes = {VBoxSessao1, VBoxSessao2, VBoxSessao3, VBoxSessao4, VBoxSessao5, VBoxSessao6};
-            vboxes[idx].getChildren().add(cardContainer);
+            secaoIdPorApi.put(secao.apiNumero, secao.idSecao);
         }
 
     }
@@ -153,13 +270,38 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
                     scrollers[j].setVisible(j == index);
                     toggles[j].setSelected(j == index);
                 }
+                definirSecaoSelecionada(index + 1);
             });
         }
 
-        // Inicialmente mostra apenas a primeira sessão
         for (int j = 0; j < scrollers.length; j++) {
             scrollers[j].setVisible(j == 0);
             toggles[j].setSelected(j == 0);
+        }
+    }
+
+    private void definirSecaoSelecionada(int apiNumero) {
+        secaoSelecionadaApiNumero = apiNumero;
+        secaoSelecionadaId = secaoIdPorApi.get(apiNumero);
+        ultimaMensagemCarregada = null;
+        if (secaoSelecionadaId == null) {
+            txtChatVisualizacao.setText("Aluno ainda não possui entrega para esta seção.");
+            return;
+        }
+        carregarChat();
+    }
+
+    private void selecionarPrimeiraSecaoDisponivel() {
+        if (secaoIdPorApi.isEmpty()) {
+            secaoSelecionadaId = null;
+            txtChatVisualizacao.setText("Aluno ainda não possui seções cadastradas.");
+            return;
+        }
+        int primeiroApi = secaoIdPorApi.keySet().stream().min(Integer::compareTo).orElse(1);
+        definirSecaoSelecionada(primeiroApi);
+        ToggleButton[] toggles = {tgS1, tgS2, tgS3, tgS4, tgS5, tgS6};
+        if (primeiroApi >= 1 && primeiroApi <= toggles.length) {
+            toggles[primeiroApi - 1].setSelected(true);
         }
     }
 
@@ -210,7 +352,7 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
     }
     private Node buildFeedbackRow(FeedbackHistoricoVM vm) {
         String data = (vm.getCriadoEm() != null)
-                ? vm.getCriadoEm().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                ? vm.getCriadoEm().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                 : "-";
 
         // Título do feedback (linha)
@@ -263,8 +405,5 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
 
         return linha;
     }
-
-
-
 
 }
