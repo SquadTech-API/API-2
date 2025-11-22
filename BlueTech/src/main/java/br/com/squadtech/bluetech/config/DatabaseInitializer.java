@@ -1,6 +1,7 @@
 package br.com.squadtech.bluetech.config;
 
 import br.com.squadtech.bluetech.dao.AgendamentoDefesaDAO;
+import br.com.squadtech.bluetech.dao.MensagensDAO;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.dao.TGVersaoDAO;
@@ -44,6 +45,7 @@ public class DatabaseInitializer {
         TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
         AgendamentoDefesaDAO agendamentoDefesaDAO = new AgendamentoDefesaDAO();
+        MensagensDAO mensagensDAO = new MensagensDAO();
 
         //Parte 1: Cria tabelas se não existirem
         usuarioDAO.createTableIfNotExists();
@@ -56,6 +58,8 @@ public class DatabaseInitializer {
         feedbackDAO.createTableIfNotExists();
         solicitacaoDAO.createTableIfNotExists();
         agendamentoDefesaDAO.createTableIfNotExists();
+        mensagensDAO.createTableIfNotExists();
+
 
         //Migrações/índices auxiliares
         TGVersaoDAO.ensureSchemaUpToDate();
