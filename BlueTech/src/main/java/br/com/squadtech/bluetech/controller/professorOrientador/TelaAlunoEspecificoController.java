@@ -20,6 +20,7 @@ import br.com.squadtech.bluetech.viewmodel.FeedbackHistoricoVM;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -238,6 +239,17 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
             lblData.setStyle("-fx-text-fill: #777777;");
 
             header.getChildren().addAll(lblTitulo, lblStatus, lblData);
+
+            if (secao.idVersao > 0) {
+                header.setCursor(Cursor.HAND);
+                header.setOnMouseClicked(evt -> {
+                    if (professorId == null) {
+                        log.warn("Professor não identificado para abrir feedback da API {}", secao.apiNumero);
+                        return;
+                    }
+                    abrirTelaFeedback(secao.idVersao, professorId);
+                });
+            }
 
             Node feedbackDrop = buildFeedbackDropdown(secao.idSecao);
             if (feedbackDrop != null) {
