@@ -246,6 +246,13 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
                 cardContainer.getChildren().add(header);
             }
 
+            VBox destino = obterVBoxPorApi(secao.apiNumero);
+            if (destino != null) {
+                destino.getChildren().add(cardContainer);
+            } else {
+                log.warn("API {} fora do intervalo esperado", secao.apiNumero);
+            }
+
             secaoIdPorApi.put(secao.apiNumero, secao.idSecao);
         }
 
@@ -254,6 +261,18 @@ public class TelaAlunoEspecificoController implements SupportsMainController {
     private void limparVBoxes() {
         VBox[] vboxes = {VBoxSessao1, VBoxSessao2, VBoxSessao3, VBoxSessao4, VBoxSessao5, VBoxSessao6};
         for (VBox vbox : vboxes) vbox.getChildren().clear();
+    }
+
+    private VBox obterVBoxPorApi(int apiNumero) {
+        return switch (apiNumero) {
+            case 1 -> VBoxSessao1;
+            case 2 -> VBoxSessao2;
+            case 3 -> VBoxSessao3;
+            case 4 -> VBoxSessao4;
+            case 5 -> VBoxSessao5;
+            case 6 -> VBoxSessao6;
+            default -> null;
+        };
     }
 
     /**
