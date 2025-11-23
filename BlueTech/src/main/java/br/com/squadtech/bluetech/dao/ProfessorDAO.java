@@ -89,6 +89,7 @@ public class ProfessorDAO {
                     professor.setId(rs.getLong("id"));
                     professor.setUsuarioEmail(rs.getString("usuario_email"));
                     professor.setCargo(rs.getString("cargo"));
+                    professor.setFoto(rs.getString("foto"));
                     professor.setTipoTG(rs.getString("tipo_tg"));
                     professor.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                     professor.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());

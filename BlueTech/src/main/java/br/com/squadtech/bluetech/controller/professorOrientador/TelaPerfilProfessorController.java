@@ -1,3 +1,5 @@
+
+
 package br.com.squadtech.bluetech.controller.professorOrientador;
 
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
@@ -62,9 +64,9 @@ public class TelaPerfilProfessorController{
     void handleCancelar(ActionEvent event) {
         // Recarrega os dados originais do usuário, descartando alterações feitas no formulário
         carregarPerfilUsuario();
-       showAlert("Informação", "Alterações descartadas. Os dados originais foram recarregados.");
-       txtSenhaAtual.clear();
-       txtNovaSenha.clear();
+        showAlert("Informação", "Alterações descartadas. Os dados originais foram recarregados.");
+        txtSenhaAtual.clear();
+        txtNovaSenha.clear();
 
     }
 
@@ -174,7 +176,7 @@ public class TelaPerfilProfessorController{
                 txtNovaSenha.clear();
             }
 
-            
+
             // SUCESSO GERAL
 
             showAlert("Sucesso", "Dados atualizados com sucesso!");
@@ -255,7 +257,7 @@ public class TelaPerfilProfessorController{
     }
 
     @FXML
-     void initialize() {
+    void initialize() {
 
         assert btnCancelar != null : "fx:id=\"btnCancelar\" was not injected: check your FXML file 'TelaPerfilProfessorOrientador.fxml'.";
         assert btnSalvar != null : "fx:id=\"btnSalvar\" was not injected: check your FXML file 'TelaPerfilProfessorOrientador.fxml'.";
@@ -263,7 +265,7 @@ public class TelaPerfilProfessorController{
         assert imgFoto != null : "fx:id=\"imgFoto\" was not injected: check your FXML file 'TelaPerfilProfessorOrientador.fxml'.";
         assert txtEmail != null : "fx:id=\"txtEmail\" was not injected: check your FXML file 'TelaPerfilProfessorOrientador.fxml'.";
         assert txtNome != null : "fx:id=\"txtNome\" was not injected: check your FXML file 'TelaPerfilProfessorOrientador.fxml'.";
-        assert txtCargo != null : "fx id=\"txtCargo\" was not injected: check your FXML file 'TelaPerfilProfessorOrientador.fxml'.";
+        assert txtCargo != null : "fx:id=\"txtCargo\" was not injected: check your FXML file 'TelaPerfilProfessorOrientador.fxml'.";
 
         txtEmail.setEditable(false);
 
@@ -307,7 +309,6 @@ public class TelaPerfilProfessorController{
             }
 
             txtCargo.setText(perfil.getCargo() != null ? perfil.getCargo() : "");
-            imgFoto.setImage(new Image("file:" + perfil.getFoto()));
 
         }
 
