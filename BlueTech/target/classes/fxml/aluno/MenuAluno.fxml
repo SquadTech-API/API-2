@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<SplitPane fx:id="splitPanelMenuAluno" dividerPositions="0.4" orientation="VERTICAL" styleClass="menu-lateral" stylesheets="@../../css/MenuStyles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.MenuAlunoController">
+  <items>
+    <AnchorPane fx:id="paneSuperiorMenuAluno" minHeight="200.0" prefHeight="260.0">
+         <children>
+            <VBox alignment="TOP_CENTER" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Label fx:id="painelAluno" text="Painel do Aluno" textFill="#ffd400">
+                     <font>
+                        <Font name="CaskaydiaMono NFM SemiBold" size="20.0" />
+                     </font>
+                  </Label>
+                   <StackPane fx:id="profileFrame" styleClass="profile-frame">
+                       <ImageView fx:id="imgViewFotoAluno" fitHeight="112.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                               <Image url="@../../assets/Usuario.png" />
+                           </image>
+                       </ImageView>
+                   </StackPane>
+                  <VBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="6.0">
+                     <children>
+                        <Label fx:id="txtMenuAlunoNomeAluno" text="Aluno:" textFill="WHITE" />
+                        <Label fx:id="txtMenuAlunoCursoAluno" text="Curso:" textFill="WHITE" />
+                        <Label fx:id="txtMenuAlunoOrientadorAluno" text="Orientador:" textFill="WHITE" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+    </AnchorPane>
+    <VBox fx:id="vboxMenuAluno" alignment="TOP_CENTER" fillWidth="true" prefWidth="200.0" spacing="16.0">
+       <padding>
+          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+       </padding>
+       <children>
+          <JFXButton fx:id="btnAlunoEntregas" maxWidth="Infinity" onAction="#AbrirEntregasSeccoes" text="Entregas" />
+          <JFXButton fx:id="btnAlunoPortifolio" maxWidth="Infinity" text="Portifólio" />
+          <JFXButton fx:id="btnAlunoSolicitarOrientacao" maxWidth="Infinity" onAction="#SolicitarOrientacao" text="Solicitar Orientação" />
+          <JFXButton fx:id="btnAlunoAgendamentoDefesa" maxWidth="Infinity" onAction="#AbrirAgendamentoDefesa" text="Agendamento Defesa" />
+          <JFXButton fx:id="btnAlunoPerfil" maxWidth="Infinity" onAction="#AbreTelaPerfilAluno" text="Perfil" />
+       </children>
+    </VBox>
+  </items>
+</SplitPane>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<SplitPane fx:id="splitPanelMenuADM" dividerPositions="0.4" orientation="VERTICAL" styleClass="menu-lateral" stylesheets="@../../css/MenuStyles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.admin.MenuADMController">
+
+    <items>
+        <!-- Topo do menu -->
+        <AnchorPane fx:id="paneSuperiorMenuADM" minHeight="200.0" prefHeight="260.0">
+            <children>
+                <VBox alignment="TOP_CENTER" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10" />
+                    </padding>
+                    <children>
+                        <Label fx:id="lblTituloADM" text="Painel Administrador" textFill="#ffd400">
+                            <font>
+                                <Font name="CaskaydiaMono NFM SemiBold" size="20" />
+                            </font>
+                        </Label>
+
+                        <!-- 🔥 IMAGEM COMENTADA TEMPORARIAMENTE - MESMO PADRÃO DO PROFESSOR TG -->
+                        <!-- <ImageView fx:id="imgViewFotoADM" fitWidth="100" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../main/resources/assets/Usuario.png" />
+                            </image>
+                        </ImageView> -->
+
+                        <VBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="6.0">
+                            <children>
+                                <Label fx:id="lblADM" style="-fx-font-weight: bold; -fx-font-size: 16px;" text="ADMINISTRADOR:" textFill="WHITE" />
+                                <Label fx:id="lblSemestreADM" style="-fx-font-size: 14px;" text="SISTEMA BLUETECH" textFill="WHITE" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+
+        <!-- Menu lateral com Accordion e botões -->
+        <VBox fx:id="vboxMenuADM" alignment="TOP_CENTER" fillWidth="true" prefWidth="200.0" spacing="16.0">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <children>
+                <VBox fillWidth="true" spacing="16.0">
+                    <children>
+                        <!-- Accordion principal -->
+                        <Accordion fx:id="accordionADM" prefWidth="Infinity" styleClass="menu-accordion" />
+
+                        <!-- Botões do ADMIN -->
+                        <JFXButton fx:id="btnTelaInicial" maxWidth="Infinity" onAction="#abrirTelaInicial" text="Tela Inicial" />
+
+                        <JFXButton fx:id="btnAddProfessor" maxWidth="Infinity" onAction="#abrirTelaAdicionarProfessor" text="Adicionar Professor TG" />
+
+                        <JFXButton fx:id="btnCSV" maxWidth="Infinity" onAction="#AbrirTelaCSV" text="Cadastrar Professores - CSV" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </items>
+</SplitPane>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/21.0.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.TelaEntregasAlunoController">
+
+    <!-- Cabeçalho -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: transparent;" styleClass="hbox-header">
+            <padding>
+                <Insets bottom="15" left="20" right="20" top="15" />
+            </padding>
+
+            <!-- Label ocupa o lado esquerdo -->
+            <Label styleClass="label-title" text="Minhas Entregas" HBox.hgrow="ALWAYS" />
+
+            <!-- Espaço elástico para empurrar o botão -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Botão alinhado à direita -->
+            <Button fx:id="btnCriarSecao" onAction="#CriarEntregaSessaoAPI" styleClass="button-primary" text="+ Criar Seção" />
+        </HBox>
+    </top>
+
+    <!-- Área Central com os Cards -->
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="scroll-pane">
+            <content>
+                <FlowPane fx:id="flowCards" alignment="TOP_LEFT" hgap="20" vgap="20">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+
+                    <!-- Exemplo de card fixo (para visualização no Scene Builder) -->
+                    <children>
+                        <VBox alignment="CENTER_LEFT" styleClass="card">
+                            <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="1º Semestre - 2025/1" />
+                            <Label styleClass="status-em-andamento" text="Status: Em andamento" />
+                            <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="Última atualização: 21/10/2025" />
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" styleClass="card">
+                            <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="2º Semestre - 2025/2" />
+                            <Label styleClass="status-entregue" text="Status: Entregue" />
+                            <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="Última atualização: 12/10/2025" />
+                        </VBox>
+                    </children>
+                </FlowPane>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

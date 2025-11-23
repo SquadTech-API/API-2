@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaFeedbackController"
+            prefWidth="1000" prefHeight="800"
+            stylesheets="@../../css/Style.css">
+
+    <VBox spacing="20"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Cabeçalho -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Feedback do Aluno:" style="-fx-font-weight: bold; -fx-font-size: 18px;" />
+            <Label fx:id="lblAlunoNome" text="Nome do Aluno" style="-fx-font-size: 18px;" />
+        </HBox>
+
+        <!-- Formulário de feedback -->
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <content>
+                <VBox fx:id="vbFeedbackForm" spacing="15"/>
+            </content>
+        </ScrollPane>
+
+        <!-- Comentário geral -->
+        <Label text="Comentário Geral (Opcional):" style="-fx-font-weight: bold;" />
+        <TextArea fx:id="ta_comentario_geral"
+                  promptText="Escreva um comentário geral..."
+                  prefHeight="80"
+                  wrapText="true" />
+
+        <!-- Botões -->
+        <HBox alignment="CENTER_RIGHT" spacing="10">
+            <Button fx:id="btnAprovado"
+                    onAction="#aprovar"
+                    text="Aprovado"
+                    style="-fx-background-color: #22c55e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    prefWidth="140" prefHeight="40" />
+
+            <Button fx:id="btn_professorTG_finalizar"
+                    onAction="#finalizar"
+                    text="Finalizar Feedback"
+                    style="-fx-background-color: #1E90FF; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6;"
+                    prefWidth="180" prefHeight="40" />
+        </HBox>
+    </VBox>
+
+</AnchorPane>

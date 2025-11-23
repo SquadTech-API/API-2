@@ -50,4 +50,47 @@ public final class NotifierFacade {
             return new NotificationService(conn, email).notifyStudentOnProfessorFeedback(feedbackId);
         }
     }
+
+    public String notifyVersionApproved(long versaoId) throws Exception {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            return new NotificationService(conn, email).notifyStudentOnVersionApproved(versaoId);
+        }
+    }
+
+    public String notifySectionApproved(long secaoId) throws Exception {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            return new NotificationService(conn, email).notifyStudentOnSectionApproved(secaoId);
+        }
+    }
+
+    public String notifyPortfolioCompleted(long portifolioId) throws Exception {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            return new NotificationService(conn, email).notifyStudentOnPortfolioCompleted(portifolioId);
+        }
+    }
+
+    public String notifyCoordinatorOnPortfolioCompleted(long portifolioId) throws Exception {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            return new NotificationService(conn, email).notifyCoordinatorOnPortfolioCompleted(portifolioId);
+        }
+    }
+
+    public String notifyOrientationRequest(long alunoId, long professorId) throws Exception {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            return new NotificationService(conn, email).notifyProfessorOnOrientationRequest(alunoId, professorId);
+        }
+    }
+
+    public String notifyOrientationResponse(long alunoId, long professorId, boolean aceita) throws Exception {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            return new NotificationService(conn, email).notifyStudentOnOrientationResponse(alunoId, professorId, aceita);
+        }
+    }
+
+    public void notifyDefenseScheduled(long defesaId) throws Exception {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            new NotificationService(conn, email).notifyOnDefenseScheduled(defesaId);
+        }
+    }
+
 }
