@@ -9,6 +9,32 @@ import java.util.List;
 
 public class ProfessorTGDAO {
 
+    public void createTableIfNotExists() {
+        String sql = """
+            CREATE TABLE IF NOT EXISTS professor_tg (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nome VARCHAR(150) NOT NULL,
+                usuario_email VARCHAR(190) NOT NULL,
+                cargo VARCHAR(150),
+                tipo_tg ENUM('TG1','TG2','AMBOS','NENHUM') NOT NULL DEFAULT 'NENHUM',
+                curso_vinculado VARCHAR(150),
+                formacao_academica TEXT,
+                areas_especializacao TEXT,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                CONSTRAINT uk_professor_tg_email UNIQUE (usuario_email),
+                CONSTRAINT fk_professor_tg_usuario FOREIGN KEY (usuario_email)
+                    REFERENCES usuario(email) ON DELETE RESTRICT ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        """;
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao criar tabela professor_tg: " + e.getMessage(), e);
+        }
+    }
+
     public boolean salvar(ProfessorTG professor) {
         String sql = professor.getId() == 0 ?
                 "INSERT INTO professor_tg (nome, usuario_email, cargo, tipo_tg, curso_vinculado, formacao_academica, areas_especializacao) VALUES (?, ?, ?, ?, ?, ?, ?)" :
