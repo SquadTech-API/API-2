@@ -47,6 +47,7 @@ public class TelaSecaoAPIController implements SupportsMainController {
     private final PerfilAlunoDAO perfilAlunoDAO = new PerfilAlunoDAO();
     private final OrientaDAO orientaDAO = new OrientaDAO();
     private static final Logger log = LoggerFactory.getLogger(TelaSecaoAPIController.class);
+    private static final String TOOLTIP_EDIT_BLOCKED = "Edição liberada apenas após o feedback do orientador.";
 
     @FXML
     private ResourceBundle resources;
@@ -155,6 +156,9 @@ public class TelaSecaoAPIController implements SupportsMainController {
         assert webViewMarkdown != null : "fx:id=\"webViewMarkdown\" was not injected: check your FXML file 'TelaSecaoAPI.fxml'.";
         assert txtMensagem != null : "fx:id=\"txtMensagem\" was not injected: check your FXML file 'TelaSecaoAPI.fxml'.";
 
+        btnEditarSecao.setDisable(true);
+        btnEditarSecao.setTooltip(new Tooltip(TOOLTIP_EDIT_BLOCKED));
+
         carregarMarkdownDaUltimaVersaoSelecionada();
 
         // Configura renderer da lista de versões para exibir id e data
@@ -176,13 +180,17 @@ public class TelaSecaoAPIController implements SupportsMainController {
         listVersoes.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
             if (newV != null) {
                 renderVersaoToWebView(newV);
-                carregarFeedbackDaVersao(newV); // <<< adiciona aqui
+                Feedback fb = carregarFeedbackDaVersao(newV);
+                atualizarEstadoBotaoEdicao(newV, fb);
+            } else {
+                atualizarEstadoBotaoEdicao(null, null);
             }
         });
 
     }
 
     private void carregarMarkdownDaUltimaVersaoSelecionada() {
+        atualizarEstadoBotaoEdicao(null, null);
         Integer idSecao = SecaoContext.getIdSecaoSelecionada();
         if (idSecao == null) {
             renderHtmlInWebView("<p><i>Nenhuma seção selecionada.</i></p>");
@@ -253,8 +261,8 @@ public class TelaSecaoAPIController implements SupportsMainController {
                 }
             }
 
-            // Feedbacks placeholder — se houver campo de feedback salvo nas versões, buscar e preencher
-            carregarFeedbackDaVersao(versao);
+            Feedback feedback = carregarFeedbackDaVersao(versao);
+            atualizarEstadoBotaoEdicao(versao, feedback);
             carregarChat();
             iniciarChatRefresher();
 
@@ -328,13 +336,13 @@ public class TelaSecaoAPIController implements SupportsMainController {
         this.painelPrincipalController = controller;
     }
 
-    private void carregarFeedbackDaVersao(TGVersao v) {
-        if (txtFeedbacks == null) return;
+    private Feedback carregarFeedbackDaVersao(TGVersao v) {
+        if (txtFeedbacks == null) return null;
         txtFeedbacks.clear();
 
         if (v == null) {
             txtFeedbacks.setText("Nenhuma versão selecionada.");
-            return;
+            return null;
         }
 
         Long versaoId = null;
@@ -344,16 +352,15 @@ public class TelaSecaoAPIController implements SupportsMainController {
             }
         } catch (Exception ignore) {}
 
-
         if (versaoId == null) {
             txtFeedbacks.setText("Não foi possível identificar a versão para carregar o feedback.");
-            return;
+            return null;
         }
 
         Feedback fb = feedbackDAO.buscarPorVersaoId(versaoId);
         if (fb == null) {
             txtFeedbacks.setText("Nenhum feedback para esta versão.");
-            return;
+            return null;
         }
 
         StringBuilder sb = new StringBuilder();
@@ -382,6 +389,7 @@ public class TelaSecaoAPIController implements SupportsMainController {
         }
 
         txtFeedbacks.setText(sb.toString());
+        return fb;
     }
 
     private String traduzCampo(String campoId) {
@@ -397,6 +405,24 @@ public class TelaSecaoAPIController implements SupportsMainController {
             case "softSkills"    -> "Soft Skills";
             default -> campoId;
         };
+    }
+
+    private void atualizarEstadoBotaoEdicao(TGVersao versao, Feedback feedback) {
+        if (btnEditarSecao == null) return;
+        boolean versaoEhAtual = versao != null && secaoAtual != null && versao.getIdSecaoApi() != null && versao.getIdSecaoApi().equals(secaoAtual.getIdVersao());
+        boolean feedbackPermiteEdicao = feedback != null && (feedback.getStatus() == null || !"APROVADO".equalsIgnoreCase(feedback.getStatus()));
+        boolean habilitar = versaoEhAtual && feedbackPermiteEdicao;
+        btnEditarSecao.setDisable(!habilitar);
+        if (habilitar) {
+            btnEditarSecao.setTooltip(null);
+        } else {
+            Tooltip tip = btnEditarSecao.getTooltip();
+            if (tip == null) {
+                btnEditarSecao.setTooltip(new Tooltip(TOOLTIP_EDIT_BLOCKED));
+            } else {
+                tip.setText(TOOLTIP_EDIT_BLOCKED);
+            }
+        }
     }
 
     private class FinalizableChatRefresher extends Thread {

@@ -340,4 +340,16 @@ public class TGVersaoDAO {
             throw new RuntimeException("Erro ao atribuir Versao_Numero após atualizar Id_Secao: " + e.getMessage(), e);
         }
     }
+
+    public void updateMarkdownContent(int idVersao, String markdownContent) {
+        String sql = "UPDATE TG_Versao SET Markdown_Content = ? WHERE Id_Versao = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, markdownContent);
+            ps.setInt(2, idVersao);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar Markdown da TG_Versao: " + e.getMessage(), e);
+        }
+    }
 }

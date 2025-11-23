@@ -4,28 +4,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@../../css/Style.css"
-            xmlns="http://javafx.com/javafx/24.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="br.com.squadtech.bluetech.controller.aluno.EditarSecaoAPIController">
+<BorderPane stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.EditarSecaoAPIController">
 
     <!-- Cabeçalho -->
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="header-bar">
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="titled-pane">
             <padding>
                 <Insets bottom="15" left="20" right="20" top="15" />
             </padding>
 
-            <Label text="Editar Seção API"
-                   styleClass="label-title"
-                   HBox.hgrow="ALWAYS" />
+            <Label styleClass="label-title" text="Editar Seção API" HBox.hgrow="ALWAYS" />
 
             <Region HBox.hgrow="ALWAYS" />
 
-            <Button fx:id="btnVoltar"
-                    onAction="#voltarTelaSecaoAPI"
-                    text="Voltar"
-                    styleClass="button-secondary" />
+            <Button fx:id="btnVoltar" onAction="#voltarTelaSecaoAPI" styleClass="button-secondary" text="Voltar" />
         </HBox>
     </top>
 
@@ -42,67 +34,50 @@
 
                             <!-- PROBLEMA -->
                             <VBox spacing="4">
-                                <Label text="Problema:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taProblema"
-                                          wrapText="true"
-                                          prefRowCount="3"
-                                          VBox.vgrow="NEVER"/>
+                                <Label style="-fx-font-weight: bold;" text="Problema:" />
+                                <TextArea fx:id="taProblema" prefRowCount="3" wrapText="true" VBox.vgrow="NEVER" />
                             </VBox>
 
                             <!-- SOLUÇÃO -->
                             <VBox spacing="4">
-                                <Label text="Solução:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taSolucao"
-                                          wrapText="true"
-                                          prefRowCount="3" />
+                                <Label style="-fx-font-weight: bold;" text="Solução:" />
+                                <TextArea fx:id="taSolucao" prefRowCount="3" wrapText="true" />
                             </VBox>
 
                             <!-- REPOSITÓRIO -->
                             <VBox spacing="4">
-                                <Label text="Repositório:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taRepositorio"
-                                          wrapText="true"
-                                          prefRowCount="2" />
+                                <Label style="-fx-font-weight: bold;" text="Repositório:" />
+                                <TextArea fx:id="taRepositorio" prefRowCount="2" wrapText="true" />
                             </VBox>
 
                             <!-- LINKEDIN -->
                             <VBox spacing="4">
-                                <Label text="LinkedIn:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taLinkedin"
-                                          wrapText="true"
-                                          prefRowCount="2" />
+                                <Label style="-fx-font-weight: bold;" text="LinkedIn:" />
+                                <TextArea fx:id="taLinkedin" prefRowCount="2" wrapText="true" />
                             </VBox>
 
                             <!-- TECNOLOGIAS -->
                             <VBox spacing="4">
-                                <Label text="Tecnologias:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taTecnologias"
-                                          wrapText="true"
-                                          prefRowCount="3" />
+                                <Label style="-fx-font-weight: bold;" text="Tecnologias:" />
+                                <TextArea fx:id="taTecnologias" prefRowCount="3" wrapText="true" />
                             </VBox>
 
                             <!-- CONTRIBUIÇÕES -->
                             <VBox spacing="4">
-                                <Label text="Contribuições:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taContribuicoes"
-                                          wrapText="true"
-                                          prefRowCount="3" />
+                                <Label style="-fx-font-weight: bold;" text="Contribuições:" />
+                                <TextArea fx:id="taContribuicoes" prefRowCount="3" wrapText="true" />
                             </VBox>
 
                             <!-- HARD SKILLS -->
                             <VBox spacing="4">
-                                <Label text="Hard Skills:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taHardSkills"
-                                          wrapText="true"
-                                          prefRowCount="3" />
+                                <Label style="-fx-font-weight: bold;" text="Hard Skills:" />
+                                <TextArea fx:id="taHardSkills" prefRowCount="3" wrapText="true" />
                             </VBox>
 
                             <!-- SOFT SKILLS -->
                             <VBox spacing="4">
-                                <Label text="Soft Skills:" style="-fx-font-weight: bold;" />
-                                <TextArea fx:id="taSoftSkills"
-                                          wrapText="true"
-                                          prefRowCount="3" />
+                                <Label style="-fx-font-weight: bold;" text="Soft Skills:" />
+                                <TextArea fx:id="taSoftSkills" prefRowCount="3" wrapText="true" />
                             </VBox>
 
                         </VBox>
@@ -116,14 +91,9 @@
                         <Insets bottom="20" left="20" right="20" top="20" />
                     </padding>
 
-                    <Label text="Feedback do Orientador"
-                           style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+                    <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Feedback do Orientador" />
 
-                    <TextArea fx:id="txtFeedbackOrientador"
-                              editable="false"
-                              wrapText="true"
-                              VBox.vgrow="ALWAYS"
-                              style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" />
+                    <TextArea fx:id="txtFeedbackOrientador" editable="false" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" wrapText="true" VBox.vgrow="ALWAYS" />
                 </VBox>
 
             </items>
@@ -137,15 +107,9 @@
                 <Insets bottom="15" left="20" right="20" top="15" />
             </padding>
 
-            <Button fx:id="btnCancelar"
-                    onAction="#cancelaMudancas"
-                    text="Cancelar"
-                    styleClass="button-secondary" />
+            <Button fx:id="btnCancelar" onAction="#cancelaMudancas" styleClass="button-secondary" text="Cancelar" />
 
-            <Button fx:id="btnSalvar"
-                    onAction="#salvarNovaVersaoSessaoAPI"
-                    text="Salvar Alterações"
-                    styleClass="button-primary" />
+            <Button fx:id="btnSalvar" onAction="#salvarNovaVersaoSessaoAPI" styleClass="button-primary" text="Salvar Alterações" />
         </HBox>
     </bottom>
 

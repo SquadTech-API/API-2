@@ -74,8 +74,15 @@ public final class MarkdownBuilderUtil {
         // Metadados
         sb.append("---\n");
         sb.append("API número: ").append(s != null ? s.getApiNumero() : "N/A").append("  \n");
-        sb.append("Versão: ").append(v.getVersaoNumero() != null ? ("v" + v.getVersaoNumero()) : ("id=" + v.getIdSecaoApi())).append("  \n");
-        sb.append("Data da versão: ").append(v.getCreatedAt() != null ? v.getCreatedAt().toString() : "N/A").append("  \n");
+        String versaoLabel = v.getVersaoNumero() != null ? ("v" + v.getVersaoNumero()) : (v.getIdSecaoApi() != null ? "id=" + v.getIdSecaoApi() : "N/A");
+        sb.append("Versão: ").append(versaoLabel).append("  \n");
+        if (v.getCreatedAt() != null) {
+            sb.append("Data da versão: ").append(v.getCreatedAt().toLocalDate()).append("  \n");
+            sb.append("Hora: ").append(v.getCreatedAt().toLocalTime()).append("  \n");
+        } else {
+            sb.append("Data da versão: N/A  \n");
+            sb.append("Hora: N/A  \n");
+        }
 
         return sb.toString();
     }
