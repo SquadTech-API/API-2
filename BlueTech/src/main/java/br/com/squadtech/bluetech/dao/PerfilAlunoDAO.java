@@ -19,7 +19,8 @@ public class PerfilAlunoDAO {
 
     private static final Logger log = LoggerFactory.getLogger(PerfilAlunoDAO.class);
 
-    //Construtor vazio (seguindo padrão do UsuarioDAO que abre conexão dentro de cada método)
+    // Construtor vazio (seguindo padrão do UsuarioDAO que abre conexão dentro de
+    // cada método)
     public PerfilAlunoDAO() {
     }
 
@@ -38,7 +39,7 @@ public class PerfilAlunoDAO {
                 "FOREIGN KEY (email_usuario) REFERENCES usuario(email)" +
                 ")";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao criar tabela Perfil_Aluno: " + e.getMessage());
@@ -51,7 +52,7 @@ public class PerfilAlunoDAO {
     public boolean existePerfil(String emailUsuario) {
         String sql = "SELECT 1 FROM Perfil_Aluno WHERE email_usuario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, emailUsuario);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
@@ -62,17 +63,20 @@ public class PerfilAlunoDAO {
     }
 
     /**
-     * Verifica se o perfil do aluno está completo (com campos principais preenchidos).
+     * Verifica se o perfil do aluno está completo (com campos principais
+     * preenchidos).
      * Não exige idade nem foto porque podem ser opcionais.
      */
     public boolean isPerfilCompleto(String emailUsuario) {
-        String sql = "SELECT historico_academico, motivacao, historico_profissional, link_github, link_linkedin, conhecimentos_tecnicos " +
+        String sql = "SELECT historico_academico, motivacao, historico_profissional, link_github, link_linkedin, conhecimentos_tecnicos "
+                +
                 "FROM Perfil_Aluno WHERE email_usuario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, emailUsuario);
             try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) return false; // não há perfil
+                if (!rs.next())
+                    return false; // não há perfil
                 String histAcad = rs.getString("historico_academico");
                 String motiv = rs.getString("motivacao");
                 String histProf = rs.getString("historico_profissional");
@@ -97,7 +101,7 @@ public class PerfilAlunoDAO {
     public PerfilAluno getPerfilByEmail(String emailUsuario) {
         String sql = "SELECT * FROM Perfil_Aluno WHERE email_usuario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, emailUsuario);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -130,12 +134,14 @@ public class PerfilAlunoDAO {
     public boolean inserirPerfil(PerfilAluno perfil) {
         String sql = "INSERT INTO Perfil_Aluno (email_usuario, idade, foto, historico_academico, motivacao, historico_profissional, link_github, link_linkedin, conhecimentos_tecnicos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, perfil.getEmailUsuario());
 
-            if (perfil.getIdade() != null) stmt.setInt(2, perfil.getIdade());
-            else stmt.setNull(2, Types.INTEGER);
+            if (perfil.getIdade() != null)
+                stmt.setInt(2, perfil.getIdade());
+            else
+                stmt.setNull(2, Types.INTEGER);
 
             stmt.setString(3, perfil.getFoto());
             stmt.setString(4, perfil.getHistoricoAcademico());
@@ -159,10 +165,12 @@ public class PerfilAlunoDAO {
     public boolean atualizarPerfil(PerfilAluno perfil) {
         String sql = "UPDATE Perfil_Aluno SET idade = ?, foto = ?, historico_academico = ?, motivacao = ?, historico_profissional = ?, link_github = ?, link_linkedin = ?, conhecimentos_tecnicos = ? WHERE email_usuario = ?";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            if (perfil.getIdade() != null) stmt.setInt(1, perfil.getIdade());
-            else stmt.setNull(1, Types.INTEGER);
+            if (perfil.getIdade() != null)
+                stmt.setInt(1, perfil.getIdade());
+            else
+                stmt.setNull(1, Types.INTEGER);
 
             stmt.setString(2, perfil.getFoto());
             stmt.setString(3, perfil.getHistoricoAcademico());
@@ -182,27 +190,26 @@ public class PerfilAlunoDAO {
         }
     }
 
-    // Lista alunos para cards (join com usuario p/ obter nome)
     public List<PerfilAluno> listarAlunosParaCard(String termoNomeOpcional, Long professorId) {
         StringBuilder sql = new StringBuilder("""
-            SELECT
-                p.id_perfil_aluno,
-                p.email_usuario,
-                p.idade,
-                p.foto,
-                p.link_github,
-                u.nome AS nome_aluno,
-                (
-                    SELECT f.status FROM feedback f
-                    JOIN TG_Versao v ON f.versao_id = v.Id_Versao
-                    JOIN TG_Secao s ON v.Id_Secao = s.Id_Secao
-                    WHERE s.email_usuario = p.email_usuario
-                    ORDER BY f.created_at DESC
-                    LIMIT 1
-                ) AS ultimo_feedback_status
-            FROM Perfil_Aluno p
-            JOIN usuario u ON u.email = p.email_usuario
-        """);
+                    SELECT
+                        p.id_perfil_aluno,
+                        p.email_usuario,
+                        p.idade,
+                        p.foto,
+                        p.link_github,
+                        u.nome AS nome_aluno,
+                        (
+                            SELECT f.status FROM feedback f
+                            JOIN TG_Versao v ON f.versao_id = v.Id_Versao
+                            JOIN TG_Secao s ON v.Id_Secao = s.Id_Secao
+                            WHERE s.email_usuario = p.email_usuario
+                            ORDER BY f.created_at DESC
+                            LIMIT 1
+                        ) AS ultimo_feedback_status
+                    FROM Perfil_Aluno p
+                    JOIN usuario u ON u.email = p.email_usuario
+                """);
 
         boolean filtrarPorProfessor = professorId != null;
         if (filtrarPorProfessor) {
@@ -219,7 +226,7 @@ public class PerfilAlunoDAO {
 
         List<PerfilAluno> list = new ArrayList<>();
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+                PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             int paramIndex = 1;
             if (filtrarPorProfessor) {
                 ps.setLong(paramIndex++, professorId);
@@ -232,15 +239,12 @@ public class PerfilAlunoDAO {
                     PerfilAluno a = new PerfilAluno();
                     a.setIdPerfilAluno(rs.getInt("id_perfil_aluno"));
                     a.setEmailUsuario(rs.getString("email_usuario"));
-                    a.setLinkGithub(rs.getString("link_github"));  // 👈 ESSA LINHA
+                    a.setLinkGithub(rs.getString("link_github"));
                     int idade = rs.getInt("idade");
                     a.setIdade(rs.wasNull() ? null : idade);
                     a.setFoto(rs.getString("foto"));
                     a.setNomeAluno(rs.getString("nome_aluno"));
-                    
-                    // Novo campo: Status do último feedback
                     a.setUltimoFeedbackStatus(rs.getString("ultimo_feedback_status"));
-                    
                     list.add(a);
                 }
             }
@@ -250,13 +254,64 @@ public class PerfilAlunoDAO {
         return list;
     }
 
+    public List<PerfilAluno> buscarAlunosPorNomeOuEmail(String termo) {
+        String sql = """
+                    SELECT
+                        p.id_perfil_aluno,
+                        p.email_usuario,
+                        p.idade,
+                        p.foto,
+                        p.link_github,
+                        u.nome AS nome_aluno,
+                        (
+                            SELECT f.status FROM feedback f
+                            JOIN TG_Versao v ON f.versao_id = v.Id_Versao
+                            JOIN TG_Secao s ON v.Id_Secao = s.Id_Secao
+                            WHERE s.email_usuario = p.email_usuario
+                            ORDER BY f.created_at DESC
+                            LIMIT 1
+                        ) AS ultimo_feedback_status
+                    FROM Perfil_Aluno p
+                    JOIN usuario u ON u.email = p.email_usuario
+                    WHERE LOWER(u.nome) LIKE ? OR LOWER(p.email_usuario) LIKE ?
+                    ORDER BY u.nome
+                """;
+
+        List<PerfilAluno> list = new ArrayList<>();
+        try (Connection conn = ConnectionFactory.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            String likeTerm = "%" + (termo != null ? termo.trim().toLowerCase(Locale.ROOT) : "") + "%";
+            ps.setString(1, likeTerm);
+            ps.setString(2, likeTerm);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PerfilAluno a = new PerfilAluno();
+                    a.setIdPerfilAluno(rs.getInt("id_perfil_aluno"));
+                    a.setEmailUsuario(rs.getString("email_usuario"));
+                    a.setLinkGithub(rs.getString("link_github"));
+                    int idade = rs.getInt("idade");
+                    a.setIdade(rs.wasNull() ? null : idade);
+                    a.setFoto(rs.getString("foto"));
+                    a.setNomeAluno(rs.getString("nome_aluno"));
+                    a.setUltimoFeedbackStatus(rs.getString("ultimo_feedback_status"));
+                    list.add(a);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar alunos por nome ou email: " + e.getMessage(), e);
+        }
+        return list;
+    }
+
     public String getEmailByPerfilId(int idPerfilAluno) {
         String sql = "SELECT email_usuario FROM Perfil_Aluno WHERE id_perfil_aluno = ?";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idPerfilAluno);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getString(1);
+                if (rs.next())
+                    return rs.getString(1);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar email por id_perfil_aluno: " + e.getMessage(), e);

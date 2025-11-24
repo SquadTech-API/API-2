@@ -10,23 +10,30 @@ import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.service.EmailService;
 import com.jfoenix.controls.JFXButton;
 import jakarta.mail.MessagingException;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.geometry.Rectangle2D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MenuProfessorOrientadorController implements MenuAware, SupportsMainController {
 
     private static final Logger log = LoggerFactory.getLogger(MenuProfessorOrientadorController.class);
+    private static final String DEFAULT_AVATAR = "/assets/Usuario.png";
 
     @FXML
     private Label lblTituloProfessorOri;
@@ -64,6 +71,10 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
 
     @FXML
     private JFXButton btnProfessorTG;
+
+    @FXML
+    private StackPane profileFrame;
+    private final ProfessorDAO professorDAO = new ProfessorDAO();
 
     @FXML
     void abrirSolicitacoesOrientacao(ActionEvent event) {
@@ -145,6 +156,7 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
                     btnProfessorTG.setVisible(false);
                     btnProfessorTG.setManaged(false);
                 }
+                aplicarFoto(null);
                 return;
             }
 
@@ -152,11 +164,12 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
             String nome = (usuario.getNome() != null && !usuario.getNome().isBlank())
                     ? usuario.getNome()
                     : usuario.getEmail();
-            lblProfessorOri.setText(nome);
+            lblProfessorOri.setText("PROFESSOR ORIENTADOR: " + nome);
 
             // 3. Busca registro na tabela PROFESSOR para mostrar cargo / tipo TG (mantido por compatibilidade)
             ProfessorDAO profDAO = new ProfessorDAO();
             Professor professor = profDAO.findByUsuarioEmail(usuario.getEmail());
+            aplicarFoto(professor != null ? professor.getFoto() : null);
 
             // ✅ VERIFICAÇÃO CORRETA: o tipo vem da tabela USUARIO.coluna tipo
             String tipoUsuario = null;
@@ -221,6 +234,39 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         }
     }
 
+    private void aplicarFoto(String caminho) {
+        Image image;
+        if (caminho == null || caminho.isBlank() || !new File(caminho).exists()) {
+            var resource = getClass().getResource(DEFAULT_AVATAR);
+            image = resource != null ? new Image(resource.toExternalForm(), false) : null;
+        } else {
+            image = new Image(new File(caminho).toURI().toString(), false);
+        }
+        imgViewFotoProfessorOri.setImage(image);
+        Platform.runLater(this::processarImagemCircular);
+    }
+
+    public void updateFotoProfessorOrientador(String caminho) {
+        aplicarFoto(caminho);
+    }
+
+    private void processarImagemCircular() {
+        if (imgViewFotoProfessorOri == null) return;
+        Image image = imgViewFotoProfessorOri.getImage();
+        if (image == null || image.getWidth() == 0 || image.getHeight() == 0) return;
+        double fitSize = 112.0;
+        double side = Math.min(image.getWidth(), image.getHeight());
+        double x = (image.getWidth() - side) / 2.0;
+        double y = (image.getHeight() - side) / 2.0;
+        imgViewFotoProfessorOri.setViewport(new Rectangle2D(x, y, side, side));
+        imgViewFotoProfessorOri.setPreserveRatio(false);
+        imgViewFotoProfessorOri.setSmooth(true);
+        imgViewFotoProfessorOri.setFitWidth(fitSize);
+        imgViewFotoProfessorOri.setFitHeight(fitSize);
+        Circle clip = new Circle(fitSize / 2.0, fitSize / 2.0, fitSize / 2.0);
+        imgViewFotoProfessorOri.setClip(clip);
+    }
+
     @FXML
     void initialize() {
         // GARANTE QUE O BOTÃO COMEÇA INVISÍVEL E NÃO OCUPA ESPAÇO
@@ -239,6 +285,11 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         assert vboxMenuProfessorOri != null : "fx:id=\"vboxMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert btnProfessorTG != null : "fx:id=\"btnProfessorTG\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
 
+        profileFrame.setPrefSize(120, 120);
+        profileFrame.setMinSize(120, 120);
+        profileFrame.setMaxSize(120, 120);
+
         carregarDadosProfessor();
+        Platform.runLater(this::processarImagemCircular);
     }
 }

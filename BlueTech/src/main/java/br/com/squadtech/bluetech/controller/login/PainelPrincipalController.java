@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 import br.com.squadtech.bluetech.controller.MenuAware;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.aluno.MenuAlunoController;
+import br.com.squadtech.bluetech.controller.professorTG.MenuProfessorTGController;
+import br.com.squadtech.bluetech.controller.professorOrientador.MenuProfessorOrientadorController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,9 +37,13 @@ public class PainelPrincipalController {
 
     // Mantém referência ao controller do menu atual (para atualizar avatar, etc.)
     private MenuAlunoController menuAlunoController;
+    private MenuProfessorOrientadorController menuProfessorOrientadorController;
 
     // Mantém referência a menus que desejam reagir à troca de conteúdo
     private MenuAware menuAware;
+
+    // Mantém referência ao controller do menu atual, permitindo acesso a métodos específicos de cada menu
+    private Object currentMenuController;
 
     /**
      * Carrega um FXML dentro do painel lateral de menu (painelPrincipalMenu).
@@ -56,7 +62,12 @@ public class PainelPrincipalController {
             // Garantir injeção explícita também para compatibilidade
             menuAlunoController.setPainelPrincipalController(this);
         }
+        if (controller instanceof MenuProfessorOrientadorController orientadorController) {
+            this.menuProfessorOrientadorController = orientadorController;
+            orientadorController.setPainelPrincipalController(this);
+        }
         this.menuAware = (controller instanceof MenuAware) ? (MenuAware) controller : null;
+        this.currentMenuController = controller;
 
         painelPrincipalMenu.getChildren().clear();
         painelPrincipalMenu.getChildren().add(pane);
@@ -142,6 +153,15 @@ public class PainelPrincipalController {
         if (menuAlunoController != null) {
             menuAlunoController.updateFotoAluno(imagePath);
         }
+        if (currentMenuController instanceof MenuProfessorTGController menuProfessorTGController) {
+            menuProfessorTGController.updateFotoProfessorTG(imagePath);
+        }
+    }
+
+    public void updateFotoMenuProfessorOrientador(String imagePath) {
+        if (menuProfessorOrientadorController != null) {
+            menuProfessorOrientadorController.updateFotoProfessorOrientador(imagePath);
+        }
     }
 
     @FXML
@@ -152,4 +172,3 @@ public class PainelPrincipalController {
 
     }
 }
-

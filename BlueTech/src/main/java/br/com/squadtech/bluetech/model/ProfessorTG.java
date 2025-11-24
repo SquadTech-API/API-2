@@ -9,6 +9,7 @@ public class ProfessorTG {
     private String cursoVinculado;
     private String formacaoAcademica;
     private String areasEspecializacao;
+    private String foto;
 
     // Construtores
     public ProfessorTG() {}
@@ -45,6 +46,9 @@ public class ProfessorTG {
 
     public String getAreasEspecializacao() { return areasEspecializacao; }
     public void setAreasEspecializacao(String areasEspecializacao) { this.areasEspecializacao = areasEspecializacao; }
+
+    public String getFoto() { return foto; }
+    public void setFoto(String foto) { this.foto = foto; }
 
     @Override
     public String toString() {

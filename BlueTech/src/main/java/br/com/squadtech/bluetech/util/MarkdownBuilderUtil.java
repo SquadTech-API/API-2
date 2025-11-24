@@ -5,12 +5,14 @@ import br.com.squadtech.bluetech.model.TGVersao;
 
 public final class MarkdownBuilderUtil {
 
-    private MarkdownBuilderUtil() {}
+    private MarkdownBuilderUtil() {
+    }
 
     public static String buildMarkdownFromVersao(TGVersao v, TGSecao s) {
         StringBuilder sb = new StringBuilder();
 
-        // Cabeçalho ajustado: Semestre do curso (ano-semestre do ano) | API-Empresa Parceira
+        // Cabeçalho ajustado: Semestre do curso (ano-semestre do ano) | API-Empresa
+        // Parceira
         sb.append("# ");
         String semestreCurso = v.getSemestre() != null ? v.getSemestre() : "—";
         sb.append(semestreCurso);
@@ -66,30 +68,13 @@ public final class MarkdownBuilderUtil {
         sb.append(v.getHardSkills() != null ? v.getHardSkills() : "Não informado");
         sb.append("\n\n");
 
-        // Soft Skills
-        sb.append("## Soft Skills\n");
-        sb.append(v.getSoftSkills() != null ? v.getSoftSkills() : "Não informado");
-        sb.append("\n\n");
-
-        // Metadados
-        sb.append("---\n");
-        sb.append("API número: ").append(s != null ? s.getApiNumero() : "N/A").append("  \n");
-        String versaoLabel = v.getVersaoNumero() != null ? ("v" + v.getVersaoNumero()) : (v.getIdSecaoApi() != null ? "id=" + v.getIdSecaoApi() : "N/A");
-        sb.append("Versão: ").append(versaoLabel).append("  \n");
-        if (v.getCreatedAt() != null) {
-            sb.append("Data da versão: ").append(v.getCreatedAt().toLocalDate()).append("  \n");
-            sb.append("Hora: ").append(v.getCreatedAt().toLocalTime()).append("  \n");
-        } else {
-            sb.append("Data da versão: N/A  \n");
-            sb.append("Hora: N/A  \n");
-        }
-
         return sb.toString();
     }
 
     private static String normalizeUrl(String url) {
         String u = url.trim();
-        if (u.startsWith("http://") || u.startsWith("https://")) return u;
+        if (u.startsWith("http://") || u.startsWith("https://"))
+            return u;
         return "https://" + u;
     }
 }

@@ -34,14 +34,14 @@
         <VBox alignment="TOP_CENTER" prefHeight="684.0" prefWidth="821.0" spacing="12" styleClass="sidebar">
             <padding><Insets bottom="18" left="14" right="14" top="18" /></padding>
             <children>
-                <Label styleClass="sidebar-title" text="Sessões" />
+                <Label styleClass="sidebar-title" text="Seções" />
 
-                <ToggleButton fx:id="tgS1" selected="true" styleClass="session-toggle" text="Sessão 1" textAlignment="CENTER" VBox.vgrow="NEVER" />
-                <ToggleButton fx:id="tgS2" styleClass="session-toggle" text="Sessão 2" />
-                <ToggleButton fx:id="tgS3" styleClass="session-toggle" text="Sessão 3" />
-                <ToggleButton fx:id="tgS4" styleClass="session-toggle" text="Sessão 4" />
-                <ToggleButton fx:id="tgS5" styleClass="session-toggle" text="Sessão 5" />
-                <ToggleButton fx:id="tgS6" styleClass="session-toggle" text="Sessão 6" />
+                <ToggleButton fx:id="tgS1" selected="true" styleClass="session-toggle" text="Seção 1" textAlignment="CENTER" VBox.vgrow="NEVER" />
+                <ToggleButton fx:id="tgS2" styleClass="session-toggle" text="Seção 2" />
+                <ToggleButton fx:id="tgS3" styleClass="session-toggle" text="Seção 3" />
+                <ToggleButton fx:id="tgS4" styleClass="session-toggle" text="Seção 4" />
+                <ToggleButton fx:id="tgS5" styleClass="session-toggle" text="Seção 5" />
+                <ToggleButton fx:id="tgS6" styleClass="session-toggle" text="Seção 6" />
             <Label alignment="TOP_LEFT" prefHeight="0.0" prefWidth="610.0" style="-fx-font-weight: bold;" text="Chat com o Aluno:" />
             <TextArea fx:id="txtChatVisualizacao" editable="false" prefHeight="228.0" prefRowCount="8" prefWidth="610.0" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 12px; -fx-control-inner-background: #fafafa;" wrapText="true" />
             <HBox alignment="CENTER_LEFT" spacing="8">

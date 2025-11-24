@@ -1,7 +1,6 @@
-
-
 package br.com.squadtech.bluetech.controller.professorOrientador;
 
+import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.dao.UsuarioDAO;
@@ -59,6 +58,11 @@ public class TelaPerfilProfessorController{
     private TextField txtSenhaAtual;
 
     private String caminhoFoto; //Para guardar o caminho da foto selecionada para salvar
+    private PainelPrincipalController painelPrincipalController;
+
+    public void setPainelPrincipalController(PainelPrincipalController controller) {
+        this.painelPrincipalController = controller;
+    }
 
     @FXML
     void handleCancelar(ActionEvent event) {
@@ -133,6 +137,10 @@ public class TelaPerfilProfessorController{
             if (!profOk) {
                 showAlert("Erro", "Não foi possível atualizar cargo/foto.");
                 return;
+            }
+
+            if (painelPrincipalController != null) {
+                painelPrincipalController.updateFotoMenuProfessorOrientador(caminhoFoto);
             }
 
 
@@ -247,6 +255,9 @@ public class TelaPerfilProfessorController{
                 caminhoFoto = destino;
 
                 showAlert("Sucesso", "Foto selecionada com sucesso!");
+                if (painelPrincipalController != null) {
+                    painelPrincipalController.updateFotoMenuProfessorOrientador(destino);
+                }
 
             } catch (IOException e) {
                 showAlert("Erro", "Falha ao copiar a foto: " + e.getMessage());

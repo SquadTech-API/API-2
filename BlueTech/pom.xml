@@ -88,15 +88,15 @@
             <version>0.64.8</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>jakarta.mail</artifactId>
-            <version>2.0.2</version>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.1.5</version>
         </dependency>
         <!-- Runtime implementation for Jakarta Mail (Angus Mail) -->
         <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-mail</artifactId>
-            <version>2.0.4</version>
+            <version>2.0.5</version>
         </dependency>
         <!-- Optional SMTP provider for SSL sockets (Angus activation is transitive) -->
         <dependency>
