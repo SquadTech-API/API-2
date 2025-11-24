@@ -11,6 +11,7 @@ import br.com.squadtech.bluetech.model.TGSecao;
 import br.com.squadtech.bluetech.model.TGVersao;
 import br.com.squadtech.bluetech.model.Usuario;
 import br.com.squadtech.bluetech.util.MarkdownBuilderUtil;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import javafx.event.ActionEvent;
@@ -24,10 +25,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,6 +83,10 @@ public class PortfolioAlunoController implements SupportsMainController {
 
         md.append("<div align=\"center\">\n\n");
         md.append("# ").append(usuario.getNome()).append("\n\n");
+        String fotoHtml = buildFotoHtml(perfil);
+        if (!fotoHtml.isEmpty()) {
+            md.append(fotoHtml).append("\n\n");
+        }
         md.append("### Portfólio Acadêmico\n\n");
 
         // Badges de Contato
@@ -278,24 +289,72 @@ public class PortfolioAlunoController implements SupportsMainController {
         return new String[] { color, logo };
     }
 
-    private void renderMarkdown(String markdown) {
+    private void mostrarAlerta(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private String buildFotoHtml(PerfilAluno perfil) {
+        if (perfil == null || perfil.getFoto() == null || perfil.getFoto().isBlank()) {
+            return "";
+        }
+        try {
+            Path fotoPath = Paths.get(perfil.getFoto());
+            if (!Files.exists(fotoPath)) {
+                log.warn("Foto do aluno não encontrada em {}", fotoPath);
+                return "";
+            }
+            String dataUri = buildDataUri(fotoPath);
+            if (dataUri == null) {
+                return "";
+            }
+            return "<div class=\"perfil-foto\"><img src=\"" + dataUri + "\" alt=\"Foto do aluno\"/></div>";
+        } catch (Exception e) {
+            log.warn("Falha ao carregar foto do aluno", e);
+            return "";
+        }
+    }
+
+    private String buildDataUri(Path fotoPath) {
+        try {
+            byte[] bytes = Files.readAllBytes(fotoPath);
+            if (bytes.length == 0) {
+                return null;
+            }
+            String mimeType = Files.probeContentType(fotoPath);
+            if (mimeType == null || !mimeType.startsWith("image")) {
+                mimeType = "image/png";
+            }
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+            return "data:" + mimeType + ";base64," + base64;
+        } catch (IOException e) {
+            log.warn("Não foi possível converter foto em data URI", e);
+            return null;
+        }
+    }
+
+    private String buildHtmlDocument(String markdown) {
         String htmlBody = mdRenderer.render(mdParser.parse(markdown));
-        // CSS aprimorado para visualização no WebView
-        String css = "body{font-family: 'Segoe UI', Arial, sans-serif; padding:40px; max-width: 900px; margin: auto; line-height: 1.6; color: #333;} "
-                +
+        String css = "body{font-family: 'Segoe UI', Arial, sans-serif; padding:40px; max-width: 900px; margin: auto; line-height: 1.6; color: #333;} " +
                 "h1{color:#2b5797; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;} " +
                 "h2{color:#2b5797; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px;} " +
                 "h3{color:#555; text-align: center; margin-top: -10px; margin-bottom: 30px;} " +
                 "a{color: #0078d4; text-decoration: none;} a:hover{text-decoration: underline;} " +
-                "pre{background:#f6f8fa; padding:15px; border-radius: 6px; overflow-x: auto; border: 1px solid #e1e4e8;} "
-                +
+                "pre{background:#f6f8fa; padding:15px; border-radius: 6px; overflow-x: auto; border: 1px solid #e1e4e8;} " +
                 "code{font-family: Consolas, monospace; background: #f6f8fa; padding: 2px 4px; border-radius: 3px;} " +
                 "blockquote{border-left: 4px solid #dfe2e5; color: #6a737d; padding-left: 15px; margin-left: 0;} " +
                 "img {max-width: 100%; height: auto;} " +
+                ".perfil-foto {width: 240px; aspect-ratio: 3 / 4; margin: 0 auto 20px; border-radius: 12px; overflow: hidden; border: 4px solid #e1e4e8; box-shadow: 0 6px 18px rgba(0,0,0,0.1);} " +
+                ".perfil-foto img {width: 100%; height: 100%; object-fit: cover;} " +
                 ".badge {display: inline-block; margin-right: 5px; margin-bottom: 5px;}";
+        return "<html><head><meta charset=\"utf-8\"><style>" + css + "</style></head><body>" + htmlBody + "</body></html>";
+    }
 
-        String html = "<html><head><meta charset=\"utf-8\"><style>" + css + "</style></head><body>" + htmlBody
-                + "</body></html>";
+    private void renderMarkdown(String markdown) {
+        String html = buildHtmlDocument(markdown);
         renderHtml(html);
     }
 
@@ -316,27 +375,70 @@ public class PortfolioAlunoController implements SupportsMainController {
         }
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Salvar Portfólio como README.md");
-        fileChooser.setInitialFileName("README.md");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Markdown Files", "*.md"));
+        fileChooser.setTitle("Salvar Portfólio");
+        fileChooser.setInitialFileName("README");
+        FileChooser.ExtensionFilter mdFilter = new FileChooser.ExtensionFilter("Markdown (*.md)", "*.md");
+        FileChooser.ExtensionFilter htmlFilter = new FileChooser.ExtensionFilter("HTML (*.html)", "*.html");
+        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().addAll(mdFilter, htmlFilter, pdfFilter);
+        fileChooser.setSelectedExtensionFilter(mdFilter);
 
         File file = fileChooser.showSaveDialog(btnExportar.getScene().getWindow());
-        if (file != null) {
-            try (FileWriter writer = new FileWriter(file)) {
-                writer.write(markdownCompleto);
-                mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Portfólio exportado com sucesso!");
-            } catch (IOException e) {
-                log.error("Erro ao salvar arquivo", e);
-                mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao salvar o arquivo: " + e.getMessage());
+        if (file == null) {
+            return;
+        }
+
+        FileChooser.ExtensionFilter selected = fileChooser.getSelectedExtensionFilter();
+        String path = file.getAbsolutePath();
+        if (selected == mdFilter && !path.toLowerCase().endsWith(".md")) {
+            file = new File(path + ".md");
+        } else if (selected == htmlFilter && !path.toLowerCase().endsWith(".html")) {
+            file = new File(path + ".html");
+        } else if (selected == pdfFilter && !path.toLowerCase().endsWith(".pdf")) {
+            file = new File(path + ".pdf");
+        }
+
+        try {
+            if (selected == htmlFilter) {
+                salvarComoHtml(file);
+            } else if (selected == pdfFilter) {
+                salvarComoPdf(file);
+            } else {
+                salvarComoMarkdown(file);
             }
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Portfólio exportado com sucesso!");
+        } catch (Exception e) {
+            log.error("Erro ao exportar portfólio", e);
+            mostrarAlerta(Alert.AlertType.ERROR, "Erro", "Falha ao exportar: " + e.getMessage());
         }
     }
 
-    private void mostrarAlerta(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    private void salvarComoMarkdown(File destino) throws IOException {
+        try (FileWriter writer = new FileWriter(destino)) {
+            writer.write(markdownCompleto);
+        }
+    }
+
+    private void salvarComoHtml(File destino) throws IOException {
+        String html = buildHtmlDocument(markdownCompleto);
+        try (FileWriter writer = new FileWriter(destino, StandardCharsets.UTF_8)) {
+            writer.write(html);
+        }
+    }
+
+    private void salvarComoPdf(File destino) throws IOException {
+        String html = buildHtmlDocument(markdownCompleto);
+        try (OutputStream os = new FileOutputStream(destino)) {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            builder.withHtmlContent(html, null);
+            builder.toStream(os);
+            builder.run();
+        } catch (Exception e) {
+            if (e instanceof IOException io) {
+                throw io;
+            }
+            throw new IOException("Falha ao gerar PDF", e);
+        }
     }
 }

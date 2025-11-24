@@ -2,12 +2,16 @@ package br.com.squadtech.bluetech.dao;
 
 import br.com.squadtech.bluetech.model.ProfessorTG;
 import br.com.squadtech.bluetech.config.ConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfessorTGDAO {
+
+    private static final Logger log = LoggerFactory.getLogger(ProfessorTGDAO.class);
 
     public ProfessorTGDAO() {
         ensureFotoColumnExists();
@@ -230,12 +234,23 @@ public class ProfessorTGDAO {
     }
 
     private void ensureFotoColumnExists() {
-        String sql = "ALTER TABLE professor_tg ADD COLUMN IF NOT EXISTS foto VARCHAR(255)";
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.executeUpdate();
-        } catch (SQLException ignored) {
-            // Ignora se a coluna já existir ou se o banco não suportar IF NOT EXISTS.
+        String tableName = "professor_tg";
+        String columnName = "foto";
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            DatabaseMetaData metaData = conn.getMetaData();
+            try (ResultSet columns = metaData.getColumns(conn.getCatalog(), null, tableName, columnName)) {
+                if (columns.next()) {
+                    return; // coluna já existe
+                }
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(
+                    "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " VARCHAR(255)")) {
+                stmt.executeUpdate();
+                log.info("Coluna '{}' adicionada à tabela '{}'", columnName, tableName);
+            }
+        } catch (SQLException e) {
+            log.warn("Não foi possível garantir a coluna '{}' na tabela '{}': {}", columnName, tableName, e.getMessage());
         }
     }
 }

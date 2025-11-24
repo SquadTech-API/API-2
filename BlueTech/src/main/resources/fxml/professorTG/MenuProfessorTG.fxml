@@ -52,7 +52,7 @@
                         <Accordion fx:id="accordionProfessorTG" prefWidth="Infinity" styleClass="menu-accordion" />
 
                         <!-- Botões extras -->
-                        <JFXButton fx:id="btnPortfolios" maxWidth="Infinity" onAction="#abrirPortfolio" text="Portfólios Concluídos" />
+                        <JFXButton fx:id="btnPortfolios" maxWidth="Infinity" onAction="#abrirPortfolio" text="Visualizar Portfólios" />
 
                         <!-- 🔥 NOVO BOTÃO DE IMPORTACAO CSV 🔥 -->
                         <JFXButton fx:id="btnImportarCSV" maxWidth="Infinity" onAction="#abrirImportacaoCSV" text="Importar CSV Orientadores" />

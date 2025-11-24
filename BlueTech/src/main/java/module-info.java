@@ -22,6 +22,8 @@ module br.com.squadtech.bluetech {
     requires jakarta.mail;
     requires javafx.base;
     requires javafx.media;
+    requires openhtmltopdf.core;
+    requires openhtmltopdf.pdfbox;
 
     // ABERTURAS PARA JAVAFX
     opens br.com.squadtech.bluetech to javafx.fxml;

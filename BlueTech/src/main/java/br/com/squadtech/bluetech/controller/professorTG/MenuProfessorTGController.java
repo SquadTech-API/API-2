@@ -75,6 +75,7 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     @FXML
     private JFXButton btnImportarCSV;
 
+    @FXML
     private StackPane profileFrame;
 
     private final ProfessorTGDAO professorTGDAO = new ProfessorTGDAO();
@@ -170,7 +171,21 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     private void abrirOrientacao(ActionEvent event) {
         if (painelPrincipalController != null) {
             try {
+                var usuario = SessaoUsuario.getUsuarioLogado();
+                String fotoAtual = null;
+                if (usuario != null) {
+                    ProfessorTG professorTG = professorTGDAO.findByUsuarioEmail(usuario.getEmail());
+                    if (professorTG != null) {
+                        fotoAtual = professorTG.getFoto();
+                    }
+                }
                 painelPrincipalController.loadMenu("/fxml/professorOrientador/MenuProfessorOrientador.fxml");
+                var menuOrientadorController = painelPrincipalController.getCurrentMenuController(br.com.squadtech.bluetech.controller.professorOrientador.MenuProfessorOrientadorController.class);
+                if (menuOrientadorController != null) {
+                    menuOrientadorController.updateFotoProfessorOrientador(fotoAtual);
+                } else {
+                    log.warn("MenuProfessorOrientadorController não pôde ser carregado para sincronizar a foto.");
+                }
                 painelPrincipalController.loadContent("/fxml/professorOrientador/TelaOrientador.fxml");
                 log.info("Redirecionado para TelaOrientador.fxml a partir do MenuProfessorTG.");
             } catch (Exception e) {
@@ -292,12 +307,9 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
         assert vboxMenuProfessorTG != null : "fx:id=\"vboxMenuProfessorTG\" não foi injetado.";
         assert splitPanelMenuProfessorTG != null : "fx:id=\"splitPanelMenuProfessorTG\" não foi injetado.";
 
-        profileFrame = (StackPane) paneSuperiorMenuProfessorTG.lookup("#profileFrame");
-        if (profileFrame != null) {
-            profileFrame.setPrefSize(120, 120);
-            profileFrame.setMinSize(120, 120);
-            profileFrame.setMaxSize(120, 120);
-        }
+        profileFrame.setPrefSize(120, 120);
+        profileFrame.setMinSize(120, 120);
+        profileFrame.setMaxSize(120, 120);
 
         log.info("MenuProfessorTGController inicializado com sucesso.");
 

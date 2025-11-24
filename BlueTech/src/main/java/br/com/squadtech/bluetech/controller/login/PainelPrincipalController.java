@@ -164,6 +164,13 @@ public class PainelPrincipalController {
         }
     }
 
+    public <T> T getCurrentMenuController(Class<T> type) {
+        if (type.isInstance(currentMenuController)) {
+            return type.cast(currentMenuController);
+        }
+        return null;
+    }
+
     @FXML
     void initialize() {
         assert painelPrincipal != null : "fx:id=\"painelPrincipal\" was not injected: check your FXML file 'PainelPrincipal.fxml'.";
