@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -63,6 +64,9 @@
                         <JFXButton fx:id="btnAddProfessor" maxWidth="Infinity" onAction="#abrirTelaAdicionarProfessor" text="Adicionar Professor TG" />
 
                         <JFXButton fx:id="btnCSV" maxWidth="Infinity" onAction="#AbrirTelaCSV" text="Cadastrar Professores - CSV" />
+
+                        <Separator opacity="0.4" />
+                        <JFXButton fx:id="btnLogout" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Sair" />
                     </children>
                 </VBox>
             </children>

@@ -3,15 +3,21 @@ package br.com.squadtech.bluetech.controller.admin;
 import br.com.squadtech.bluetech.controller.MenuAware;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
+import br.com.squadtech.bluetech.util.LogoutHelper;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +57,9 @@ public class MenuADMController implements MenuAware, SupportsMainController {
 
     @FXML
     private JFXButton btnCSV;
+
+    @FXML
+    private JFXButton btnLogout;
 
     // Referência ao painel principal unificado
     private PainelPrincipalController painelPrincipalController;
@@ -107,6 +116,12 @@ public class MenuADMController implements MenuAware, SupportsMainController {
     }
 
     @FXML
+    private void handleLogout(ActionEvent event) {
+        log.info("Administrador solicitou logout");
+        LogoutHelper.performLogout(event, log);
+    }
+
+    @FXML
     void initialize() {
         // Validações dos componentes FXML
         assert btnTelaInicial != null : "fx:id=\"btnTelaInicial\" não foi injetado: verifique seu FXML 'MenuADM.fxml'.";
@@ -118,6 +133,7 @@ public class MenuADMController implements MenuAware, SupportsMainController {
         assert lblTituloADM != null : "fx:id=\"lblTituloADM\" não foi injetado: verifique seu FXML.";
         assert vboxMenuADM != null : "fx:id=\"vboxMenuADM\" não foi injetado: verifique seu FXML.";
         assert splitPanelMenuADM != null : "fx:id=\"splitPanelMenuADM\" não foi injetado: verifique seu FXML.";
+        assert btnLogout != null : "fx:id=\"btnLogout\" não foi injetado: verifique seu FXML.";
 
         log.info("MenuADMController inicializado com sucesso.");
     }

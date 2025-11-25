@@ -297,3 +297,17 @@
     -fx-background-color: transparent;
     -fx-padding: 8 0 0 0;
 }
+
+/* Estilo específico para o botão de logout */
+.menu-lateral .logout-button {
+    -fx-background-color:
+        linear-gradient(to right, rgba(255, 77, 77, 0.2), rgba(255, 0, 102, 0.15));
+    -fx-border-color: rgba(255, 99, 132, 0.6);
+    -fx-text-fill: #ffe6e6;
+}
+
+.menu-lateral .logout-button:hover {
+    -fx-background-color:
+        linear-gradient(to right, rgba(255, 77, 77, 0.35), rgba(255, 0, 102, 0.25));
+    -fx-text-fill: #ffffff;
+}

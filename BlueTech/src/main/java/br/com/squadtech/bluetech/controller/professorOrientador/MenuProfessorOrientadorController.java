@@ -8,6 +8,7 @@ import br.com.squadtech.bluetech.dao.ProfessorDAO;
 import br.com.squadtech.bluetech.model.Professor;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.service.EmailService;
+import br.com.squadtech.bluetech.util.LogoutHelper;
 import com.jfoenix.controls.JFXButton;
 import jakarta.mail.MessagingException;
 import javafx.application.Platform;
@@ -71,6 +72,9 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
 
     @FXML
     private JFXButton btnProfessorTG;
+
+    @FXML
+    private JFXButton btnLogoutProfessorOri;
 
     @FXML
     private StackPane profileFrame;
@@ -268,6 +272,12 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
     }
 
     @FXML
+    private void handleLogout(ActionEvent event) {
+        log.info("Professor orientador solicitou logout");
+        LogoutHelper.performLogout(event, log);
+    }
+
+    @FXML
     void initialize() {
         // GARANTE QUE O BOTÃO COMEÇA INVISÍVEL E NÃO OCUPA ESPAÇO
         if (btnProfessorTG != null) {
@@ -284,6 +294,7 @@ public class MenuProfessorOrientadorController implements MenuAware, SupportsMai
         assert splitPanelMenuProfessorOri != null : "fx:id=\"splitPanelMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert vboxMenuProfessorOri != null : "fx:id=\"vboxMenuProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
         assert btnProfessorTG != null : "fx:id=\"btnProfessorTG\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
+        assert btnLogoutProfessorOri != null : "fx:id=\"btnLogoutProfessorOri\" was not injected: check your FXML file 'MenuProfessorOrientador.fxml'.";
 
         profileFrame.setPrefSize(120, 120);
         profileFrame.setMinSize(120, 120);

@@ -61,6 +61,8 @@
                         <JFXButton fx:id="btnAgendamentosTG" maxWidth="Infinity" onAction="#abrirAgendamentos" text="Agendamentos de TG" />
                         <JFXButton fx:id="btnOrientacao" maxWidth="Infinity" onAction="#abrirOrientacao" text="Orientação" />
                   <JFXButton fx:id="btnPerfilProfTG" layoutX="10.0" layoutY="270.0" maxWidth="Infinity" onAction="#abrirPerfilProfTG" text="Perfil" />
+                        <Separator opacity="0.4" />
+                        <JFXButton fx:id="btnLogoutProfessorTG" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Sair" />
                     </children>
                 </VBox>
             </children>

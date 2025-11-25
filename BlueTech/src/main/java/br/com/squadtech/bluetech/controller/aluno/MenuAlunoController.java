@@ -10,6 +10,7 @@ import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
 import br.com.squadtech.bluetech.model.Orienta;
 import br.com.squadtech.bluetech.model.Professor;
+import br.com.squadtech.bluetech.util.LogoutHelper;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -85,6 +86,9 @@ public class MenuAlunoController implements SupportsMainController {
     @FXML
     private StackPane profileFrame;
 
+    @FXML
+    private JFXButton btnLogoutAluno;
+
     // Referência para o controller principal, para podermos carregar conteúdos à
     // direita
     private PainelPrincipalController painelPrincipalController;
@@ -146,6 +150,12 @@ public class MenuAlunoController implements SupportsMainController {
     }
 
     @FXML
+    private void handleLogout(ActionEvent event) {
+        log.info("Aluno solicitou logout");
+        LogoutHelper.performLogout(event, log);
+    }
+
+    @FXML
     void initialize() {
         assert btnAlunoSolicitarOrientacao != null
                 : "fx:id=\"btnAlunoSolicitarOrientacao\" was not injected: check your FXML file 'MenuAluno.fxml'.";
@@ -173,6 +183,8 @@ public class MenuAlunoController implements SupportsMainController {
         assert vboxMenuAluno != null
                 : "fx:id=\"vboxMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
         assert profileFrame != null : "fx:id=\"profileFrame\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnLogoutAluno != null
+                : "fx:id=\"btnLogoutAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
 
         // Mantém o topo com altura estável (~260px) e o bottom responsivo
         paneSuperiorMenuAluno.setMinHeight(200.0);

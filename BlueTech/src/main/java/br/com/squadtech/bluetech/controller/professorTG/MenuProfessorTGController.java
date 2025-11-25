@@ -7,6 +7,7 @@ import br.com.squadtech.bluetech.dao.ProfessorTGDAO;
 import br.com.squadtech.bluetech.model.ProfessorTG;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
+import br.com.squadtech.bluetech.util.LogoutHelper;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -74,6 +75,9 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     // 🔥 NOVO BOTÃO 🔥
     @FXML
     private JFXButton btnImportarCSV;
+
+    @FXML
+    private JFXButton btnLogoutProfessorTG;
 
     @FXML
     private StackPane profileFrame;
@@ -293,6 +297,12 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
     }
 
     @FXML
+    private void handleLogout(ActionEvent event) {
+        log.info("Professor TG solicitou logout");
+        LogoutHelper.performLogout(event, log);
+    }
+
+    @FXML
     void initialize() {
         assert btnPortfolios != null : "fx:id=\"btnPortfolios\" não foi injetado: verifique seu FXML 'MenuProfessorTG.fxml'.";
         assert btnCadastrarOrientadores != null : "fx:id=\"btnCadastrarOrientadores\" não foi injetado.";
@@ -306,6 +316,7 @@ public class MenuProfessorTGController implements MenuAware, SupportsMainControl
         assert lblTituloProfessorTG != null : "fx:id=\"lblTituloProfessorTG\" não foi injetado.";
         assert vboxMenuProfessorTG != null : "fx:id=\"vboxMenuProfessorTG\" não foi injetado.";
         assert splitPanelMenuProfessorTG != null : "fx:id=\"splitPanelMenuProfessorTG\" não foi injetado.";
+        assert btnLogoutProfessorTG != null : "fx:id=\"btnLogoutProfessorTG\" não foi injetado.";
 
         profileFrame.setPrefSize(120, 120);
         profileFrame.setMinSize(120, 120);

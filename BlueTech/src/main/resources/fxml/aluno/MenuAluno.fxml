@@ -48,6 +48,8 @@
             <JFXButton fx:id="btnAlunoSolicitarOrientacao" maxWidth="Infinity" onAction="#SolicitarOrientacao" text="Solicitar Orientação" />
             <JFXButton fx:id="btnAlunoAgendamentoDefesa" maxWidth="Infinity" onAction="#AbrirAgendamentoDefesa" text="Agendar Defesa" />
             <JFXButton fx:id="btnAlunoPerfil" maxWidth="Infinity" onAction="#AbreTelaPerfilAluno" text="Perfil" />
+            <Separator opacity="0.4" />
+            <JFXButton fx:id="btnLogoutAluno" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Sair" />
          </children>
       </VBox>
    </items>

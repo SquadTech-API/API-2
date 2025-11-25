@@ -50,7 +50,8 @@
                 <JFXButton fx:id="btnAgendamentoDefesa" maxWidth="Infinity" onAction="#abrirAgendamentosDefesa" styleClass="submenu-btn" text="Agendamento de Defesa" />
                 <JFXButton fx:id="btnEditarPerfilprofessor" maxWidth="Infinity" onAction="#abrirTelaPerfilProfessorOrientador" styleClass="submenu-btn" text="Editar Perfil" />
                 <JFXButton fx:id="btnProfessorTG" maxWidth="Infinity" onAction="#abrirTelaPerfilTG" styleClass="submenu-btn" text="Tela Professor TG" visible="false" />
-
+                <Separator opacity="0.4" />
+                <JFXButton fx:id="btnLogoutProfessorOri" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Sair" />
             </children>
         </VBox>
     </items>

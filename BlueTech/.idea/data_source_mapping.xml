@@ -3,12 +3,9 @@
   <component name="DataSourcePerFileMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/AgendamentoDefesaDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/FeedbackDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
-    <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/FeedbackItemDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
-    <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/MensagensDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/OrientaDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/PerfilAlunoDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/ProfessorDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
-    <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/ProfessorTGDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/SolicitacaoDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/TGPortifolioDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
     <file url="file://$PROJECT_DIR$/src/main/java/br/com/squadtech/bluetech/dao/TGSecaoDAO.java" value="4892b0ec-6616-470b-b411-66c21697fe2f" />
