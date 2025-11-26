@@ -34,8 +34,9 @@
         <Label text="Comentário Geral (Opcional):" style="-fx-font-weight: bold;" />
         <TextArea fx:id="ta_comentario_geral"
                   promptText="Escreva um comentário geral..."
-                  prefHeight="80"
-                  wrapText="true" />
+
+                  wrapText="true"
+        />
 
         <!-- Botões -->
         <HBox alignment="CENTER_RIGHT" spacing="10">

@@ -129,6 +129,13 @@
     -fx-effect: dropshadow(gaussian, rgba(25,118,210,0.25), 8, 0, 0, 1);
 }
 
+/* Estilo para TextAreas não editáveis (conteúdo do aluno) para remover a barra de rolagem vertical */
+.conteudo-aluno-area .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+}
+
 /* ===========================
    SIDEBAR
    =========================== */
