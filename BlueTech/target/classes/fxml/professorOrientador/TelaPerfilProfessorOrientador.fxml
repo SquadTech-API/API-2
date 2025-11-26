@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="AncorPanePerfilProfessor" prefHeight="700" prefWidth="900" styleClass="painel" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaPerfilProfessorController">
+
+    <!-- Scroll para ficar responsivo em janelas menores -->
+    <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <VBox prefWidth="800" spacing="16">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <HBox alignment="CENTER" maxWidth="Infinity">
+                <Label styleClass="label-title" text="Perfil do Professor">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            </HBox>
+         <HBox prefHeight="84.0" prefWidth="850.0" />
+
+            <GridPane hgap="16" prefHeight="281.0" prefWidth="850.0" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="65" />
+                    <ColumnConstraints percentWidth="35" />
+                </columnConstraints>
+
+                <!-- Coluna esquerda: formulários -->
+                <VBox prefHeight="305.0" prefWidth="542.0" spacing="10" GridPane.columnIndex="0">
+
+                    <GridPane hgap="8" prefHeight="250.0" prefWidth="542.0" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="14.0" />
+                            <ColumnConstraints percentWidth="86.0" />
+                        </columnConstraints>
+
+                        <Label styleClass="label-campos" text="Nome:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+
+                        <Label styleClass="label-campos" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+                        <Label styleClass="label-campos" text="Cargo:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtCargo" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label styleClass="label-campos" text="Senha atual:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <PasswordField fx:id="txtSenhaAtual" promptText="Digite a senha atual:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                        <Label styleClass="label-campos" text="Nova senha:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                            <PasswordField fx:id="txtNovaSenha" promptText="Digite a nova senha:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtNome" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <rowConstraints>
+                            <RowConstraints />
+                            <RowConstraints />
+                            <RowConstraints />
+                            <RowConstraints />
+                            <RowConstraints />
+                        </rowConstraints>
+                    </GridPane>
+
+                </VBox>
+
+                <!-- Coluna direita: foto e ações -->
+                <VBox alignment="TOP_CENTER" fillWidth="false" spacing="12" GridPane.columnIndex="1">
+                    <!-- Wrapper com moldura (mesmo tamanho do ImageView + padding da moldura) -->
+                    <StackPane styleClass="profile-frame">
+                        <ImageView fx:id="imgFoto" fitHeight="200.0" fitWidth="200.0" nodeOrientation="INHERIT" preserveRatio="true" styleClass="profile-Image">
+                            <Image url="@../../assets/Usuario.png" />
+                        </ImageView>
+                    </StackPane>
+                    <Label style="-fx-font-size:11px; -fx-text-fill:#666;" text="A foto será copiada para: ~/BlueTech/PerfilProfessor" wrapText="true" />
+                    <Button fx:id="btnSelecionarFoto" onAction="#handleSelecionarFoto" text="Selecionar Foto..." />
+                    <HBox spacing="8">
+                        <children>
+                            <Pane prefHeight="50.0" />
+                        </children>
+                    </HBox>
+                </VBox>
+                <rowConstraints>
+                    <RowConstraints />
+                </rowConstraints>
+            </GridPane>
+              <HBox alignment="CENTER" maxWidth="Infinity" spacing="8">
+                  <Button fx:id="btnSalvar" onAction="#handleSalvar" style="-fx-font-weight:bold;" text="Salvar" />
+                  <Button fx:id="btnCancelar" onAction="#handleCancelar" styleClass="button-secondary" text="Cancelar" />
+              </HBox>
+
+        </VBox>
+    </ScrollPane>
+</AnchorPane>

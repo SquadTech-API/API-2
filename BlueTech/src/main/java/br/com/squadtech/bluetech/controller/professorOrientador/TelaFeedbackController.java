@@ -10,6 +10,8 @@ import br.com.squadtech.bluetech.util.Toast;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.layout.Priority;
+
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.slf4j.Logger;
@@ -85,9 +87,10 @@ public class TelaFeedbackController implements SupportsMainController {
         Label lblTitulo = new Label(titulo);
         lblTitulo.setFont(Font.font("System", FontWeight.BOLD, 14));
 
-        TextField tf = new TextField(conteudo != null ? conteudo : "");
-        tf.setEditable(false);
-        tf.setStyle("-fx-opacity: 1; -fx-background-color: #f9f9f9;");
+        TextArea taConteudo = new TextArea(conteudo != null ? conteudo : "");
+        taConteudo.setEditable(false);
+        taConteudo.setStyle("-fx-opacity: 1; -fx-background-color: #f9f9f9;");
+        taConteudo.getStyleClass().add("conteudo-aluno-area");
 
         HBox botoes = new HBox(10);
         RadioButton rbOk = new RadioButton("OK");
@@ -101,7 +104,7 @@ public class TelaFeedbackController implements SupportsMainController {
         taComentario.setPromptText("Descreva o ajuste necessário...");
         taComentario.setVisible(false);
         taComentario.setManaged(false);
-        taComentario.setPrefHeight(60);
+        // taComentario.setPrefHeight(60); // Removido para permitir crescimento automático
 
         group.selectedToggleProperty().addListener((obs, old, novo) -> {
             if (novo == null) return;
@@ -111,7 +114,13 @@ public class TelaFeedbackController implements SupportsMainController {
             atualizarEstadoBotoes();
         });
 
-        campoBox.getChildren().addAll(lblTitulo, tf, botoes, taComentario);
+        taConteudo.setWrapText(true);
+        taConteudo.setPrefRowCount(1); // Altura mínima de 1 linha
+        taConteudo.setPrefHeight(Region.USE_COMPUTED_SIZE); // Deixa o JavaFX calcular a altura
+        taConteudo.setMinHeight(Region.USE_PREF_SIZE);
+
+        VBox.setVgrow(taConteudo, Priority.ALWAYS);
+        campoBox.getChildren().addAll(lblTitulo, taConteudo, botoes, taComentario);
         campoBox.setStyle("-fx-padding: 10; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
 
         vbFeedbackForm.getChildren().add(campoBox);

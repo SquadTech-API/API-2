@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<BorderPane stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/21.0.8"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="br.com.squadtech.bluetech.controller.professorTG.VisualizadorTGController">
+
+    <!-- Cabeçalho -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="hbox-header">
+            <padding>
+                <Insets bottom="15" left="20" right="20" top="15" />
+            </padding>
+
+            <Label styleClass="label-title" text="Visualizar Portfólio do Aluno" HBox.hgrow="ALWAYS" />
+
+            <!-- Espaço elástico -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="btnExportar" onAction="#exportarPortfolio" styleClass="button-primary"
+                text="Exportar README.md" />
+        </HBox>
+    </top>
+
+    <!-- Conteúdo Central -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="0" />
+            </padding>
+            <!-- WebView para renderizar o Markdown -->
+            <WebView fx:id="webViewPortfolio" prefHeight="600.0" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane style="-fx-background-color: white;" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorOrientador.TelaOrientadorController">
+    <children>
+        <!-- Container responsivo principal -->
+        <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <!-- Título no topo, centralizado -->
+            <top>
+                <StackPane BorderPane.alignment="CENTER">
+                    <children>
+                        <Label text="Bem vindo ao Gerenciador de TG's estilo portfólio!">
+                            <font>
+                                <Font name="Monospaced Bold" size="28.0" />
+                            </font>
+                            <StackPane.alignment>CENTER</StackPane.alignment>
+                            <wrapText>true</wrapText>
+                        </Label>
+                    </children>
+                </StackPane>
+            </top>
+
+            <!-- Conteúdo central empilhado e centralizado -->
+            <center>
+                <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <ImageView fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../assets/Logo.png" />
+                            </image>
+                        </ImageView>
+
+                        <!-- Bloco de texto central com wrap -->
+                        <Label maxWidth="800.0" text="Vamos facilitar o gerenciamento de seus orientados e feedbacks para defesa a elaboração da Tese de Graduação estilo Portfólio, facilitando a inserção de dados na formatação correta, na interação com o seu orientado para criar um portfólio perfeito para o TG.">
+                            <font>
+                                <Font size="20.0" />
+                            </font>
+                            <wrapText>true</wrapText>
+                        </Label>
+
+                        <!-- Dica com imagem à esquerda e texto à direita -->
+                        <HBox alignment="CENTER_LEFT" maxWidth="800.0" spacing="16.0">
+                            <children>
+                                <ImageView fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../assets/DedoEsquerda.gif" />
+                                    </image>
+                                </ImageView>
+                                <Label text="Para começar, basta escolher uma opção no menu lateral">
+                                    <font>
+                                        <Font name="System Bold Italic" size="18.0" />
+                                    </font>
+                                    <wrapText>true</wrapText>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </center>
+
+            <!-- Rodapé com logos e link, posicionado e com espaçamento responsivo -->
+            <bottom>
+                <BorderPane BorderPane.alignment="CENTER">
+                    <left>
+                        <HBox alignment="CENTER_LEFT" spacing="16.0">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                            <children>
+                                <VBox alignment="CENTER_RIGHT" spacing="6.0">
+                                    <children>
+                                        <Label text="Desenvolvido pelo time">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Hyperlink fx:id="linkGithubSquadTech" alignment="CENTER" contentDisplay="CENTER" onAction="#abrirRepoSquadTech" prefHeight="23.0" prefWidth="156.0" text="Github" />
+                                    </children>
+                                </VBox>
+                                <ImageView fitHeight="60.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../assets/logoSquad.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </HBox>
+                    </left>
+                    <right>
+                        <HBox alignment="CENTER_RIGHT" spacing="12.0">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                            <children>
+                                <VBox alignment="CENTER_RIGHT" spacing="4.0">
+                                    <children>
+                                        <Label text="Apoiado por">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </VBox>
+                                <ImageView fitHeight="45.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../assets/LogoFatec.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </HBox>
+                    </right>
+                </BorderPane>
+            </bottom>
+        </BorderPane>
+    </children>
+</AnchorPane>

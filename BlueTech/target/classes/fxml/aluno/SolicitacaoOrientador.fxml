@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.aluno.SolicitacaoOrientadorController">
+
+    <children>
+        <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" styleClass="solicitacao-root">
+
+            <!-- Título -->
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" styleClass="titulo-principal solicitacao-title" text="Solicitação de Orientador">
+                <padding>
+                    <Insets bottom="10.0" left="20.0" top="20.0" />
+                </padding>
+            </Label>
+
+            <!-- Seleção de Professor -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="solicitacao-form">
+                <children>
+                    <Label text="Selecione o Professor:" />
+                    <ChoiceBox fx:id="choiceSolicitacaoOrientadorLista" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                </children>
+                <padding>
+                    <Insets bottom="10.0" left="20.0" right="20.0" />
+                </padding>
+            </HBox>
+
+            <!-- Campo de Apresentação -->
+            <Label style="-fx-font-weight: bold;" text="Apresentação e Pedido Formal:" styleClass="solicitacao-title">
+                <padding>
+                    <Insets bottom="5.0" left="20.0" />
+                </padding>
+            </Label>
+
+            <TextArea fx:id="txtSolicitacaoOrientadorPedido" promptText="Escreva aqui sua apresentação e solicitação formal..." wrapText="true" VBox.vgrow="SOMETIMES" styleClass="solicitacao-textarea">
+                <padding>
+                    <Insets left="20.0" right="20.0" />
+                </padding>
+            </TextArea>
+
+            <!-- Botões -->
+            <HBox alignment="CENTER_RIGHT" spacing="10.0" styleClass="solicitacao-buttons">
+                <children>
+                    <Button fx:id="btnSolicitarOrientadorCancelar" onAction="#cancelarSolicitacao" styleClass="button-secondary" text="Cancelar" />
+                    <Button fx:id="btnSolicitarOrientadorEnviarSolicitacao" onAction="#enviarSolicitacao" styleClass="button-primary" text="Enviar Solicitação" />
+                </children>
+                <padding>
+                    <Insets bottom="20.0" right="20.0" top="10.0" />
+                </padding>
+            </HBox>
+
+            <!-- Lista de Solicitações -->
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" styleClass="subtitulo solicitacao-title" text="Suas Solicitações Existentes:">
+                <padding>
+                    <Insets bottom="10.0" left="20.0" />
+                </padding>
+            </Label>
+
+            <ScrollPane fx:id="exibirSolicitacaoOrientador" fitToWidth="true" VBox.vgrow="ALWAYS">
+                <content>
+                    <FlowPane fx:id="flowCardsSolicitacoes" hgap="10.0" prefWrapLength="760.0" vgap="10.0" styleClass="solicitacao-cards-section">
+                        <padding>
+                            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                        </padding>
+                    </FlowPane>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </children>
+</AnchorPane>
