@@ -121,8 +121,18 @@ public class EditarSecaoAPIController implements SupportsMainController {
                 return;
             }
 
+            // Atualiza o ID real para refletir na construção do markdown pós-inserção
+            novaVersao.setIdSecaoApi(idVersao);
+
             // Atualiza a seção para apontar para a nova versão
             secaoDAO.updateIdVersao(idSecao, idVersao);
+
+            // Regenera markdown com dados atualizados (versão/createdAt) e grava
+            TGVersao versaoPersistida = versaoDAO.findById(idVersao);
+            if (versaoPersistida != null) {
+                versaoPersistida.setMarkdownContent(MarkdownBuilderUtil.buildMarkdownFromVersao(versaoPersistida, secaoAtual));
+                versaoDAO.updateMarkdownContent(idVersao, versaoPersistida.getMarkdownContent());
+            }
 
             // Notifica professor (mantendo sua lógica atual)
             NotifierEvents.onNewVersionSubmitted(idVersao.longValue());

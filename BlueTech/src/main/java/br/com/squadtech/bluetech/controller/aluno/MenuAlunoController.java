@@ -2,9 +2,15 @@ package br.com.squadtech.bluetech.controller.aluno;
 
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
+import br.com.squadtech.bluetech.dao.OrientaDAO;
+import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.model.PerfilAluno;
 import br.com.squadtech.bluetech.model.SessaoUsuario;
 import br.com.squadtech.bluetech.model.Usuario;
+import br.com.squadtech.bluetech.model.Orienta;
+import br.com.squadtech.bluetech.model.Professor;
+import br.com.squadtech.bluetech.util.LogoutHelper;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -13,6 +19,7 @@ import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -79,20 +86,25 @@ public class MenuAlunoController implements SupportsMainController {
     @FXML
     private StackPane profileFrame;
 
-    //Referência para o controller principal, para podermos carregar conteúdos à direita
+    @FXML
+    private JFXButton btnLogoutAluno;
+
+    // Referência para o controller principal, para podermos carregar conteúdos à
+    // direita
     private PainelPrincipalController painelPrincipalController;
 
-    //Setter chamado pelo PainelPrincipalController após carregar este menu
+    // Setter chamado pelo PainelPrincipalController após carregar este menu
     @Override
     public void setPainelPrincipalController(PainelPrincipalController controller) {
         this.painelPrincipalController = controller;
     }
 
-    //Para carregar qualquer conteúdo no painel de exibição
+    // Para carregar qualquer conteúdo no painel de exibição
     private void loadContentIntoMain(String fxmlPath) {
         if (painelPrincipalController == null) {
             // Sem referência ao painel principal, não há onde injetar o conteúdo
-            log.error("[MenuAlunoController] painelPrincipalController é nulo. Verifique se foi configurado ao carregar o menu.");
+            log.error(
+                    "[MenuAlunoController] painelPrincipalController é nulo. Verifique se foi configurado ao carregar o menu.");
             return;
         }
         try {
@@ -101,7 +113,6 @@ public class MenuAlunoController implements SupportsMainController {
             log.error("Erro ao carregar conteúdo FXML: {}", fxmlPath, e);
         }
     }
-
 
     @FXML
     void AbrirEntregasSeccoes(ActionEvent event) {
@@ -118,48 +129,73 @@ public class MenuAlunoController implements SupportsMainController {
         loadContentIntoMain("/fxml/aluno/AgendamentoDefesaAluno.fxml");
     }
 
-    //Atualizar a foto no menu
-    public void updateFotoAluno(String imagePath) {
-        if (imagePath != null && !imagePath.isEmpty()) {
-            Image image = new Image("file:" + imagePath);
-            imgViewFotoAluno.setImage(image);
-            // Reaplique o processamento ap��s atualizar a imagem
-            Platform.runLater(this::applyImageProcessing);
-        }
-    }
-
     @FXML
     void SolicitarOrientacao(ActionEvent event) {
         loadContentIntoMain("/fxml/aluno/SolicitacaoOrientador.fxml");
     }
 
     @FXML
-    void initialize() {
-        assert btnAlunoSolicitarOrientacao != null : "fx:id=\"btnAlunoSolicitarOrientacao\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert btnAlunoEntregas != null : "fx:id=\"btnAlunoEntregas\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert btnAlunoPerfil != null : "fx:id=\"btnAlunoPerfil\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert btnAlunoPortifolio != null : "fx:id=\"btnAlunoPortifolio\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert btnAlunoAgendamentoDefesa != null : "fx:id=\"btnAlunoAgendamentoDefesa\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert imgViewFotoAluno != null : "fx:id=\"imgViewFotoAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert painelAluno != null : "fx:id=\"painelAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert paneSuperiorMenuAluno != null : "fx:id=\"paneSuperiorMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert splitPanelMenuAluno != null : "fx:id=\"splitPanelMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert txtMenuAlunoCursoAluno != null : "fx:id=\"txtMenuAlunoCursoAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert txtMenuAlunoNomeAluno != null : "fx:id=\"txtMenuAlunoNomeAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert txtMenuAlunoOrientadorAluno != null : "fx:id=\"txtMenuAlunoOrientadorAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert vboxMenuAluno != null : "fx:id=\"vboxMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
-        assert profileFrame != null : "fx:id=\"profileFrame\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+    void abrirPortfolio(ActionEvent event) {
+        loadContentIntoMain("/fxml/aluno/PortfolioAluno.fxml");
+    }
 
-        //Mantém o topo com altura estável (~260px) e o bottom responsivo
+    // Atualizar a foto no menu
+    public void updateFotoAluno(String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            Image image = new Image("file:" + imagePath);
+            imgViewFotoAluno.setImage(image);
+            // Reaplique o processamento após atualizar a imagem
+            Platform.runLater(this::applyImageProcessing);
+        }
+    }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        log.info("Aluno solicitou logout");
+        LogoutHelper.performLogout(event, log);
+    }
+
+    @FXML
+    void initialize() {
+        assert btnAlunoSolicitarOrientacao != null
+                : "fx:id=\"btnAlunoSolicitarOrientacao\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnAlunoEntregas != null
+                : "fx:id=\"btnAlunoEntregas\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnAlunoPerfil != null
+                : "fx:id=\"btnAlunoPerfil\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnAlunoPortifolio != null
+                : "fx:id=\"btnAlunoPortifolio\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnAlunoAgendamentoDefesa != null
+                : "fx:id=\"btnAlunoAgendamentoDefesa\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert imgViewFotoAluno != null
+                : "fx:id=\"imgViewFotoAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert painelAluno != null : "fx:id=\"painelAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert paneSuperiorMenuAluno != null
+                : "fx:id=\"paneSuperiorMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert splitPanelMenuAluno != null
+                : "fx:id=\"splitPanelMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert txtMenuAlunoCursoAluno != null
+                : "fx:id=\"txtMenuAlunoCursoAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert txtMenuAlunoNomeAluno != null
+                : "fx:id=\"txtMenuAlunoNomeAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert txtMenuAlunoOrientadorAluno != null
+                : "fx:id=\"txtMenuAlunoOrientadorAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert vboxMenuAluno != null
+                : "fx:id=\"vboxMenuAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert profileFrame != null : "fx:id=\"profileFrame\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+        assert btnLogoutAluno != null
+                : "fx:id=\"btnLogoutAluno\" was not injected: check your FXML file 'MenuAluno.fxml'.";
+
+        // Mantém o topo com altura estável (~260px) e o bottom responsivo
         paneSuperiorMenuAluno.setMinHeight(200.0);
         paneSuperiorMenuAluno.setPrefHeight(260.0);
         SplitPane.setResizableWithParent(paneSuperiorMenuAluno, Boolean.FALSE);
 
-        //Posiciona o divisor após layout e em redimensionamentos
+        // Posiciona o divisor após layout e em redimensionamentos
         Platform.runLater(this::fixDividerPosition);
         splitPanelMenuAluno.heightProperty().addListener((obs, oldH, newH) -> fixDividerPosition());
 
-        //Impede o usuário de arrastar o divisor (trava na posição desejada)
+        // Impede o usuário de arrastar o divisor (trava na posição desejada)
         if (!splitPanelMenuAluno.getDividers().isEmpty()) {
             splitPanelMenuAluno.getDividers().get(0).positionProperty().addListener((obs, oldPos, newPos) -> {
                 double desired = computeDesiredDividerPosition();
@@ -169,23 +205,59 @@ public class MenuAlunoController implements SupportsMainController {
             });
         }
 
-        //exibir o nome do Aluno logado na aplicação
+        // exibir o nome do Aluno logado na aplicação
         Usuario usuario = SessaoUsuario.getUsuarioLogado();
         if (usuario != null) {
             txtMenuAlunoNomeAluno.setText("Nome: " + usuario.getNome());
-            //Carregar foto se existir perfil
+
             PerfilAlunoDAO dao = new PerfilAlunoDAO();
             if (dao.existePerfil(usuario.getEmail())) {
                 PerfilAluno perfil = dao.getPerfilByEmail(usuario.getEmail());
-                if (perfil != null && perfil.getFoto() != null) {
-                    updateFotoAluno(perfil.getFoto());
+                if (perfil != null) {
+                    // Carregar foto
+                    if (perfil.getFoto() != null) {
+                        updateFotoAluno(perfil.getFoto());
+                    }
+
+                    // Verificar Orientador
+                    try {
+                        OrientaDAO orientaDAO = new OrientaDAO();
+                        Long alunoId = perfil.getIdPerfilAluno() != null ? Long.valueOf(perfil.getIdPerfilAluno())
+                                : -1L;
+
+                        List<Orienta> orientacoes = orientaDAO.findByAlunoId(alunoId);
+
+                        Orienta orientacaoAtiva = orientacoes.stream()
+                                .filter(Orienta::isAtivo)
+                                .findFirst()
+                                .orElse(null);
+
+                        if (orientacaoAtiva != null) {
+                            ProfessorDAO professorDAO = new ProfessorDAO();
+                            Professor professor = professorDAO.findById(orientacaoAtiva.getProfessorId());
+
+                            if (professor != null) {
+                                UsuarioDAO usuarioDAO = new UsuarioDAO();
+                                Usuario profUsuario = usuarioDAO.findByEmail(professor.getUsuarioEmail());
+                                if (profUsuario != null) {
+                                    txtMenuAlunoOrientadorAluno.setText("Orientador: " + profUsuario.getNome());
+                                }
+                            }
+                        } else {
+                            txtMenuAlunoOrientadorAluno.setText("Orientador: Pendente");
+                        }
+                    } catch (Exception e) {
+                        log.error("Erro ao buscar orientador no menu", e);
+                        txtMenuAlunoOrientadorAluno.setText("Orientador: Pendente");
+                    }
                 }
             }
         } else {
             txtMenuAlunoNomeAluno.setText("Bem-vindo!");
         }
 
-        // Garanta que o StackPane seja quadrado, combinando com os tamanhos do CSS (120x120)
+        // Garanta que o StackPane seja quadrado, combinando com os tamanhos do CSS
+        // (120x120)
         profileFrame.setPrefWidth(120);
         profileFrame.setPrefHeight(120);
         profileFrame.setMinWidth(120);
@@ -203,7 +275,8 @@ public class MenuAlunoController implements SupportsMainController {
             return; // Nada a processar se não houver imagem válida
         }
 
-        // Defina o tamanho desejado para a imagem interna (subtraindo a largura da borda: 120 - 2*4 = 112px)
+        // Defina o tamanho desejado para a imagem interna (subtraindo a largura da
+        // borda: 120 - 2*4 = 112px)
         double fitSize = 112.0;
 
         // Calcule o viewport para cropar a imagem ao centro em formato quadrado
@@ -233,7 +306,7 @@ public class MenuAlunoController implements SupportsMainController {
     private double computeDesiredDividerPosition() {
         double total = Math.max(1.0, splitPanelMenuAluno.getHeight());
         double desired = paneSuperiorMenuAluno.getPrefHeight() / total;
-        //Limita para evitar posições extremas em alturas pequenas/grandes
+        // Limita para evitar posições extremas em alturas pequenas/grandes
         return Math.max(0.1, Math.min(0.9, desired));
     }
 

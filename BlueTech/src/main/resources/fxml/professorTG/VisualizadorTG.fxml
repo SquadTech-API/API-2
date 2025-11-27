@@ -3,170 +3,38 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorTG.VisualizadorTGController">
-    <children>
-        <AnchorPane prefHeight="768.0" prefWidth="962.0" HBox.hgrow="ALWAYS">
-            <HBox.margin>
-                <Insets right="4.0" />
-            </HBox.margin>
-            <children>
-                <VBox alignment="CENTER" spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-style: 0; -fx-border-radius: 0;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-                    <children>
-                        <StackPane prefHeight="80.0" prefWidth="80.0">
-                            <children>
-                                <Rectangle arcHeight="15.0" arcWidth="15.0" fill="#e8e8e8" height="80.0" stroke="GAINSBORO" strokeType="INSIDE" width="80.0" />
-                                <Label text="MD" textFill="#b5b5b5">
-                                    <font>
-                                        <Font name="System Bold" size="24.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                        </StackPane>
-                        <Label text="Área de Visualização do Arquivo" textFill="#a1a1a1">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
-            </children>
-        </AnchorPane>
+<BorderPane stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/21.0.8"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="br.com.squadtech.bluetech.controller.professorTG.VisualizadorTGController">
 
-        <AnchorPane prefHeight="768.0" prefWidth="400.0">
-            <children>
-                <VBox layoutX="14.0" layoutY="14.0" prefHeight="80.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0; -fx-border-color: #e0e0e0; -fx-border-radius: 0;" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-                    <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="10.0">
-                            <children>
-                                <Label text="Aluno:" textFill="#0a3d62">
-                                    <font>
-                                        <Font name="System Bold" size="14.0" />
-                                    </font>
-                                </Label>
-                                <Label text="João Pedro">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                            <padding>
-                                <Insets left="15.0" />
-                            </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="10.0">
-                            <children>
-                                <Label text="Orientador:" textFill="#0a3d62">
-                                    <font>
-                                        <Font name="System Bold" size="14.0" />
-                                    </font>
-                                </Label>
-                                <Label text="José Paulo">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                            <padding>
-                                <Insets left="15.0" />
-                            </padding>
-                        </HBox>
-                    </children>
-                    <padding>
-                        <Insets bottom="5.0" top="5.0" />
-                    </padding>
-                </VBox>
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="108.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="108.0">
-                    <content>
-                        <VBox spacing="8.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0;">
-                                    <children>
-                                        <StackPane>
-                                            <children>
-                                                <Circle fill="#0a3d62" radius="18.0" strokeType="INSIDE" />
-                                                <Label text="J" textFill="WHITE">
-                                                    <font>
-                                                        <Font name="System Bold" size="16.0" />
-                                                    </font>
-                                                </Label>
-                                            </children>
-                                        </StackPane>
-                                        <Label text="TG João P.">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <Region HBox.hgrow="ALWAYS" />
-                                        <CheckBox fx:id="cbx_professorTG_VisuAluno" mnemonicParsing="false" onAction="#handleCheckboxAction" selected="true" />
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="5.0" left="10.0" right="15.0" top="5.0" />
-                                    </padding>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0;">
-                                    <children>
-                                        <StackPane>
-                                            <children>
-                                                <Circle fill="#0a3d62" radius="18.0" strokeType="INSIDE" />
-                                                <Label text="M" textFill="WHITE">
-                                                    <font>
-                                                        <Font name="System Bold" size="16.0" />
-                                                    </font>
-                                                </Label>
-                                            </children>
-                                        </StackPane>
-                                        <Label text="TG Márcio">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <Region HBox.hgrow="ALWAYS" />
-                                        <CheckBox mnemonicParsing="false" selected="true" />
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="5.0" left="10.0" right="15.0" top="5.0" />
-                                    </padding>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="68.0" prefHeight="50.0" prefWidth="200.0" spacing="15.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0;">
-                                    <children>
-                                        <StackPane>
-                                            <children>
-                                                <Circle fill="#0a3d62" radius="18.0" strokeType="INSIDE" />
-                                                <Label text="A" textFill="WHITE">
-                                                    <font>
-                                                        <Font name="System Bold" size="16.0" />
-                                                    </font>
-                                                </Label>
-                                            </children>
-                                        </StackPane>
-                                        <Label text="TG Anthony">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <Region HBox.hgrow="ALWAYS" />
-                                        <CheckBox mnemonicParsing="false" selected="true" />
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="5.0" left="10.0" right="15.0" top="5.0" />
-                                    </padding>
-                                </HBox>
-                            </children>
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </padding>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-                <Button fx:id="btn_professorTG_finalizar" layoutX="292.0" layoutY="667.0" mnemonicParsing="false" onAction="#finalizar" prefHeight="40.0" prefWidth="111.0" style="-fx-background-color: #1E90FF; -fx-background-radius: 8;" text="Finalizar" textFill="WHITE" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="14.0">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </Button>
-            </children>
-        </AnchorPane>
-    </children>
-</HBox>
+    <!-- Cabeçalho -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="hbox-header">
+            <padding>
+                <Insets bottom="15" left="20" right="20" top="15" />
+            </padding>
+
+            <Label styleClass="label-title" text="Visualizar Portfólio do Aluno" HBox.hgrow="ALWAYS" />
+
+            <!-- Espaço elástico -->
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="btnExportar" onAction="#exportarPortfolio" styleClass="button-primary"
+                text="Exportar README.md" />
+        </HBox>
+    </top>
+
+    <!-- Conteúdo Central -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="0" />
+            </padding>
+            <!-- WebView para renderizar o Markdown -->
+            <WebView fx:id="webViewPortfolio" prefHeight="600.0" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </center>
+
+</BorderPane>

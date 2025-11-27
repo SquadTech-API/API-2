@@ -5,12 +5,14 @@ import br.com.squadtech.bluetech.model.TGVersao;
 
 public final class MarkdownBuilderUtil {
 
-    private MarkdownBuilderUtil() {}
+    private MarkdownBuilderUtil() {
+    }
 
     public static String buildMarkdownFromVersao(TGVersao v, TGSecao s) {
         StringBuilder sb = new StringBuilder();
 
-        // Cabeçalho ajustado: Semestre do curso (ano-semestre do ano) | API-Empresa Parceira
+        // Cabeçalho ajustado: Semestre do curso (ano-semestre do ano) | API-Empresa
+        // Parceira
         sb.append("# ");
         String semestreCurso = v.getSemestre() != null ? v.getSemestre() : "—";
         sb.append(semestreCurso);
@@ -66,23 +68,13 @@ public final class MarkdownBuilderUtil {
         sb.append(v.getHardSkills() != null ? v.getHardSkills() : "Não informado");
         sb.append("\n\n");
 
-        // Soft Skills
-        sb.append("## Soft Skills\n");
-        sb.append(v.getSoftSkills() != null ? v.getSoftSkills() : "Não informado");
-        sb.append("\n\n");
-
-        // Metadados
-        sb.append("---\n");
-        sb.append("API número: ").append(s != null ? s.getApiNumero() : "N/A").append("  \n");
-        sb.append("Versão: ").append(v.getVersaoNumero() != null ? ("v" + v.getVersaoNumero()) : ("id=" + v.getIdSecaoApi())).append("  \n");
-        sb.append("Data da versão: ").append(v.getCreatedAt() != null ? v.getCreatedAt().toString() : "N/A").append("  \n");
-
         return sb.toString();
     }
 
     private static String normalizeUrl(String url) {
         String u = url.trim();
-        if (u.startsWith("http://") || u.startsWith("https://")) return u;
+        if (u.startsWith("http://") || u.startsWith("https://"))
+            return u;
         return "https://" + u;
     }
 }

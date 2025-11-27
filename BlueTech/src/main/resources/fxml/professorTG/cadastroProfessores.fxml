@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700" prefWidth="900" stylesheets="@../../css/Style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorTG.CadastroProfessoresController">
+
+    <ScrollPane fitToWidth="true" style="-fx-padding: 20;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+        <AnchorPane style="-fx-pref-height: 900px;">
+
+            <!-- Título -->
+            <Label styleClass="label-title" text="Cadastro Professor Orientador" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />
+
+            <!-- Container principal -->
+            <VBox spacing="15" style="-fx-pref-width: 800px;" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="40">
+
+                <!-- Nome completo -->
+                <VBox spacing="2">
+                    <Label text="Nome completo:" />
+                    <TextField fx:id="txtNome" promptText="Digite o nome completo" style="-fx-pref-width: 800px; -fx-pref-height: 35px;" styleClass="text-field" />
+                </VBox>
+
+                <!-- E-mail -->
+                <VBox spacing="2">
+                    <Label text="E-mail:" />
+                    <TextField fx:id="txtEmail" promptText="Digite o e-mail" style="-fx-pref-width: 800px; -fx-pref-height: 35px;" styleClass="text-field" />
+                </VBox>
+
+                <!-- Cargo/Função -->
+                <VBox spacing="2">
+                    <Label text="Cargo/Função:" />
+                    <TextField fx:id="txtCargo" promptText="Digite o cargo/função" style="-fx-pref-width: 800px; -fx-pref-height: 35px;" styleClass="text-field" />
+                </VBox>
+
+                <!-- Curso Vinculado -->
+                <VBox spacing="2">
+                    <Label text="Curso Vinculado:" />
+                    <TextField fx:id="txtCurso" promptText="Digite o curso vinculado" style="-fx-pref-width: 800px; -fx-pref-height: 35px;" styleClass="text-field" />
+                </VBox>
+
+                <!-- Formação Acadêmica -->
+                <VBox spacing="2">
+                    <Label text="Formação Acadêmica:" />
+                    <TextArea fx:id="txtFormacao" promptText="Digite a formação acadêmica" style="-fx-pref-width: 800px; -fx-pref-height: 80px;" styleClass="text-area" />
+                </VBox>
+
+                <!-- Áreas de Especialização -->
+                <VBox spacing="2">
+                    <Label text="Áreas de Especialização:" />
+                    <TextArea fx:id="txtEspecializacao" promptText="Digite as áreas de especialização" style="-fx-pref-width: 800px; -fx-pref-height: 80px;" styleClass="text-area" />
+                </VBox>
+
+                <!-- BOTÕES SALVAR E CANCELAR -->
+                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10 0 0 0;">
+                    <JFXButton fx:id="btnSalvar" onAction="#salvarProfessor" style="-fx-pref-width: 100px;" styleClass="button" text="Salvar" />
+                    <JFXButton fx:id="btnCancelar" onAction="#cancelar" style="-fx-pref-width: 100px;" styleClass="button-secondary" text="Cancelar" />
+                </HBox>
+
+            </VBox>
+
+            <!-- LISTA DE PROFESSORES CADASTRADOS -->
+            <VBox spacing="10" style="-fx-pref-width: 800px;" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="590">
+
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 30 0 10 0;" text="Professores Orientadores Cadastrados" />
+
+                <!-- TABELA COM AÇÕES -->
+                <TableView fx:id="tableViewProfessores" style="-fx-pref-height: 250px; -fx-pref-width: 800px;" styleClass="card">
+                    <columns>
+                        <TableColumn fx:id="colNome" prefWidth="140" text="Nome" />
+                        <TableColumn fx:id="colEmail" prefWidth="180" text="Email" />
+                        <TableColumn fx:id="colCargo" prefWidth="110" text="Cargo" />
+                        <TableColumn fx:id="colCurso" prefWidth="130" text="Curso" />
+                        <TableColumn fx:id="colFormacao" prefWidth="110" text="Formação" />
+                        <TableColumn fx:id="colEspecializacao" prefWidth="110" text="Especialização" />
+                        <TableColumn fx:id="colAcoes" prefWidth="120" text="Ações" />
+                    </columns>
+                </TableView>
+
+            </VBox>
+
+        </AnchorPane>
+    </ScrollPane>
+
+</AnchorPane>

@@ -10,6 +10,7 @@ public class Professor {
     private String tipoTG;         // "TG1", "TG2", "AMBOS", "NENHUM"
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String foto;
 
     // Construtor vazio
     public Professor() {}
@@ -21,7 +22,7 @@ public class Professor {
         this.tipoTG = tipoTG;
     }
 
-    // Construtor completo
+    // Construtor semi completo
     public Professor(Long id, String usuarioEmail, String cargo, String tipoTG,
                      LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -30,6 +31,19 @@ public class Professor {
         this.tipoTG = tipoTG;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    // Construtor completo
+
+    public Professor(Long id, String usuarioEmail, String cargo, String tipoTG,
+                     LocalDateTime createdAt, LocalDateTime updatedAt, String foto) {
+        this.id = id;
+        this.usuarioEmail = usuarioEmail;
+        this.cargo = cargo;
+        this.tipoTG = tipoTG;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.foto = foto;
     }
 
     // Getters e Setters
@@ -51,15 +65,12 @@ public class Professor {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    @Override
-    public String toString() {
-        return "Professor{" +
-                "id=" + id +
-                ", usuarioEmail='" + usuarioEmail + '\'' +
-                ", cargo='" + cargo + '\'' +
-                ", tipoTG='" + tipoTG + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+    public String getFoto() {
+        return foto;
     }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
 }

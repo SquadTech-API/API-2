@@ -14,7 +14,7 @@
 }
 
 /* Título do Painel */
-#painelAluno {
+.label-title {
     -fx-text-fill: linear-gradient(to bottom, rgba(26, 26, 26, 0.3) 0%, #000000 50%, rgba(30, 29, 29, 0.3) 100%);
     -fx-font-size: 24px;
     -fx-font-family: 'Roboto', 'Arial', sans-serif; /* Mudado para sans-serif para um look mais moderno */
@@ -296,4 +296,18 @@
 .menu-accordion .menu-accordion {
     -fx-background-color: transparent;
     -fx-padding: 8 0 0 0;
+}
+
+/* Estilo específico para o botão de logout */
+.menu-lateral .logout-button {
+    -fx-background-color:
+        linear-gradient(to right, rgba(255, 77, 77, 0.2), rgba(255, 0, 102, 0.15));
+    -fx-border-color: rgba(255, 99, 132, 0.6);
+    -fx-text-fill: #ffe6e6;
+}
+
+.menu-lateral .logout-button:hover {
+    -fx-background-color:
+        linear-gradient(to right, rgba(255, 77, 77, 0.35), rgba(255, 0, 102, 0.25));
+    -fx-text-fill: #ffffff;
 }

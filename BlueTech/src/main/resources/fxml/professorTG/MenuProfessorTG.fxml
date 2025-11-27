@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<SplitPane fx:id="splitPanelMenuProfessorTG" dividerPositions="0.4" orientation="VERTICAL" styleClass="menu-lateral" stylesheets="@../../css/MenuStyles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorTG.MenuProfessorTGController">
+<SplitPane fx:id="splitPanelMenuProfessorTG" dividerPositions="0.4" orientation="VERTICAL" styleClass="menu-lateral" stylesheets="@../../css/MenuStyles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.squadtech.bluetech.controller.professorTG.MenuProfessorTGController">
 
     <items>
         <!-- Topo do menu -->
@@ -22,21 +18,21 @@
                         <Insets bottom="10" left="10" right="10" top="10" />
                     </padding>
                     <children>
-                        <Label fx:id="lblTituloProfessorTG" text="Painel do Professor TG" textFill="#ffd400">
+                        <Label fx:id="lblTituloProfessorTG" styleClass="label-title" text="Painel Professor TG" textFill="#ffd400">
                             <font>
                                 <Font name="CaskaydiaMono NFM SemiBold" size="20" />
                             </font>
                         </Label>
-                        <ImageView fx:id="imgViewFotoProfessorTG" fitWidth="100" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../../../../../../../Users/dasmi/Downloads/API-2-main/API-2-main/BlueTech/src/main/resources/images/Usuario.png" />
-                            </image>
-                        </ImageView>
-
+                        <StackPane fx:id="profileFrame" styleClass="profile-frame">
+                            <ImageView fx:id="imgViewFotoProfTG" fitHeight="112.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../assets/Usuario.png" />
+                                </image>
+                            </ImageView>
+                        </StackPane>
                         <VBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="6.0">
                             <children>
-                                <Label fx:id="lblProfessorTG" style="-fx-font-weight: bold; -fx-font-size: 16px;" text="PROFESSOR TG: " textFill="WHITE" />
-                                <Label fx:id="lblSemestreTG" style="-fx-font-size: 14px;" text="SEMESTRE RESPONSÁVEL: " textFill="WHITE" />
+                                <Label fx:id="lblProfessorTG" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="PROFESSOR TG: " textFill="WHITE" />
                             </children>
                         </VBox>
                     </children>
@@ -56,11 +52,17 @@
                         <Accordion fx:id="accordionProfessorTG" prefWidth="Infinity" styleClass="menu-accordion" />
 
                         <!-- Botões extras -->
-                        <JFXButton fx:id="btnPortfolios" maxWidth="Infinity" onAction="#abrirPortfolio" text="Portfólios Concluídos" />
+                        <JFXButton fx:id="btnPortfolios" maxWidth="Infinity" onAction="#abrirPortfolio" text="Visualizar Portfólios" />
+
+                        <!-- 🔥 NOVO BOTÃO DE IMPORTACAO CSV 🔥 -->
+                        <JFXButton fx:id="btnImportarCSV" maxWidth="Infinity" onAction="#abrirImportacaoCSV" text="Importar CSV Orientadores" />
+
                         <JFXButton fx:id="btnCadastrarOrientadores" maxWidth="Infinity" onAction="#abrirCadastrarOrientadores" text="Cadastrar Orientadores" />
                         <JFXButton fx:id="btnAgendamentosTG" maxWidth="Infinity" onAction="#abrirAgendamentos" text="Agendamentos de TG" />
-                        <JFXButton fx:id="btnProgressso" maxWidth="Infinity" onAction="#abrirProgressoAluno" text="Alunos em Progresso" />
                         <JFXButton fx:id="btnOrientacao" maxWidth="Infinity" onAction="#abrirOrientacao" text="Orientação" />
+                  <JFXButton fx:id="btnPerfilProfTG" layoutX="10.0" layoutY="270.0" maxWidth="Infinity" onAction="#abrirPerfilProfTG" text="Perfil" />
+                        <Separator opacity="0.4" />
+                        <JFXButton fx:id="btnLogoutProfessorTG" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Sair" />
                     </children>
                 </VBox>
             </children>

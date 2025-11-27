@@ -17,6 +17,7 @@
     -fx-border-color: rgba(255,215,0,0.35), #FFD700;
     -fx-border-width: 4, 2;
     -fx-border-radius: 20 0 0 20;
+    -fx-padding: 14 14 18 14;
 }
 
 /* Labels principais e títulos */
@@ -126,6 +127,13 @@
 .text-field:focused, .text-area:focused {
     -fx-border-color: #1976d2;
     -fx-effect: dropshadow(gaussian, rgba(25,118,210,0.25), 8, 0, 0, 1);
+}
+
+/* Estilo para TextAreas não editáveis (conteúdo do aluno) para remover a barra de rolagem vertical */
+.conteudo-aluno-area .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
 }
 
 /* ===========================
@@ -387,20 +395,18 @@
 
 .filters-row .toggle {
     -fx-background-insets: 0;
-}
-.filters-row .toggle:first-child {
-    -fx-background-radius: 10 0 0 10;
-    -fx-border-radius: 10 0 0 10;
-}
-.filters-row .toggle:last-child {
-    -fx-background-radius: 0 10 10 0;
-    -fx-border-radius: 0 10 10 0;
-}
-.filters-row .toggle {
     -fx-background-radius: 0;
     -fx-border-radius: 0;
 }
-.filters-row .toggle:only-child {
+.filters-row .toggle-left {
+    -fx-background-radius: 10 0 0 10;
+    -fx-border-radius: 10 0 0 10;
+}
+.filters-row .toggle-right {
+    -fx-background-radius: 0 10 10 0;
+    -fx-border-radius: 0 10 10 0;
+}
+.filters-row .toggle-single {
     -fx-background-radius: 10;
     -fx-border-radius: 10;
 }
@@ -606,4 +612,49 @@
     -fx-control-inner-background: #f3f4f6; /* cinza claro */
     -fx-border-color: #22c55e;            /* verde para indicar OK */
     -fx-border-width: 1.5;
+}
+
+/* ===========================
+   VISUALIZAR PORTFÓLIO TG
+   =========================== */
+
+.card-item {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #e5e7eb;
+    -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(13,18,30,0.04), 8, 0.15, 0, 2);
+    -fx-cursor: hand;
+}
+
+.card-item:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.35), 10, 0, 0, 3);
+    -fx-translate-y: -2;
+}
+
+.card-item .title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+}
+
+.card-item .subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #4b5563;
+}
+
+.eye-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+    -fx-padding: 5;
+    -fx-border-color: transparent;
+}
+
+.eye-btn:hover {
+    -fx-text-fill: #1e3a8a;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
 }

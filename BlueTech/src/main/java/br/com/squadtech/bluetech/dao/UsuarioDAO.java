@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class UsuarioDAO {
@@ -121,4 +120,39 @@ public class UsuarioDAO {
         }
         return lista;
     }
+
+    public boolean updateSenhaProfessor(String email, String novaSenhaHash) {
+        String sql = "UPDATE usuario SET senha = ? WHERE email = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, novaSenhaHash);
+            stmt.setString(2, email);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar senha: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean atualizarNomeUsuario(String email, String novoNome) {
+        String sql = "UPDATE usuario SET nome = ? WHERE email = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, novoNome);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar nome do usuário: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

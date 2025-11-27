@@ -1,12 +1,14 @@
 package br.com.squadtech.bluetech.config;
 
 import br.com.squadtech.bluetech.dao.AgendamentoDefesaDAO;
+import br.com.squadtech.bluetech.dao.MensagensDAO;
 import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
 import br.com.squadtech.bluetech.dao.UsuarioDAO;
 import br.com.squadtech.bluetech.dao.TGVersaoDAO;
 import br.com.squadtech.bluetech.dao.TGSecaoDAO;
 import br.com.squadtech.bluetech.dao.FeedbackDAO;
 import br.com.squadtech.bluetech.dao.ProfessorDAO;
+import br.com.squadtech.bluetech.dao.ProfessorTGDAO;
 import br.com.squadtech.bluetech.dao.OrientaDAO;
 import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
 import br.com.squadtech.bluetech.dao.SolicitacaoDAO;
@@ -40,10 +42,12 @@ public class DatabaseInitializer {
         TGSecaoDAO tgSecaoDAO = new TGSecaoDAO();
         FeedbackDAO feedbackDAO = new FeedbackDAO();
         ProfessorDAO professorDAO = new ProfessorDAO();
+        ProfessorTGDAO professorTGDAO = new ProfessorTGDAO();
         OrientaDAO orientaDAO = new OrientaDAO();
         TGPortifolioDAO portifolioDAO = new TGPortifolioDAO();
         SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
         AgendamentoDefesaDAO agendamentoDefesaDAO = new AgendamentoDefesaDAO();
+        MensagensDAO mensagensDAO = new MensagensDAO();
 
         //Parte 1: Cria tabelas se não existirem
         usuarioDAO.createTableIfNotExists();
@@ -51,15 +55,19 @@ public class DatabaseInitializer {
         TGVersaoDAO.createTableIfNotExists();
         tgSecaoDAO.createTableIfNotExists();
         professorDAO.createTableIfNotExists();
+        professorTGDAO.createTableIfNotExists();
         orientaDAO.createTableIfNotExists();
         portifolioDAO.createTableIfNotExists();
         feedbackDAO.createTableIfNotExists();
         solicitacaoDAO.createTableIfNotExists();
         agendamentoDefesaDAO.createTableIfNotExists();
+        mensagensDAO.createTableIfNotExists();
+
 
         //Migrações/índices auxiliares
         TGVersaoDAO.ensureSchemaUpToDate();
         tgSecaoDAO.ensureSchemaUpToDate();
+        mensagensDAO.ensureSchemaUpToDate();
         ensurePerfilAlunoUniqueEmail();
 
         //Parte 2: Verifica se há dados e seed admin se vazio

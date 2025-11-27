@@ -1,21 +1,9 @@
 package br.com.squadtech.bluetech.controller.professorTG;
 
-import br.com.squadtech.bluetech.dao.PerfilAlunoDAO;
-import br.com.squadtech.bluetech.dao.TGSecaoDAO;
-import br.com.squadtech.bluetech.dao.OrientaDAO;
-import br.com.squadtech.bluetech.dao.ProfessorDAO;
-import br.com.squadtech.bluetech.dao.TGPortifolioDAO;
-import br.com.squadtech.bluetech.dao.UsuarioDAO;
-
-import br.com.squadtech.bluetech.model.PerfilAluno;
-import br.com.squadtech.bluetech.model.Orienta;
-import br.com.squadtech.bluetech.model.Professor;
-import br.com.squadtech.bluetech.model.TGPortifolio;
-import br.com.squadtech.bluetech.model.Usuario;
-
+import br.com.squadtech.bluetech.dao.*;
+import br.com.squadtech.bluetech.model.*;
 import br.com.squadtech.bluetech.controller.SupportsMainController;
 import br.com.squadtech.bluetech.controller.login.PainelPrincipalController;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -23,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -41,10 +30,7 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
     private ComboBox<String> comboCurso;
 
     @FXML
-    private ComboBox<String> comboSemestre;
-
-    @FXML
-    private ComboBox<String> comboPortifolio;
+    private TextField TextFieldNomePesquisa;
 
     @FXML
     private Button btnBuscar;
@@ -65,53 +51,66 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
 
     @FXML
     private void initialize() {
-        comboCurso.getItems().addAll("Banco de Dados", "Análise de Sistemas");
-        comboSemestre.getItems().addAll("5º Semestre", "6º Semestre");
+        // Inicialização se necessário
     }
 
     @FXML
     private void buscarPortifolio(ActionEvent event) {
-        String curso = comboCurso.getValue() != null ? comboCurso.getValue() : "";
-        String semestre = comboSemestre.getValue() != null ? comboSemestre.getValue() : "";
-        criarCards(semestre, curso);
+        String termo = TextFieldNomePesquisa.getText() != null ? TextFieldNomePesquisa.getText().trim() : "";
+        criarCards(termo);
     }
 
-    public void criarCards(String semestre, String curso) {
+    // Sobrecarga para manter compatibilidade com chamadas antigas (ex:
+    // MenuProfessorTGController)
+    public void criarCards(String curso, String nomePesquisa) {
+        criarCards(nomePesquisa);
+    }
+
+    public void criarCards(String termo) {
         cardsBox.getChildren().clear();
 
-        List<PerfilAluno> alunos = perfilAlunoDAO.listarAlunosParaCard(null, null);
+        // Busca alunos filtrando por nome ou email
+        List<PerfilAluno> alunos = perfilAlunoDAO.buscarAlunosPorNomeOuEmail(termo);
+
+        if (alunos.isEmpty()) {
+            Label lbl = new Label("Nenhum aluno encontrado.");
+            lbl.setStyle("-fx-text-fill: #666; -fx-font-size: 14px;");
+            cardsBox.getChildren().add(lbl);
+            return;
+        }
 
         for (PerfilAluno a : alunos) {
             String nomeAluno = a.getNomeAluno();
+            String emailAluno = a.getEmailUsuario();
 
             List<Orienta> orientacoes = orientaDAO.findByAlunoId(
-                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
-            );
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
 
             String professores = "Sem professor";
             if (orientacoes != null && !orientacoes.isEmpty()) {
                 professores = orientacoes.stream()
                         .map(o -> obterEmailProfessor(o.getProfessorId()))
                         .map(email -> {
-                            if (email == null) return null;
+                            if (email == null)
+                                return null;
                             Usuario u = usuarioDAO.findByEmail(email);
                             return u != null && u.getNome() != null ? u.getNome() : email;
                         })
                         .filter(n -> n != null && !n.isBlank())
                         .collect(Collectors.joining(", "));
-                if (professores.isBlank()) professores = "Sem professor";
+                if (professores.isBlank())
+                    professores = "Sem professor";
             }
 
             TGPortifolio portifolio = portifolioDAO.findByAlunoId(
-                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L
-            );
+                    a.getIdPerfilAluno() != null ? a.getIdPerfilAluno().longValue() : -1L);
 
             String statusPortifolio;
             if (portifolio != null) {
                 statusPortifolio = portifolio.getStatus()
                         + (portifolio.getPercentualConclusao() != null
-                        ? (" - " + portifolio.getPercentualConclusao() + "%")
-                        : "");
+                                ? (" - " + portifolio.getPercentualConclusao() + "%")
+                                : "");
             } else if (a.getEmailUsuario() != null) {
                 int qtd = tgSecaoDAO.countSecoes(a.getEmailUsuario());
                 statusPortifolio = qtd > 0 ? ("Seções enviadas: " + qtd) : "Sem envios";
@@ -122,13 +121,16 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             Label t1 = new Label(nomeAluno);
             t1.getStyleClass().add("title");
 
-            Label t2 = new Label("Orientador(es): " + professores);
+            Label t2 = new Label("Email: " + emailAluno); // Mostra email
             t2.getStyleClass().add("subtitle");
 
-            Label t3 = new Label("Status: " + statusPortifolio);
+            Label t3 = new Label("Orientador(es): " + professores);
             t3.getStyleClass().add("subtitle");
 
-            VBox textBox = new VBox(4, t1, t2, t3);
+            Label t4 = new Label("Status: " + statusPortifolio);
+            t4.getStyleClass().add("subtitle");
+
+            VBox textBox = new VBox(4, t1, t2, t3, t4);
             HBox.setHgrow(textBox, Priority.ALWAYS);
 
             Button eye = new Button("👁");
@@ -140,45 +142,31 @@ public class VisualizarPortifolioTGController implements SupportsMainController 
             card.getStyleClass().add("card-item");
             card.setPadding(new Insets(12));
 
-            card.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(nomeAluno, semestre, curso));
-            eye.setOnAction(e -> abrirVisualizador(nomeAluno, semestre, curso));
+            card.setOnMouseClicked((MouseEvent e) -> abrirVisualizador(emailAluno));
+            eye.setOnAction(e -> abrirVisualizador(emailAluno));
 
             cardsBox.getChildren().add(card);
         }
     }
 
-    /**
-     * Carrega uma imagem padrão de usuário (caso você queira usar em cards/foto).
-     * Ainda não está sendo usada aqui, mas já deixo pronto pra reaproveitar.
-     */
-    private Image carregarImagemPadrao() {
+    private void abrirVisualizador(String emailAluno) {
+        if (painelPrincipalController == null)
+            return;
         try {
-            return new Image(getClass().getResourceAsStream("/images/Usuario.png"));
-        } catch (Exception e) {
-            System.out.println("⚠️ Imagem padrão não encontrada no resources/assets/Usuario.png");
-            return new Image("https://cdn-icons-png.flaticon.com/512/847/847969.png"); // fallback online
-        }
-    }
-
-    private void abrirVisualizador(String nomeAluno, String semestre, String curso) {
-        if (painelPrincipalController == null) return;
-        try {
-            VisualizadorTGController controller =
-                    painelPrincipalController.loadContentReturnController(
-                            "/fxml/professorTG/VisualizadorTG.fxml",
-                            VisualizadorTGController.class
-                    );
+            VisualizadorTGController controller = painelPrincipalController.loadContentReturnController(
+                    "/fxml/professorTG/VisualizadorTG.fxml",
+                    VisualizadorTGController.class);
             if (controller != null) {
-                controller.receberDadosAluno(nomeAluno, semestre, curso);
+                controller.receberDadosAluno(emailAluno);
             }
         } catch (Exception ex) {
-            // log via console para simplificar
             ex.printStackTrace();
         }
     }
 
     private String obterEmailProfessor(Long professorId) {
-        if (professorId == null) return null;
+        if (professorId == null)
+            return null;
         Professor p = professorDAO.findById(professorId);
         return p != null ? p.getUsuarioEmail() : null;
     }
