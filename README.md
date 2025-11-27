@@ -667,10 +667,45 @@ src/main/java/module-info.java   # Definição do módulo Java do projeto
 
 # MVP:
 
-<video controls width="700">
-  <source src="assets/videos/Tela_Adm.mp4" type="video/mp4">
-  Seu navegador não suporta vídeos HTML5.
-</video>
+<details>
+<summary><strong> 🎥 TELA ADM  </strong></summary>
+
+#### 📺 Vídeo do YouTube
+
+[![Assista ao vídeo](https://img.youtube.com/vi/z4705pWGW3w/hqdefault.jpg)](https://www.youtube.com/watch?v=z4705pWGW3w)
+
+</details>
+
+
+</details>
+
+<details>
+<summary><strong> 🎥 TELA ALUNO </strong></summary>
+
+#### 📺 Vídeo do YouTube
+
+[![Assista ao vídeo](https://img.youtube.com/vi/OVeDCs0R7Zs/hqdefault.jpg)](https://www.youtube.com/watch?v=OVeDCs0R7Zs)
+
+</details>
+
+<details>
+<summary><strong> 🎥 TELA ORIENTADOR </strong></summary>
+
+#### 📺 Vídeo do YouTube
+
+[![Assista ao vídeo](https://img.youtube.com/vi/nCYGfHmNte0/hqdefault.jpg)](https://www.youtube.com/watch?v=nCYGfHmNte0)
+
+</details>
+
+<details>
+<summary><strong> 🎥 TELA PROFESSOR TG </strong></summary>
+
+#### 📺 Vídeo do YouTube
+
+[![Assista ao vídeo](https://img.youtube.com/vi/AOPw_brkQHM/hqdefault.jpg)](https://www.youtube.com/watch?v=AOPw_brkQHM)
+
+</details>
+
 
 
 
