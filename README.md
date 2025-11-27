@@ -16,7 +16,7 @@
 ## :busts_in_silhouette: Equipe
 
 <p align="center">
-      <img src="https://github.com/SquadTech-API/API-2/blob/b7571f9a959f73dcacb3b506cb20156412803aa4/assets/docs/3%C2%AA%20Sprint/EQUIPE%20-%20TERCEIRA%20SPRINT.jpeg">
+      <img src="https://github.com/SquadTech-API/API-2/blob/d7c365497e5b951cfa52f638c6971f75b4da83e1/assets/docs/3%C2%AA%20Sprint/EQUIPE%20SQUADTECH%20TERCEIRA%20SPRINT.jpg">
 </p>
 
 <table>
@@ -118,7 +118,7 @@ O processo atual de envio e correção das seções do TG é feito por e-mail e 
 
 # 📑 Backlog do Produto:
 
-<table border="1">
+<table border="1" cellspacing="0" cellpadding="6">
   <thead>
     <tr>
       <th>ID</th>
@@ -130,87 +130,115 @@ O processo atual de envio e correção das seções do TG é feito por e-mail e 
   </thead>
   <tbody>
     <tr>
-      <td># A01</td>
-      <td>:red_circle: Alta</td>
-      <td>"Como aluno, quero enviar uma seção do Trabalho de Graduação, para receber feedback do professor orientador e aprimorar o trabalho."</td>
+      <td>A01</td>
+      <td>🔴 Alta</td>
+      <td>Como aluno, quero enviar uma seção do Trabalho de Graduação, para receber feedback do professor orientador e aprimorar o trabalho.</td>
       <td>5 Pontos</td>
       <td>2</td>
     </tr>
     <tr>
-      <td># U01</td>
-      <td>:red_circle: Alta</td>
-      <td>"Como professor de TG, professor orientador e aluno, quero receber notificações sobre prazos, envios e feedbacks, para não perder nenhuma atualização importante sobre a seção de TG, e obter controle do tempo limite para realizar uma correção/revisão."</td>
+      <td>U01</td>
+      <td>🔴 Alta</td>
+      <td>Como professor de TG, professor orientador e aluno, quero receber notificações sobre prazos, envios e feedbacks, para não perder nenhuma atualização importante sobre a seção de TG, e obter controle do tempo limite para realizar uma correção/revisão.</td>
       <td>5 Pontos</td>
       <td>2</td>
     </tr>
     <tr>
-    <tr>
-      <td># P01</td>
-      <td>:red_circle: Alta</td>
-      <td>"Como professor orientador, quero acessar as seções de TGs enviados pelos meus alunos, para realizar revisões e correções de forma organizada e prática."</td>
+      <td>P01</td>
+      <td>🔴 Alta</td>
+      <td>Como professor orientador, quero acessar as seções de TGs enviados pelos meus alunos, para realizar revisões e correções de forma organizada e prática.</td>
       <td>1 Ponto</td>
       <td>2</td>
     </tr>
     <tr>
-      <td># P02</td>
-      <td>:red_circle: Alta</td>
-      <td>"Como professor orientador, quero disponibilizar feedbacks e seções corrigidas, para ajudar na construção do trabalho de graduação."</td>
+      <td>P02</td>
+      <td>🔴 Alta</td>
+      <td>Como professor orientador, quero disponibilizar feedbacks e seções corrigidas, para ajudar na construção do trabalho de graduação.</td>
       <td>2 Pontos</td>
       <td>2</td>
     </tr>
     <tr>
-      <td># TG01</td>
-      <td>:red_circle: Alta</td>
-      <td>"Como professor de TG, quero visualizar quais alunos estão vinculados a quais professores orientadores, para manter controle do andamento dos trabalhos."</td>
+      <td>TG01</td>
+      <td>🔴 Alta</td>
+      <td>Como professor de TG, quero visualizar quais alunos estão vinculados a quais professores orientadores, para manter controle do andamento dos trabalhos.</td>
       <td>2 Pontos</td>
       <td>2</td>
     </tr>
     <tr>
-      <td># A03</td>
-      <td>:yellow_circle: Média</td>
-      <td>"Como aluno, quero consultar as versões anteriores do meu TG com os comentários do professor, para acompanhar a evolução e evitar repetir erros."</td>
+      <td>A03</td>
+      <td>🟡 Média</td>
+      <td>Como aluno, quero consultar as versões anteriores do meu TG com os comentários do professor, para acompanhar a evolução e evitar repetir erros.</td>
       <td>2 Pontos</td>
       <td>2</td>
     </tr>
     <tr>
-    <td># A02</td>
-      <td>:yellow_circle: Média</td>
-      <td>"Como aluno, quero reenviar novas versões do meu TG, para incorporar os feedbacks e avançar no processo de correção. "</td>
+      <td>A02</td>
+      <td>🟡 Média</td>
+      <td>Como aluno, quero reenviar novas versões do meu TG, para incorporar os feedbacks e avançar no processo de correção.</td>
       <td>5 Pontos</td>
       <td>3</td>
     </tr>
     <tr>
-    <td># A05</td>
-      <td>:yellow_circle: Média</td>
-      <td>"Como aluno, quero exportar meu TG no formato Markdown (MD), para entregá-lo conforme o padrão exigido pela instituição."</td>
+      <td>A05</td>
+      <td>🟡 Média</td>
+      <td>Como aluno, quero exportar meu TG no formato Markdown (MD), para entregá-lo conforme o padrão exigido pela instituição.</td>
       <td>5 Pontos</td>
       <td>3</td>
     </tr>
     <tr>
-    <td># P03</td>
-      <td>:yellow_circle: Média</td>
-      <td>"Como professor orientador, quero acessar o histórico de versões do TG de cada aluno, para acompanhar a evolução e manter controle das correções."</td>
+      <td>P03</td>
+      <td>🟡 Média</td>
+      <td>Como professor orientador, quero acessar o histórico de versões do TG de cada aluno, para acompanhar a evolução e manter controle das correções.</td>
       <td>1 Ponto</td>
       <td>3</td>
     </tr>
     <tr>
-    <td># P04</td>
-      <td>:yellow_circle: Média</td>
-      <td>"Como professor orientador, quero registrar a aprovação final de um TG, para encerrar oficialmente a orientação."</td>
+      <td>P04</td>
+      <td>🟡 Média</td>
+      <td>Como professor orientador, quero registrar a aprovação final de um TG, para encerrar oficialmente a orientação.</td>
       <td>1 Ponto</td>
       <td>3</td>
     </tr>
-    <td># U02</td>
-      <td>:yellow_circle: Média</td>
-      <td>"Como aluno/professor orientador/professor de TG, quero manter minhas informações privadas, para manter o sigilo."</td>
+    <tr>
+      <td>U02</td>
+      <td>🟡 Média</td>
+      <td>Como aluno/professor orientador/professor de TG, quero manter minhas informações privadas, para manter o sigilo.</td>
       <td>2 Pontos</td>
       <td>3</td>
     </tr>
     <tr>
-    <td># A06</td>
-      <td>:green_circle: Baixa</td>
-      <td>"Como aluno, quero visualizar a aprovação final do meu TG, para iniciar o planejamento da defesa do meu TG."</td>
+      <td>TG02</td>
+      <td>🟡 Média</td>
+      <td>Como professor de TG, quero cadastrar de forma fácil e intuitiva vários professores orientadores, ou um único professor orientador, para iniciar as correções dos TG.</td>
+      <td>5 Pontos</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>ADM01</td>
+      <td>🟡 Média</td>
+      <td>Como administrador, quero cadastrar de forma fácil e intuitiva vários professores de TG, ou um único professor de TG, para iniciar o andamento das entregas finais do trabalho de graduação.</td>
+      <td>5 Pontos</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>A06</td>
+      <td>🟢 Baixa</td>
+      <td>Como aluno, quero trocar mensagens de texto com o professor orientador, para esclarecer dúvidas específicas e pertinentes ao TG. </td>
       <td>1 Ponto</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>A07</td>
+      <td>🟢 Baixa</td>
+      <td>Como aluno, quero visualizar a aprovação final do meu TG, para iniciar o planejamento da defesa do meu TG.</td>
+      <td>1 Ponto</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>A08</td>
+      <td>🟢 Baixa</td>
+      <td>Como aluno, quero que o sistema possibilite o agendamento da defesa, para a conclusão oficial do TG.</td>
+      <td>2 Pontos</td>
       <td>3</td>
     </tr>
   </tbody>
@@ -235,54 +263,81 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
 
 # :hourglass_flowing_sand: Backlog da Sprint 3:
 
-<table border="1" cellpadding="8" cellspacing="0">
+<table border="1" cellspacing="0" cellpadding="6">
   <thead>
     <tr>
-      <th>Item</th>
-      <th>Descrição</th>
+      <th>ID</th>
       <th>Prioridade</th>
+      <th>User Story</th>
       <th>Status</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>A02</td>
-      <td>Como aluno, quero reenviar novas versões do meu TG, para incorporar os feedbacks e avançar no processo de correção.</td>
       <td>🟡 Média</td>
-      <td>🛠️ Em progresso</td>
+      <td>Como aluno, quero reenviar novas versões do meu TG, para incorporar os feedbacks e avançar no processo de correção.</td>
+      <td>✅Concluído</td>
     </tr>
     <tr>
       <td>A05</td>
-      <td>Como aluno, quero exportar meu TG no formato Markdown (MD), para entregá-lo conforme o padrão exigido pela instituição.</td>
       <td>🟡 Média</td>
-      <td>🛠️ Em progresso</td>
+      <td>Como aluno, quero exportar meu TG no formato Markdown (MD), para entregá-lo conforme o padrão exigido pela instituição.</td>
+      <td>✅Concluído</td>
     </tr>
     <tr>
       <td>P03</td>
-      <td>Como professor orientador, quero acessar o histórico de versões do TG de cada aluno, para acompanhar a evolução e manter controle das correções.</td>
       <td>🟡 Média</td>
-      <td>🛠️ Em progresso</td>
+      <td>Como professor orientador, quero acessar o histórico de versões do TG de cada aluno, para acompanhar a evolução e manter controle das correções.</td>
+      <td>✅Concluído</td>
     </tr>
     <tr>
       <td>P04</td>
-      <td>Como professor orientador, quero registrar a aprovação final de um TG, para encerrar oficialmente a orientação.</td>
       <td>🟡 Média</td>
-      <td>🛠️ Em progresso</td>
+      <td>Como professor orientador, quero registrar a aprovação final de um TG, para encerrar oficialmente a orientação.</td>
+      <td>✅Concluído</td>
     </tr>
     <tr>
       <td>U02</td>
-      <td>Como aluno/professor orientador/professor de TG, quero manter minhas informações privadas, para manter o sigilo.</td>
       <td>🟡 Média</td>
-      <td>🛠️ Em progresso</td>
+      <td>Como aluno/professor orientador/professor de TG, quero manter minhas informações privadas, para manter o sigilo.</td>
+      <td>✅Concluído</td>
+    </tr>
+    <tr>
+      <td>TG02</td>
+      <td>🟡 Média</td>
+      <td>Como professor de TG, quero cadastrar de forma fácil e intuitiva vários professores orientadores, ou um único professor orientador, para iniciar as correções dos TG.</td>
+      <td>✅Concluído</td>
+    </tr>
+    <tr>
+      <td>ADM01</td>
+      <td>🟡 Média</td>
+      <td>Como administrador, quero cadastrar de forma fácil e intuitiva vários professores de TG, ou um único professor de TG, para iniciar o andamento das entregas finais do trabalho de graduação.</td>
+      <td>✅Concluído</td>
     </tr>
     <tr>
       <td>A06</td>
-      <td>Como aluno, quero visualizar a aprovação final do meu TG, para iniciar o planejamento da defesa do meu TG.</td>
       <td>🟢 Baixa</td>
-      <td>🛠️ Em progresso</td>
+      <td>Como aluno, quero trocar mensagens de texto com o professor orientador, para esclarecer dúvidas específicas e pertinentes ao TG.</td>
+      <td>✅Concluído</td>
+    </tr>
+    <tr>
+      <td>A07</td>
+      <td>🟢 Baixa</td>
+      <td>Como aluno, quero visualizar a aprovação final do meu TG, para iniciar o planejamento da defesa do meu TG.</td>
+      <td>✅Concluído</td>
+    </tr>
+    <tr>
+      <td>A08</td>
+      <td>🟢 Baixa</td>
+      <td>Como aluno, quero que o sistema possibilite o agendamento da defesa, para a conclusão oficial do TG.</td>
+      <td>✅Concluído</td>
     </tr>
   </tbody>
 </table>
+
+
+
 
 # :hourglass_flowing_sand: Critérios de Aceitação:
 
@@ -305,16 +360,16 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
       <th>Critérios de Aceitação</th>
       <th>Status</th>
     </tr>
-    <tr><td>Permitir reenvio de seções já enviadas anteriormente.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Exibir feedbacks do professor antes do reenvio.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Bloquear reenvio de seções idênticas à anterior.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Selecionar qual seção específica será reenviada.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Versionar automaticamente o novo envio (v2, v3...).</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Notificar o orientador sobre o reenvio.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Registrar data e hora do reenvio.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Confirmar envio via plataforma e e-mail.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Manter histórico de todas as versões reenviadas.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Bloquear reenvio de seções já aprovadas.</td><td>🛠️ Em progresso</td></tr>
+    <tr><td>Permitir reenvio de seções já enviadas anteriormente.</td><td>✅Concluído</td></tr>
+    <tr><td>Exibir feedbacks do professor antes do reenvio.</td><td>✅Concluído</td></tr>
+    <tr><td>Bloquear reenvio de seções idênticas à anterior.</td><td>✅Concluído</td></tr>
+    <tr><td>Selecionar qual seção específica será reenviada.</td><td>✅Concluído</td></tr>
+    <tr><td>Versionar automaticamente o novo envio (v2, v3...).</td><td>✅Concluído</td></tr>
+    <tr><td>Notificar o orientador sobre o reenvio.</td><td>✅Concluído</td></tr>
+    <tr><td>Registrar data e hora do reenvio.</td><td>✅Concluído</td></tr>
+    <tr><td>Confirmar envio via plataforma e e-mail.</td><td>✅Concluído</td></tr>
+    <tr><td>Manter histórico de todas as versões reenviadas.</td><td>✅Concluído</td></tr>
+    <tr><td>Bloquear reenvio de seções já aprovadas.</td><td>✅Concluído</td></tr>
   </tbody>
 </table>
 
@@ -339,12 +394,12 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
       <th>Critérios de Aceitação</th>
       <th>Status</th>
     </tr>
-    <tr><td>Permitir exportação do TG completo em formato .md.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Selecionar quais seções serão incluídas na exportação.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Validar se todas as seções obrigatórias estão incluídas.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Disponibilizar download imediato após exportação.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Exportar apenas conteúdo final, sem comentários.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Manter hierarquia de títulos e subtítulos no .md.</td><td>🛠️ Em progresso</td></tr>
+    <tr><td>Permitir exportação do TG completo em formato .md.</td><td>✅Concluído</td></tr>
+    <tr><td>Selecionar quais seções serão incluídas na exportação.</td><td>✅Concluído</td></tr>
+    <tr><td>Validar se todas as seções obrigatórias estão incluídas.</td><td>✅Concluído</td></tr>
+    <tr><td>Disponibilizar download imediato após exportação.</td><td>✅Concluído</td></tr>
+    <tr><td>Exportar apenas conteúdo final, sem comentários.</td><td>✅Concluído</td></tr>
+    <tr><td>Manter hierarquia de títulos e subtítulos no .md.</td><td>✅Concluído</td></tr>
   </tbody>
 </table>
 
@@ -369,13 +424,13 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
       <th>Critérios de Aceitação</th>
       <th>Status</th>
     </tr>
-    <tr><td>Mostrar histórico completo de versões dos alunos orientados.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Exibir versões ordenadas por data (mais recentes primeiro).</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Mostrar número de versão e data/hora de envio.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Permitir acesso aos feedbacks realizados em cada versão.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Indicar visualmente quais versões já foram corrigidas.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Manter registro de todos os comentários.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Impedir exclusão ou alteração do histórico.</td><td>🛠️ Em progresso</td></tr>
+    <tr><td>Mostrar histórico completo de versões dos alunos orientados.</td><td>✅Concluído</td></tr>
+    <tr><td>Exibir versões ordenadas por data (mais recentes primeiro).</td><td>✅Concluído</td></tr>
+    <tr><td>Mostrar número de versão e data/hora de envio.</td><td>✅Concluído</td></tr>
+    <tr><td>Permitir acesso aos feedbacks realizados em cada versão.</td><td>✅Concluído</td></tr>
+    <tr><td>Indicar visualmente quais versões já foram corrigidas.</td><td>✅Concluído</td></tr>
+    <tr><td>Manter registro de todos os comentários.</td><td>✅Concluído</td></tr>
+    <tr><td>Impedir exclusão ou alteração do histórico.</td><td>✅Concluído</td></tr>
   </tbody>
 </table>
 
@@ -400,14 +455,14 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
       <th>Critérios de Aceitação</th>
       <th>Status</th>
     </tr>
-    <tr><td>Permitir aprovação final apenas de TGs completos.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Exibir todas as seções do TG antes da aprovação.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Validar se todas as seções foram corrigidas.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Registrar data e hora da aprovação final.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Notificar o aluno imediatamente após aprovação.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Alterar status do TG para “aprovado” e “concluído”.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Bloquear novas correções após aprovação.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Registrar histórico da aprovação final permanentemente.</td><td>🛠️ Em progresso</td></tr>
+    <tr><td>Permitir aprovação final apenas de TGs completos.</td><td>✅Concluído</td></tr>
+    <tr><td>Exibir todas as seções do TG antes da aprovação.</td><td>✅Concluído</td></tr>
+    <tr><td>Validar se todas as seções foram corrigidas.</td><td>✅Concluído</td></tr>
+    <tr><td>Registrar data e hora da aprovação final.</td><td>✅Concluído</td></tr>
+    <tr><td>Notificar o aluno imediatamente após aprovação.</td><td>✅Concluído</td></tr>
+    <tr><td>Alterar status do TG para “aprovado” e “concluído”.</td><td>✅Concluído</td></tr>
+    <tr><td>Bloquear novas correções após aprovação.</td><td>✅Concluído</td></tr>
+    <tr><td>Registrar histórico da aprovação final permanentemente.</td><td>✅Concluído</td></tr>
   </tbody>
 </table>
 
@@ -432,14 +487,14 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
       <th>Critérios de Aceitação</th>
       <th>Status</th>
     </tr>
-    <tr><td>Não exibir e-mails pessoais de outros usuários.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Orientador só visualiza dados dos próprios orientandos.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Professor de TG vê apenas dados relevantes para gestão.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Alunos não visualizam dados pessoais de outros alunos.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Criptografia de dados pessoais no banco de dados.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Permitir edição apenas das informações próprias.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Bloquear exportação de dados de terceiros.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Garantir sigilo de correções e feedbacks.</td><td>🛠️ Em progresso</td></tr>
+    <tr><td>Não exibir e-mails pessoais de outros usuários.</td><td>✅Concluído</td></tr>
+    <tr><td>Orientador só visualiza dados dos próprios orientandos.</td><td>✅Concluído</td></tr>
+    <tr><td>Professor de TG vê apenas dados relevantes para gestão.</td><td>✅Concluído</td></tr>
+    <tr><td>Alunos não visualizam dados pessoais de outros alunos.</td><td>✅Concluído</td></tr>
+    <tr><td>Criptografia de dados pessoais no banco de dados.</td><td>✅Concluído</td></tr>
+    <tr><td>Permitir edição apenas das informações próprias.</td><td>✅Concluído</td></tr>
+    <tr><td>Bloquear exportação de dados de terceiros.</td><td>✅Concluído</td></tr>
+    <tr><td>Garantir sigilo de correções e feedbacks.</td><td>✅Concluído</td></tr>
   </tbody>
 </table>
 
@@ -464,13 +519,14 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
       <th>Critérios de Aceitação</th>
       <th>Status</th>
     </tr>
-    <tr><td>Exibir status “Aprovado” na interface do aluno.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Notificar aluno por e-mail sobre a aprovação.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Fornecer orientações sobre a defesa.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Mostrar prazo estimado para defesa.</td><td>🛠️ Em progresso</td></tr>
-    <tr><td>Bloquear novas correções após aprovação final.</td><td>🛠️ Em progresso</td></tr>
+    <tr><td>Exibir status “Aprovado” na interface do aluno.</td><td>✅Concluído</td></tr>
+    <tr><td>Notificar aluno por e-mail sobre a aprovação.</td><td>✅Concluído</td></tr>
+    <tr><td>Fornecer orientações sobre a defesa.</td><td>✅Concluído</td></tr>
+    <tr><td>Mostrar prazo estimado para defesa.</td><td>✅Concluído</td></tr>
+    <tr><td>Bloquear novas correções após aprovação final.</td><td>✅Concluído</td></tr>
   </tbody>
 </table>
+
 
 </details>
 
@@ -493,7 +549,7 @@ Nesta sprint demos continuidade ao desenvolvimento da aplicação, com foco em a
 <details>
 <summary>Sprint 3</summary>
 
-![Sprint 3 (3)]()
+![Sprint 3 (3)](https://github.com/SquadTech-API/API-2/blob/d7c365497e5b951cfa52f638c6971f75b4da83e1/assets/docs/3%C2%AA%20Sprint/BURNDOWN%20TERCEIRA%20SPRINT.png)
 
 </details>
 
@@ -588,55 +644,11 @@ src/main/java/module-info.java   # Definição do módulo Java do projeto
 
 # Manual do Usuário:
 
-<details>
-<summary><strong> BlueTech- Passo a Passo </strong></summary>
-  
-## :wrench: Como Usar
+<a href="https://github.com/SquadTech-API/API-2/blob/d7c365497e5b951cfa52f638c6971f75b4da83e1/assets/docs/3%C2%AA%20Sprint/MANUAL%20DE%20USUARIO-%20BLUETECH.pdf">
+  Abrir User Story A02
+</a>
 
-<h3>Para garantir o sucesso na utilização de nosso sistema, aqui vai uma lista das tecnologias necessárias para realizar os próximos passos:</h3>
-
-## 🚀 Como Executar o Projeto Bluetech
-
-### 1. Clonar o Repositório
-
-```bash
-git clone https://github.com/seu-usuario/bluetech.git
-cd bluetech
-```
-
----
-
-### 2. Abrir no IntelliJ IDEA
-
-1. Abra o IntelliJ IDEA.
-2. Vá em **File > Open...** e selecione a pasta do projeto **Bluetech**.
-3. Certifique-se de que o projeto está configurado com **Java 17+** (ou a versão utilizada no desenvolvimento).
-4. Verifique se o **JavaFX** está corretamente configurado nas dependências do projeto.
-
----
-
-### 3. Executar as Telas
-
-1. Localize a classe principal `App.java` em:
-
-   ```
-   src/main/java/br/com/squadtech/bluetech/App.java
-   ```
-2. Clique com o botão direito em `App.java` e escolha **Run 'App.main()'**.
-
----
-
-### 4. Saída Esperada
-
-A aplicação abrirá a **tela inicial do Bluetech** (JavaFX), permitindo a navegação entre as telas criadas no projeto.
-
----
-
-💡 **Observação**:
-Neste momento, o projeto contém apenas as telas da aplicação (interfaces gráficas em JavaFX). As próximas etapas incluirão a integração com o backend e banco de dados.
-
-</details>
-
+<br>
 
 → [Voltar ao topo](#topo)<br/>
 
@@ -653,8 +665,12 @@ Neste momento, o projeto contém apenas as telas da aplicação (interfaces grá
 
 → [Voltar ao topo](#topo)<br/>
 
+# MVP:
 
-  
+<video controls width="700">
+  <source src="assets/videos/Tela_Adm.mp4" type="video/mp4">
+  Seu navegador não suporta vídeos HTML5.
+</video>
 
 
 
